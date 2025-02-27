@@ -42,6 +42,9 @@ jobs:
       - name: 🛎️ Checkout repository
         uses: actions/checkout@v4
 
+      - name: 📂 Liste des fichiers présents (Debug)
+        run: ls -R  # 🔹 Affiche tous les fichiers et dossiers pour vérifier où est le Dockerfile
+
       - name: 🐳 Login to DockerHub
         uses: docker/login-action@v2
         with:
@@ -53,7 +56,7 @@ jobs:
 
       - name: 📦 Build Docker Image
         run: |
-          docker build -t matias151/schooldev:${{ env.IMAGE_TAG }} -f SchoolDev/Dockerfile SchoolDev
+          docker build -t matias151/schooldev:${{ env.IMAGE_TAG }} -f ./SchoolDev/Dockerfile ./SchoolDev
           docker tag matias151/schooldev:${{ env.IMAGE_TAG }} matias151/schooldev:latest
 
       - name: 📤 Push Docker Image
