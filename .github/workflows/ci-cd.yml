@@ -53,12 +53,10 @@ jobs:
 
       - name: 📦 Build Docker Image
         run: |
-          docker build -t matias151/schooldev:${{ env.IMAGE_TAG }} .
+          docker build -t matias151/schooldev:${{ env.IMAGE_TAG }} -f SchoolDev/Dockerfile SchoolDev
           docker tag matias151/schooldev:${{ env.IMAGE_TAG }} matias151/schooldev:latest
-        working-directory: SchoolDev  # 🔹 Définit le bon répertoire
 
       - name: 📤 Push Docker Image
         run: |
           docker push matias151/schooldev:${{ env.IMAGE_TAG }}
           docker push matias151/schooldev:latest
-        working-directory: SchoolDev
