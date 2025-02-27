@@ -23,7 +23,6 @@ jobs:
 
       - name: 🔨 Build with Maven
         run: mvn clean package -DskipTests
-        run: mvn build
         working-directory: SchoolDev
 
       # - name: 🧪 Run Tests
