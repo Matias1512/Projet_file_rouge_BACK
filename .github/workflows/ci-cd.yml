@@ -48,10 +48,17 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: 🏷️ Set Docker Image Tag
+        run: echo "IMAGE_TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
       - name: 📦 Build Docker Image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/schooldev:latest .
-        working-directory: SchoolDev  # 🔹 Définit le bon répertoire pour le build
+        run: |
+          docker build -t matias151/schooldev:${{ env.IMAGE_TAG }} .
+          docker tag matias151/schooldev:${{ env.IMAGE_TAG }} matias151/schooldev:latest
+        working-directory: SchoolDev  # 🔹 Définit le bon répertoire
 
       - name: 📤 Push Docker Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/schooldev:latest
-        working-directory: SchoolDev  # 🔹 S'assure d'être dans le bon dossier
+        run: |
+          docker push matias151/schooldev:${{ env.IMAGE_TAG }}
+          docker push matias151/schooldev:latest
+        working-directory: SchoolDev
