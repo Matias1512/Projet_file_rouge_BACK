@@ -25,10 +25,6 @@ jobs:
         run: mvn clean package -DskipTests
         working-directory: SchoolDev
 
-      # Vérification du JAR
-      - name: 📂 Vérifier la présence du fichier .jar
-        run: ls -lh SchoolDev/target
-
   docker:
     runs-on: ubuntu-latest
     needs: build
