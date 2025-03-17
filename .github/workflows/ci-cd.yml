@@ -1,4 +1,4 @@
-name: CI/CD - Spring Boot
+name: CI/CD - Spring Boot & Docker
 
 on:
   push:
@@ -19,20 +19,15 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '23'
-          cache: maven # Change to 'gradle' si tu utilises Gradle
+          cache: maven
 
       - name: 🔨 Build with Maven
         run: mvn clean package -DskipTests
         working-directory: SchoolDev
 
-      # - name: 🧪 Run Tests
-      #   run: mvn test
-
-      # - name: 📦 Save JAR Artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: app-jar
-      #     path: target/*.jar
+      # Vérification du JAR
+      - name: 📂 Vérifier la présence du fichier .jar
+        run: ls -lh SchoolDev/target
 
   docker:
     runs-on: ubuntu-latest
@@ -42,19 +37,8 @@ jobs:
       - name: 🛎️ Checkout repository
         uses: actions/checkout@v4
 
-      - name: ☕ Setup Java 23
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '23'
-          cache: maven
-
-      - name: 🔨 Build with Maven
-        run: mvn clean package -DskipTests
-        working-directory: SchoolDev  # 📌 Compile le projet et génère `target/`
-
-      - name: 📂 Vérifier la présence du fichier .jar
-        run: ls -lh SchoolDev/target  # 📌 Affiche les fichiers dans target/
+      - name: 🏷️ Set Docker Image Tag
+        run: echo "IMAGE_TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
 
       - name: 🐳 Login to DockerHub
         uses: docker/login-action@v2
@@ -62,15 +46,15 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: 🏷️ Set Docker Image Tag
-        run: echo "IMAGE_TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+      - name: 🏗️ Vérifier Dockerfile
+        run: ls -lh SchoolDev/Dockerfile
 
       - name: 📦 Build Docker Image
         run: |
           docker build -t matias151/schooldev_back:${{ env.IMAGE_TAG }} -f ./SchoolDev/Dockerfile ./SchoolDev
-          docker tag matias151/schooldev_back:${{ env.IMAGE_TAG }} matias151/schooldev:latest
+          docker tag matias151/schooldev_back:${{ env.IMAGE_TAG }} matias151/schooldev_back:latest
 
       - name: 📤 Push Docker Image
         run: |
-          docker push matias151/schooldev:${{ env.IMAGE_TAG }}
-          docker push matias151/schooldev:latest
+          docker push matias151/schooldev_back:${{ env.IMAGE_TAG }}
+          docker push matias151/schooldev_back:latest
