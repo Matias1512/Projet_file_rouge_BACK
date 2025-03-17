@@ -72,5 +72,5 @@ jobs:
 
       - name: 📤 Push Docker Image
         run: |
-          docker push matias151/schooldev:${{ env.IMAGE_TAG }}
-          docker push matias151/schooldev:latest
+          docker push matias151/schooldev_back:${{ env.IMAGE_TAG }}
+          docker push matias151/schooldev_back:latest
