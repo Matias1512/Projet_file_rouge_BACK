@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Saxomat+15
+      POSTGRES_DB: schoolDevDatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  trivy:
+    image: aquasec/trivy:latest
+    container_name: trivy_scanner
+    command: --version
+
+  spring-app:
+    build: .
+    container_name: spring_boot
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/schoolDevDatabase
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Saxomat+15
+    ports:
+      - "8080:8080"
+
+volumes:
+  pg_data:
