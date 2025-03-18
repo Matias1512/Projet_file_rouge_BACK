@@ -21,7 +21,7 @@ services:
     command: --version
 
   spring-app:
-    build: .
+    image: matias151/schooldev_back:latest
     container_name: spring_boot
     restart: always
     depends_on:
