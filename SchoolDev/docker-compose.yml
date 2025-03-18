@@ -12,13 +12,11 @@ services:
       POSTGRES_DB: schoolDevDatabase
     ports:
       - "5432:5432"
-    volumes:
-      - pg_data:/var/lib/postgresql/data
 
-  trivy:
-    image: aquasec/trivy:latest
-    container_name: trivy_scanner
-    command: --version
+  # trivy:
+  #   image: aquasec/trivy:latest
+  #   container_name: trivy_scanner
+  #   command: --version
 
   spring-app:
     image: matias151/schooldev_back:latest
@@ -33,5 +31,3 @@ services:
     ports:
       - "8080:8080"
 
-volumes:
-  pg_data:
