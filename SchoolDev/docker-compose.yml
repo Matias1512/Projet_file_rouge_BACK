@@ -1,6 +1,22 @@
 version: '3.8'
 
 services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    command:
+      - "--api.dashboard=true"
+      - "--api.insecure=true"            # ← important pour accès en HTTP sans authentification
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"       # pour les requêtes HTTP
+      - "8081:8080"   # pour accéder au dashboard via localhost:8081
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - web
+
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -12,11 +28,8 @@ services:
       POSTGRES_DB: schoolDevDatabase
     ports:
       - "5432:5432"
-
-  # trivy:
-  #   image: aquasec/trivy:latest
-  #   container_name: trivy_scanner
-  #   command: --version
+    networks:
+      - web
 
   spring-app:
     image: matias151/schooldev_back:latest
@@ -28,6 +41,14 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/schoolDevDatabase
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Saxomat+15
-    ports:
-      - "8080:8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.springboot.rule=Host(`localhost`)"
+      - "traefik.http.routers.springboot.entrypoints=web"
+      - "traefik.http.services.springboot.loadbalancer.server.port=8080"
+    networks:
+      - web
 
+networks:
+  web:
+    external: false
