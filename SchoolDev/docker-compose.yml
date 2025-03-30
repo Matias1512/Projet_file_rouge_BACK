@@ -4,16 +4,25 @@ services:
   traefik:
     image: traefik:v2.10
     container_name: traefik
+    restart: always
     command:
       - "--api.dashboard=true"
-      - "--api.insecure=true"            # ← important pour accès en HTTP sans authentification
-      - "--providers.docker=true"
+      - "--api.insecure=true"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.docker=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=ton.email@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
-      - "80:80"       # pour les requêtes HTTP
-      - "8081:8080"   # pour accéder au dashboard via localhost:8081
+      - "80:80"
+      - "443:443"
+      - "8081:8080" # dashboard Traefik
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+
     networks:
       - web
 
@@ -43,9 +52,11 @@ services:
       SPRING_DATASOURCE_PASSWORD: Saxomat+15
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.springboot.rule=Host(`localhost`)"
-      - "traefik.http.routers.springboot.entrypoints=web"
+      - "traefik.http.routers.springboot.rule=Host(`emklateam.duckdns.org`)"
+      - "traefik.http.routers.springboot.entrypoints=websecure"
+      - "traefik.http.routers.springboot.tls.certresolver=myresolver"
       - "traefik.http.services.springboot.loadbalancer.server.port=8080"
+
     networks:
       - web
 
