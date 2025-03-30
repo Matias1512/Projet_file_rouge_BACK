@@ -52,7 +52,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: Saxomat+15
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.springboot.rule=Host(`emklateam.duckdns.org`)"
+      - "traefik.http.routers.springboot.rule=Host(`schooldev.duckdns.org`)"
       - "traefik.http.routers.springboot.entrypoints=websecure"
       - "traefik.http.routers.springboot.tls.certresolver=myresolver"
       - "traefik.http.services.springboot.loadbalancer.server.port=8080"
