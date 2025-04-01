@@ -1,4 +1,4 @@
-package com.tonprojet.config; // adapte le nom du package à ton projet
+package com.learncode.schoolDev.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
