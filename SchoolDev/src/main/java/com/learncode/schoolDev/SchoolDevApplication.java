@@ -8,18 +8,19 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.servers.Server;
 
-@SpringBootApplication
 @Configuration
 @OpenAPIDefinition(
     info = @Info(
-        title = "API Documentation",
+        title = "Documentation de l'API",
         version = "v1"
     ),
-    servers = @Server(
-        url = "https://schooldev.duckdns.org",
-        description = "Serveur principal"
-    )
+    servers = {
+        @Server(url = "http://api.example.com", description = "Serveur HTTP"),
+        @Server(url = "https://api.example.com", description = "Serveur HTTPS")
+    }
 )
+
+@SpringBootApplication
 public class SchoolDevApplication {
 
 	public static void main(String[] args) {
