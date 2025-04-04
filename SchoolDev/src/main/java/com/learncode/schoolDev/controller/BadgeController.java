@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/badges")
-@Tag(name = "Badges", description = "Gestion des badges")
+@Tag(name = "Badges", description = "Gestion des badgeeeeeeeeeeeeeeeeees")
 public class BadgeController {
     private final BadgeService badgeService;
 
