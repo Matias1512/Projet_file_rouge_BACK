@@ -44,7 +44,12 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> 
-                auth.requestMatchers("/api/auth/**").permitAll().anyRequest().authenticated())
+                auth.requestMatchers(
+                        "/api/auth/**",          // accès libre pour login/register
+                        "/swagger-ui/**",        // UI Swagger
+                        "/v3/api-docs/**",       // docs OpenAPI
+                        "/swagger-resources/**" // dépendances Swagger
+                ).permitAll().anyRequest().authenticated())
             .addFilterBefore(new JwtFilter(jwtUtils, userService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

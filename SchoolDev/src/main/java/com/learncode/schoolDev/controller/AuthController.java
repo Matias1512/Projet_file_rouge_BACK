@@ -16,7 +16,6 @@ import com.learncode.schoolDev.config.JwtUtils;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.repository.UserRepository;
 
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
