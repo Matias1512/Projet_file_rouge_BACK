@@ -3,6 +3,9 @@ package com.learncode.schoolDev.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name = "Users")
 public class User {
@@ -10,10 +13,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String passwordHash;
+
+    @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime signupDate;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(nullable = false)
+    private String role; // Default role
 
     @PrePersist
     protected void onCreate() {
@@ -55,5 +73,9 @@ public class User {
 
     public LocalDateTime getSignupDate() {
         return signupDate;
+    }
+
+    public String getRole() {
+        return role;
     }
 }
