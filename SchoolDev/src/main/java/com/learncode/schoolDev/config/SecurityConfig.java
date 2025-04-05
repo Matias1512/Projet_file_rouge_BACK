@@ -15,14 +15,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.learncode.schoolDev.filter.JwtFilter;
 import com.learncode.schoolDev.service.UserService;
 
-import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
     private final UserService userService;
     private final JwtUtils jwtUtils;
+
+    public SecurityConfig(UserService userService, JwtUtils jwtUtils) {
+        this.userService = userService;
+        this.jwtUtils = jwtUtils;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
