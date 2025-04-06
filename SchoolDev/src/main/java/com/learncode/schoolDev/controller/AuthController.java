@@ -39,13 +39,14 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
-        if(userRepository.findByUsername(user.getUsername()) != null) {
+        if(userRepository.findByUsername(user.getUsername()).isPresent()) {
             System.out.println(userRepository.findByUsername(user.getUsername()));
             System.out.println("Registering user: " + user.getUsername());
             return ResponseEntity.badRequest().body("Username already exists");
-        }
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-        return ResponseEntity.ok(userRepository.save(user));
+        } else {
+            user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+            return ResponseEntity.ok(userRepository.save(user));
+        } 
     }
     
     @PostMapping("/login")
