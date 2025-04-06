@@ -40,6 +40,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         if(userRepository.findByUsername(user.getUsername()) != null) {
+            System.out.println("Registering user: " + user.getUsername());
             return ResponseEntity.badRequest().body("Username already exists");
         }
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
