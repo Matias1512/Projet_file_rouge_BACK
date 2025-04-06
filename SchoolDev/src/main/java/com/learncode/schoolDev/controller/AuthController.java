@@ -61,10 +61,10 @@ public class AuthController {
                 authData.put("type", "Bearer");
                 return ResponseEntity.ok(authData);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password 1");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password 2");
         }
     }
 }
