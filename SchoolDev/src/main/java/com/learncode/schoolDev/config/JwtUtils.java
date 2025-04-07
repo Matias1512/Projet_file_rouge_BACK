@@ -15,12 +15,12 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtils {
 
-    @Value("${app.secret-key}")
-    private String secretKey;
+    private Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     @Value("${app.jwt-expiration}")
     private long jwtExpiration;
@@ -42,7 +42,7 @@ public class JwtUtils {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = secretKey.getBytes();
+        byte[] keyBytes = secretKey.getEncoded();
         return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
