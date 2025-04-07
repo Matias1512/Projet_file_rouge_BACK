@@ -33,11 +33,20 @@ public class UserService implements UserDetailsService {
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+    
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 
     public User createUser(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("Un utilisateur avec cet email existe déjà.");
         }
+
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Un utilisateur avec ce nom existe déjà.");
+        }
+
         return userRepository.save(user);
     }
 
@@ -59,11 +68,11 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    public UserDetails loadUserByUsername(String mail) {
-       User user = userRepository.findByEmail(mail)
-               .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec le nom d'utilisateur : " + mail));
+    public UserDetails loadUserByUsername(String username) {
+       User user = userRepository.findByUsername(username)
+               .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec le nom d'utilisateur : " + username));
         if(user == null) {
-            throw new UsernameNotFoundException("user not found with username: " + mail);
+            throw new UsernameNotFoundException("user not found with username: " + username);
         }
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
