@@ -20,9 +20,10 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtils {
 
-    private Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    @Value("${app.jwt.secret-key}")
+    private String jwtSecret;
 
-    @Value("${app.jwt-expiration}")
+    @Value("${app.jwt.expiration}")
     private long jwtExpiration;
 
     public String generateToken(String username) {
@@ -42,7 +43,7 @@ public class JwtUtils {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = secretKey.getEncoded();
+        byte[] keyBytes = jwtSecret.getBytes();
         return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
