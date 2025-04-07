@@ -20,7 +20,6 @@ import com.learncode.schoolDev.repository.UserRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -40,8 +39,6 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         if(userRepository.findByUsername(user.getUsername()).isPresent()) {
-            System.out.println(userRepository.findByUsername(user.getUsername()));
-            System.out.println("Registering user: " + user.getUsername());
             return ResponseEntity.badRequest().body("Username already exists");
         } else {
             user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
@@ -50,16 +47,18 @@ public class AuthController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> loginData) {
+        String username = loginData.get("username");
+        String password = loginData.get("password"); // ⚠️ le champ "password" ici
         try {
-            System.out.println("Registering user: " + user.getUsername());
-            System.out.println("Passport user: " + user.getPasswordHash());
+            System.out.println("Registering user: " + username);
+            System.out.println("Passport user: " + password);
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPasswordHash())
+                new UsernamePasswordAuthenticationToken(username, password)
             ); 
             if(authentication.isAuthenticated()) {
                 Map<String, Object> authData =  new HashMap<>();
-                authData.put("token", jwtUtils.generateToken(user.getUsername()));
+                authData.put("token", jwtUtils.generateToken(username));
                 authData.put("type", "Bearer");
                 return ResponseEntity.ok(authData);
             } else {
