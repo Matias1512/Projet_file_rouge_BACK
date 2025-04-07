@@ -50,7 +50,7 @@ public class SecurityConfig {
                         "/v3/api-docs/**",       // docs OpenAPI
                         "/swagger-resources/**" // dépendances Swagger
                 ).permitAll().anyRequest().authenticated())
-            .addFilterBefore(new JwtFilter(jwtUtils, userService), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

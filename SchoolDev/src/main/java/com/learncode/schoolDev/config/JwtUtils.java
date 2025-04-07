@@ -1,5 +1,6 @@
 package com.learncode.schoolDev.config;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.sql.Date;
 import java.util.HashMap;
@@ -23,6 +24,11 @@ public class JwtUtils {
     @Value("${app.jwt.secret-key}")
     private String jwtSecret;
 
+    private Key getSignInKey() {
+        byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
+        return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
+    }
+
     @Value("${app.jwt.expiration}")
     private long jwtExpiration;
 
@@ -40,11 +46,6 @@ public class JwtUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
-    }
-
-    private Key getSignInKey() {
-        byte[] keyBytes = jwtSecret.getBytes();
-        return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
     public boolean isTokenValid(String token, UserDetails username) {
