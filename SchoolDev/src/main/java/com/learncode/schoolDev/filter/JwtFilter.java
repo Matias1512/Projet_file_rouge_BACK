@@ -33,16 +33,20 @@ public class JwtFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException, java.io.IOException {
+        System.out.println("JE SUIS DANS doFilterInternal");
         final String authHeader = request.getHeader("Authorization");
         String username = null;
         String jwt = null;
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            System.out.println("JE SUIS DANS doFilterInternal DANS LE IF Bearer");
             jwt = authHeader.substring(7);
             username = jwtUtils.extractUsername(jwt);
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            System.out.println("JE SUIS DANS doFilterInternal DANS LE IF AUTRE");
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+            System.out.println("IS VALIDE: " + jwtUtils.isTokenValid(jwt, userDetails));
             if (jwtUtils.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
@@ -53,7 +57,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-
+        System.out.println("JE SUIS DANS doFilterInternal DANS LE FIN");
         filterChain.doFilter(request, response);
     }
     
