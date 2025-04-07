@@ -2,7 +2,7 @@ package com.learncode.schoolDev.config;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -61,8 +61,8 @@ public class JwtUtils {
         return extractClaim(token, Claims::getSubject);
     }
 
-    private Date extractExpirationDate(String token) {
-        return (Date) extractClaim(token, Claims::getExpiration);
+    private java.util.Date extractExpirationDate(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
