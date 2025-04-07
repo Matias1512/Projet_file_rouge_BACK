@@ -41,7 +41,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        return http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> 
                 auth.requestMatchers(
@@ -50,7 +50,6 @@ public class SecurityConfig {
                         "/v3/api-docs/**",       // docs OpenAPI
                         "/swagger-resources/**" // dépendances Swagger
                 ).permitAll().anyRequest().authenticated())
-            .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+            .addFilterBefore(new JwtFilter(jwtUtils, userService), UsernamePasswordAuthenticationFilter.class).build();
     }
 }
