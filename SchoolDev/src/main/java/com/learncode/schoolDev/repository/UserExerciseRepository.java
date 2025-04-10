@@ -7,6 +7,6 @@ import com.learncode.schoolDev.model.UserExercise;
 import java.util.List;
 
 public interface UserExerciseRepository extends JpaRepository<UserExercise, Long> {
-    List<UserExercise> findByUserId(Long userId);
-    List<UserExercise> findByExerciseId(Long exerciceId);
+    List<UserExercise> findByUser_UserId(Long userId);
+    List<UserExercise> findByExercise_ExerciseId(Long exerciceId);
 }

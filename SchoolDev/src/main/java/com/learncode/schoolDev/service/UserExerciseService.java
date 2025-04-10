@@ -25,10 +25,10 @@ public class UserExerciseService {
     }
 
     public List<UserExercise> getByUserId(Long userId) {
-        return repository.findByUserId(userId);
+        return repository.findByUser_UserId(userId);
     }
 
     public List<UserExercise> getByExerciseId(Long exerciseId) {
-        return repository.findByExerciseId(exerciseId);
+        return repository.findByExercise_ExerciseId(exerciseId);
     }
 }
