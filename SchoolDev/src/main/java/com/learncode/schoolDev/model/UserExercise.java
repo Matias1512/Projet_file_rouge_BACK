@@ -21,7 +21,7 @@ public class UserExercise {
 
     private LocalDateTime completedAt;
 
-    private Integer score;
+    private Boolean success;
 
     // Getters and setters
     public Long getId() {
@@ -56,11 +56,11 @@ public class UserExercise {
         this.completedAt = completedAt;
     }
 
-    public Integer getScore() {
-        return score;
+    public Boolean getSuccess() {
+        return success;
     }
 
-    public void setScore(Integer score) {
-        this.score = score;
+    public void setSuccess(Boolean success) {
+        this.success = success;
     }
 }
