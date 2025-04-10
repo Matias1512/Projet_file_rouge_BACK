@@ -17,7 +17,7 @@ public class Course {
     private LocalDateTime createdAt;
     
     @Enumerated(EnumType.STRING)
-    private String difficultyLevel;
+    private DifficultyLevel difficultyLevel;
 
     @PrePersist
     protected void onCreate() {
@@ -53,11 +53,11 @@ public class Course {
         return createdAt;
     }
 
-    public String getDifficultyLevel() {
+    public DifficultyLevel getDifficultyLevel() {
         return difficultyLevel;
     }
 
-    public void setDifficultyLevel(String difficultyLevel) {
+    public void setDifficultyLevel(DifficultyLevel difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
     }
     
