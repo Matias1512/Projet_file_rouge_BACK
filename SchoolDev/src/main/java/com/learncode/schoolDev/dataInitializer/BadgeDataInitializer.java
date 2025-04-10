@@ -2,7 +2,6 @@ package com.learncode.schoolDev.dataInitializer;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,21 +29,23 @@ public class BadgeDataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-    InputStream inputStream = getClass().getClassLoader().getResourceAsStream("badges.json");
-    if (inputStream == null) {
-        throw new FileNotFoundException("badges.json not found");
-    }
-
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JavaTimeModule());
-    objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-    List<Badge> badges = Arrays.asList(objectMapper.readValue(inputStream, Badge[].class));
-
-    for (Badge badge : badges) {
-        if (!badgeRepository.existsByName(badge.getName())) {
-            badgeRepository.save(badge);
+        System.out.println("Initializing Badge data...");
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("badges.json");
+        if (inputStream == null) {
+            throw new FileNotFoundException("badges.json not found");
         }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        List<Badge> badges = Arrays.asList(objectMapper.readValue(inputStream, Badge[].class));
+
+        for (Badge badge : badges) {
+            if (!badgeRepository.existsByName(badge.getName())) {
+                badgeRepository.save(badge);
+            }
+        }
+        System.out.println("Badge data initialized successfully.");
     }
-}
 }
