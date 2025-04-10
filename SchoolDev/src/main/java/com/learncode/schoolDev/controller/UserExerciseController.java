@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.learncode.schoolDev.model.UserExercise;
 import com.learncode.schoolDev.service.UserExerciseService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/user-exercises")
+@Tag(name = "UserExercice", description = "Gestion du liens entre les utilisateurs et les exercices")
 public class UserExerciseController {
 
     private final UserExerciseService service;

@@ -16,12 +16,14 @@ import com.learncode.schoolDev.config.JwtUtils;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.repository.UserRepository;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentification", description = "Gestion de l'authentification des utilisateurs")
 public class AuthController {
 
     public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
