@@ -32,7 +32,7 @@ public class BadgeDataInitializer implements CommandLineRunner {
         System.out.println("Initializing Badge data...");
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("ListOfBadge.json");
         if (inputStream == null) {
-            throw new FileNotFoundException("badges.json not found");
+            throw new FileNotFoundException("ListOfBadge.json not found");
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
