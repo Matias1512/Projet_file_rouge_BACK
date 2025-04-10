@@ -54,7 +54,7 @@ public class UserBadgeService {
     }
 
     public void assignBadgeIfNotExists(User user, Badge badge) {
-        if (!userBadgeRepository.existsByUser_IdAndBadge_Id(user.getUserId(), badge.getBadgeId())) {
+        if (!userBadgeRepository.existsByUser_UserIdAndBadge_BadgeId(user.getUserId(), badge.getBadgeId())) {
             UserBadge userBadge = new UserBadge();
             userBadge.setUser(user);
             userBadge.setBadge(badge);
