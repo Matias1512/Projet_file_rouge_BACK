@@ -3,6 +3,8 @@ package com.learncode.schoolDev.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.learncode.schoolDev.enums.DifficultyLevel;
+
 @Entity
 @Table(name = "Courses")
 public class Course {
@@ -11,9 +13,10 @@ public class Course {
     private Long courseId;
 
     private String title;
-    private int studentNumber;
     private String language;
     private LocalDateTime createdAt;
+    
+    @Enumerated(EnumType.STRING)
     private String difficultyLevel;
 
     @PrePersist
@@ -38,14 +41,6 @@ public class Course {
         this.title = title;
     }
 
-    public int getStudentNumber() {
-        return studentNumber;
-    }
-
-    public void setStudentNumber(int studentNumber) {
-        this.studentNumber = studentNumber;
-    }
-
     public String getLanguage() {
         return language;
     }
@@ -65,4 +60,5 @@ public class Course {
     public void setDifficultyLevel(String difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
     }
+    
 }

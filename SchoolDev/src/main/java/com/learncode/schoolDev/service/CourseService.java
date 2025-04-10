@@ -32,7 +32,6 @@ public class CourseService {
         return courseRepository.findById(id)
                 .map(course -> {
                     course.setTitle(updatedCourse.getTitle());
-                    course.setStudentNumber(updatedCourse.getStudentNumber());
                     course.setLanguage(updatedCourse.getLanguage());
                     course.setDifficultyLevel(updatedCourse.getDifficultyLevel());
                     return courseRepository.save(course);
