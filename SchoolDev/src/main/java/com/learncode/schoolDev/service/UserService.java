@@ -3,8 +3,6 @@ package com.learncode.schoolDev.service;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
