@@ -77,5 +77,12 @@ public class UserBadge {
         public int hashCode() {
             return Objects.hash(user, badge);
         }
+
+        
+        public void uptdateBadgeOfAUser(Long userId) {
+            // Logic to update the badge of a user
+            // This could involve checking if the user has completed certain tasks or exercises
+            // and then assigning the badge accordingly.
+        }
     }
 }

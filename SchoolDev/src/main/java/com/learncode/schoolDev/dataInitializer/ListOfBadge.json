@@ -1,0 +1,20 @@
+[
+    {
+      "name": "JAVA X",
+      "description": "Débloqué après avoir terminé 10 exercice de JAVA",
+      "iconUrl": "<FaFlask size={32} />",
+      "createdAt": "2025-04-10T10:00:00"
+    },
+    {
+      "name": "MEGA JAVA X",
+      "description": "Débloqué après avoir complété 10 lessons de JAVA",
+      "iconUrl": "<FaFlask size={32} />",
+      "createdAt": "2025-04-10T10:05:00"
+    },
+    {
+      "name": "10 soumissions",
+      "description": "Débloqué après 10 soumissions correctes",
+      "iconUrl": "<FaFire size={32} />",
+      "createdAt": "2025-04-10T10:10:00"
+    }
+  ]
