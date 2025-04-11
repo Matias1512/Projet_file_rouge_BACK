@@ -2,6 +2,7 @@ package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +16,7 @@ public class Submission {
     @Column(columnDefinition = "TEXT")
     @NotBlank(message = "Le code soumis est obligatoire")
     private String code;
-    @NotBlank(message = "Le résultat est obligatoire")
+    @NotNull(message = "Le résultat est obligatoire")
     private boolean isCorrect;
     private LocalDateTime submittedAt;
 

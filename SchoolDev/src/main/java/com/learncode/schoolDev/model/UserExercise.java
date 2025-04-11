@@ -1,7 +1,7 @@
 package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -15,18 +15,18 @@ public class UserExercise {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @NotBlank(message = "L'ID de l'utilisateur est obligatoire")
+    @NotNull(message = "L'ID de l'utilisateur est obligatoire")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "exercise_id", nullable = false)
-    @NotBlank(message = "L'ID de l'exercice est obligatoire")
+    @NotNull(message = "L'ID de l'exercice est obligatoire")
     private Exercise exercise;
 
     private LocalDateTime completedAt;
 
     @Column(name = "success", nullable = false)
-    @NotBlank(message = "Le statut de réussite est obligatoire")
+    @NotNull(message = "Le statut de réussite est obligatoire")
     private Boolean success;
 
     // Getters and setters

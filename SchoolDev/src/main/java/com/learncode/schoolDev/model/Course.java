@@ -2,6 +2,7 @@ package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +21,7 @@ public class Course {
     private String language;
     private LocalDateTime createdAt;
     
-    @NotBlank(message = "Le niveau de difficulté est obligatoire")
+    @NotNull(message = "Le niveau de difficulté est obligatoire")
     @Enumerated(EnumType.STRING)
     private DifficultyLevel difficultyLevel;
 

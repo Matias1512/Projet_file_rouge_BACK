@@ -2,6 +2,7 @@ package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ public class Lesson {
     private String title;
     @NotBlank(message = "Le contenu est obligatoire")
     private String content;
-    @NotBlank(message = "L'ordre dans le cours est obligatoire")
+    @NotNull(message = "L'ordre dans le cours est obligatoire")
     private int orderInCourse;
     private LocalDateTime createdAt;
 
