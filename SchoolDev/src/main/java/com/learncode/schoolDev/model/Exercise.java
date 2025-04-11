@@ -1,6 +1,8 @@
 package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,9 +12,13 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long exerciseId;
 
+    @NotBlank(message = "Le titre est obligatoire")
     private String title;
+    @NotBlank(message = "La description est obligatoire")
     private String description;
+    @NotBlank(message = "Le code de démarrage est obligatoire")
     private String starterCode;
+    @NotBlank(message = "Les cas de test sont obligatoires")
     private String testCases;
     private LocalDateTime createdAt;
 

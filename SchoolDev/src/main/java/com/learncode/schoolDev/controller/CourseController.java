@@ -2,6 +2,8 @@ package com.learncode.schoolDev.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +38,11 @@ public class CourseController {
 
     @PostMapping
     @Operation(summary = "Créer un nouveau cours", description = "Ajoute un nouveau cours à la base de données")
-    public Course createCourse(@RequestBody Course course) {
+    public Course createCourse(@Valid @RequestBody Course request) {
+        Course course = new Course();
+        course.setTitle(request.getTitle());
+        course.setLanguage(request.getLanguage());
+        course.setDifficultyLevel(request.getDifficultyLevel()); // Assurez-vous que le niveau de difficulté est un enum ou une chaîne valide
         return courseService.createCourse(course);
     }
 

@@ -1,6 +1,8 @@
 package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,16 +16,19 @@ public class User {
     private Long userId;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = "Le nom d'utilisateur est obligatoire")
     private String username;
 
     @Column(nullable = false)
+    @NotBlank(message = "L'email est obligatoire")
     private String email;
 
     @Column(nullable = false)
+    @NotBlank(message = "Le mot de passe est obligatoire")
     private String passwordHash;
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(updatable = false)  
     private LocalDateTime signupDate;
 
     @UpdateTimestamp
@@ -31,6 +36,7 @@ public class User {
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
+    @NotBlank(message = "Le rôle est obligatoire")
     private String role; // Default role
 
     @PrePersist

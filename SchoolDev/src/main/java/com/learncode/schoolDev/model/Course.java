@@ -1,6 +1,8 @@
 package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDateTime;
 
 import com.learncode.schoolDev.enums.DifficultyLevel;
@@ -12,10 +14,13 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long courseId;
 
+    @NotBlank(message = "Le titre est obligatoire")
     private String title;
+    @NotBlank(message = "La langue est obligatoire")
     private String language;
     private LocalDateTime createdAt;
     
+    @NotBlank(message = "Le niveau de difficulté est obligatoire")
     @Enumerated(EnumType.STRING)
     private DifficultyLevel difficultyLevel;
 

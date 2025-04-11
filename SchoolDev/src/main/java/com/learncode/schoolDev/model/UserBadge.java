@@ -1,6 +1,7 @@
 package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,11 +15,13 @@ public class UserBadge {
     @Id
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
+    @NotBlank(message = "L'ID de l'utilisateur est obligatoire")
     private User user;
 
     @Id
     @ManyToOne
     @JoinColumn(name = "badgeId", nullable = false)
+    @NotBlank(message = "L'ID du badge est obligatoire")
     private Badge badge;
 
     @Column(name = "unlockedAt", nullable = false)

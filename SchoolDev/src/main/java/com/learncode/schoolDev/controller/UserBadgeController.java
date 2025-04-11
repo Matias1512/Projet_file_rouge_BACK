@@ -2,6 +2,8 @@ package com.learncode.schoolDev.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +51,7 @@ public class UserBadgeController {
 
     @PostMapping
     @Operation(summary = "Attribuer un badge à un utilisateur", description = "Ajoute une nouvelle association utilisateur-badge à la base de données")
-    public UserBadge createUserBadge(@RequestBody UserBadge userBadge) {
+    public UserBadge createUserBadge(@Valid @RequestBody UserBadge userBadge) {
         return userBadgeService.createUserBadge(userBadge);
     }
 

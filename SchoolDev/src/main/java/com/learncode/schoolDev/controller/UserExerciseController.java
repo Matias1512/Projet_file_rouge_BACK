@@ -13,6 +13,7 @@ import com.learncode.schoolDev.model.UserExercise;
 import com.learncode.schoolDev.service.UserExerciseService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/user-exercises")
@@ -26,7 +27,7 @@ public class UserExerciseController {
     }
 
     @PostMapping
-    public UserExercise create(@RequestBody UserExercise userExercise) {
+    public UserExercise create(@Valid @RequestBody UserExercise userExercise) {
         return service.save(userExercise);
     }
 
