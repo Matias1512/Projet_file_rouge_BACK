@@ -1,8 +1,11 @@
 package com.learncode.schoolDev.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learncode.schoolDev.config.JwtUtils;
+import com.learncode.schoolDev.model.Badge;
 import com.learncode.schoolDev.model.User;
+import com.learncode.schoolDev.model.UserBadge;
+import com.learncode.schoolDev.repository.BadgeRepository;
+import com.learncode.schoolDev.repository.UserBadgeRepository;
 import com.learncode.schoolDev.repository.UserRepository;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "Authentification", description = "Gestion de l'authentification des utilisateurs")
+
 public class AuthController {
 
     public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
@@ -39,13 +47,32 @@ public class AuthController {
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
 
+    @Autowired
+    private UserBadgeRepository userBadgeRepository;
+
+    @Autowired
+    private BadgeRepository badgeRepository;
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody User user) {
         if(userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already exists");
         } else {
             user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-            return ResponseEntity.ok(userRepository.save(user));
+            User savedUser = userRepository.save(user);
+            List<Badge> allBadges = badgeRepository.findAll();
+
+            List<UserBadge> userBadges = new ArrayList<>();
+            for (Badge badge : allBadges) {
+                UserBadge userBadge = new UserBadge();
+                userBadge.setUser(savedUser);
+                userBadge.setBadge(badge);
+                userBadges.add(userBadge);
+            }
+
+            userBadgeRepository.saveAll(userBadges);
+
+            return ResponseEntity.ok(savedUser);
         } 
     }
     
