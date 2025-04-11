@@ -17,6 +17,7 @@ import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.repository.UserRepository;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,7 +40,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
+    public ResponseEntity<?> register(@Valid @RequestBody User user) {
         if(userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already exists");
         } else {
@@ -49,7 +50,7 @@ public class AuthController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> loginData) {
+    public ResponseEntity<?> login(@Valid @RequestBody Map<String, String> loginData) {
         String username = loginData.get("username");
         String password = loginData.get("password"); // ⚠️ le champ "password" ici
         try {
