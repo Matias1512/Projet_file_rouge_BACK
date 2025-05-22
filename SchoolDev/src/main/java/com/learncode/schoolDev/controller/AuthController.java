@@ -57,6 +57,7 @@ public class AuthController {
     public ResponseEntity<?> register(@Valid @RequestBody User user) {
         if(userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already exists");
+            //System.out.println("Username already exists");
         } else {
             user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
             User savedUser = userRepository.save(user);
