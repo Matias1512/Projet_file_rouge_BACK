@@ -50,7 +50,8 @@ jobs:
         run: mvn sonar:sonar
 
       - name: 📂 Vérifier le contenu du rapport JaCoCo
-        run: ls -lh SchoolDev/target/site/jacoco
+        run: Get-ChildItem SchoolDev/target/site/jacoco | Select-Object Name, Length, LastWriteTime
+
   
   docker:
     runs-on: ubuntu-latest
