@@ -2,6 +2,8 @@ package com.learncode.schoolDev.service;
 
 import org.springframework.stereotype.Service;
 
+import com.learncode.schoolDev.model.Badge;
+import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.model.UserBadge;
 import com.learncode.schoolDev.repository.UserBadgeRepository;
 
@@ -20,7 +22,7 @@ public class UserBadgeService {
         return userBadgeRepository.findAll();
     }
 
-    public Optional<UserBadge> getUserBadgeById(Long id) {
+    public Optional<UserBadge> getUserBadgeById(UserBadge.UserBadgeKey id) {
         return userBadgeRepository.findById(id);
     }
 
@@ -36,19 +38,28 @@ public class UserBadgeService {
         return userBadgeRepository.save(userBadge);
     }
 
-    public UserBadge updateUserBadge(Long id, UserBadge updatedUserBadge) {
+    public UserBadge updateUserBadge(UserBadge.UserBadgeKey id, UserBadge updatedUserBadge) {
         return userBadgeRepository.findById(id)
-                .map(userBadge -> {
-                    userBadge.setUser(updatedUserBadge.getUser());
-                    userBadge.setBadge(updatedUserBadge.getBadge());
-                    userBadge.setEarnedAt(updatedUserBadge.getEarnedAt());
-                    return userBadgeRepository.save(userBadge);
-                })
-                .orElseThrow(() -> new RuntimeException("UserBadge non trouvé avec ID : " + id));
+            .map(userBadge -> {
+                userBadge.setUser(updatedUserBadge.getUser());
+                userBadge.setBadge(updatedUserBadge.getBadge());
+                userBadge.setUnlockedAt(updatedUserBadge.getUnlockedAt());
+                return userBadgeRepository.save(userBadge);
+            })
+            .orElseThrow(() -> new RuntimeException("UserBadge non trouvé avec ID : " + id));
     }
 
-    public void deleteUserBadge(Long id) {
+    public void deleteUserBadge(UserBadge.UserBadgeKey id) {
         userBadgeRepository.deleteById(id);
+    }
+
+    public void assignBadgeIfNotExists(User user, Badge badge) {
+        if (!userBadgeRepository.existsByUser_UserIdAndBadge_BadgeId(user.getUserId(), badge.getBadgeId())) {
+            UserBadge userBadge = new UserBadge();
+            userBadge.setUser(user);
+            userBadge.setBadge(badge);
+            userBadgeRepository.save(userBadge);
+        }
     }
 }
 

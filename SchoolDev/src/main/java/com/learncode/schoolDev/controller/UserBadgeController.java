@@ -2,6 +2,8 @@ package com.learncode.schoolDev.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +29,11 @@ public class UserBadgeController {
         return userBadgeService.getAllUserBadges();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get-by-composite-id")
     @Operation(summary = "Obtenir un badge utilisateur par ID", description = "Retourne les détails d'un badge utilisateur spécifique")
-    public ResponseEntity<UserBadge> getUserBadgeById(@PathVariable Long id) {
-        Optional<UserBadge> userBadge = userBadgeService.getUserBadgeById(id);
+    public ResponseEntity<UserBadge> getUserBadgeById(@RequestParam Long userId, @RequestParam Long badgeId) {
+        UserBadge.UserBadgeKey key = new UserBadge.UserBadgeKey(userId, badgeId);
+        Optional<UserBadge> userBadge = userBadgeService.getUserBadgeById(key);
         return userBadge.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -48,24 +51,26 @@ public class UserBadgeController {
 
     @PostMapping
     @Operation(summary = "Attribuer un badge à un utilisateur", description = "Ajoute une nouvelle association utilisateur-badge à la base de données")
-    public UserBadge createUserBadge(@RequestBody UserBadge userBadge) {
+    public UserBadge createUserBadge(@Valid @RequestBody UserBadge userBadge) {
         return userBadgeService.createUserBadge(userBadge);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update")
     @Operation(summary = "Mettre à jour un badge utilisateur", description = "Met à jour les informations d'un badge utilisateur existant")
-    public ResponseEntity<UserBadge> updateUserBadge(@PathVariable Long id, @RequestBody UserBadge updatedUserBadge) {
+    public ResponseEntity<UserBadge> updateUserBadge(@RequestParam Long userId, @RequestParam Long badgeId, @RequestBody UserBadge updatedUserBadge) {
+        UserBadge.UserBadgeKey key = new UserBadge.UserBadgeKey(userId, badgeId);
         try {
-            return ResponseEntity.ok(userBadgeService.updateUserBadge(id, updatedUserBadge));
+            return ResponseEntity.ok(userBadgeService.updateUserBadge(key, updatedUserBadge));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete")
     @Operation(summary = "Supprimer un badge utilisateur", description = "Supprime un badge utilisateur de la base de données")
-    public ResponseEntity<Void> deleteUserBadge(@PathVariable Long id) {
-        userBadgeService.deleteUserBadge(id);
+    public ResponseEntity<Void> deleteUserBadge(@RequestParam Long userId, @RequestParam Long badgeId) {
+        UserBadge.UserBadgeKey key = new UserBadge.UserBadgeKey(userId, badgeId);
+        userBadgeService.deleteUserBadge(key);
         return ResponseEntity.noContent().build();
     }
 }

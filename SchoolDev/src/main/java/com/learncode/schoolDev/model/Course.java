@@ -1,7 +1,12 @@
 package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
+
+import com.learncode.schoolDev.enums.DifficultyLevel;
 
 @Entity
 @Table(name = "Courses")
@@ -10,11 +15,15 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long courseId;
 
+    @NotBlank(message = "Le titre est obligatoire")
     private String title;
-    private int studentNumber;
+    @NotBlank(message = "La langue est obligatoire")
     private String language;
     private LocalDateTime createdAt;
-    private String difficultyLevel;
+    
+    @NotNull(message = "Le niveau de difficulté est obligatoire")
+    @Enumerated(EnumType.STRING)
+    private DifficultyLevel difficultyLevel;
 
     @PrePersist
     protected void onCreate() {
@@ -38,14 +47,6 @@ public class Course {
         this.title = title;
     }
 
-    public int getStudentNumber() {
-        return studentNumber;
-    }
-
-    public void setStudentNumber(int studentNumber) {
-        this.studentNumber = studentNumber;
-    }
-
     public String getLanguage() {
         return language;
     }
@@ -58,11 +59,12 @@ public class Course {
         return createdAt;
     }
 
-    public String getDifficultyLevel() {
+    public DifficultyLevel getDifficultyLevel() {
         return difficultyLevel;
     }
 
-    public void setDifficultyLevel(String difficultyLevel) {
+    public void setDifficultyLevel(DifficultyLevel difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
     }
+    
 }

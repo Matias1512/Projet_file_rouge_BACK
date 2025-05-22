@@ -1,6 +1,8 @@
 package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,8 +12,11 @@ public class Badge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long badgeId;
 
+    @NotBlank(message = "Le nom est obligatoire")
     private String name;
+    @NotBlank(message = "La description est obligatoire")
     private String description;
+    @NotBlank(message = "L'icône est obligatoire")
     private String iconUrl;
     private LocalDateTime createdAt;
 

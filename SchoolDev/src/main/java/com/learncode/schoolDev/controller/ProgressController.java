@@ -2,6 +2,8 @@ package com.learncode.schoolDev.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +50,7 @@ public class ProgressController {
 
     @PostMapping
     @Operation(summary = "Créer une nouvelle progression", description = "Ajoute une nouvelle progression à la base de données")
-    public Progress createProgress(@RequestBody Progress progress) {
+    public Progress createProgress(@Valid @RequestBody Progress progress) {
         return progressService.createProgress(progress);
     }
 

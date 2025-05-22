@@ -2,6 +2,8 @@ package com.learncode.schoolDev.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +50,7 @@ public class SubmissionController {
 
     @PostMapping
     @Operation(summary = "Créer une nouvelle soumission", description = "Ajoute une nouvelle soumission à la base de données")
-    public Submission createSubmission(@RequestBody Submission submission) {
+    public Submission createSubmission(@Valid @RequestBody Submission submission) {
         return submissionService.createSubmission(submission);
     }
 

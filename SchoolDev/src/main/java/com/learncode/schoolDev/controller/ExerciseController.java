@@ -2,6 +2,8 @@ package com.learncode.schoolDev.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +44,7 @@ public class ExerciseController {
 
     @PostMapping
     @Operation(summary = "Créer un nouvel exercice", description = "Ajoute un nouvel exercice à la base de données")
-    public Exercise createExercise(@RequestBody Exercise exercise) {
+    public Exercise createExercise(@Valid @RequestBody Exercise exercise) {
         return exerciseService.createExercise(exercise);
     }
 

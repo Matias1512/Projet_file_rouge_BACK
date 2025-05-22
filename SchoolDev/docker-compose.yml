@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    restart: always
+    command:
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.docker=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8081:8080" # dashboard Traefik
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+
+    networks:
+      - web
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Saxomat+15
+      POSTGRES_DB: schoolDevDatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - web
+
+  spring-app:
+    image: matias151/schooldev_back:latest
+    container_name: spring_boot
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/schoolDevDatabase
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Saxomat+15
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.springboot.rule=Host(`schooldev.duckdns.org`)"
+      - "traefik.http.routers.springboot.entrypoints=web"
+      - "traefik.http.services.springboot.loadbalancer.server.port=8080"
+      - "traefik.http.routers.springboot.entrypoints=websecure"
+      - "traefik.http.routers.springboot.tls.certresolver=myresolver"
+
+    networks:
+      - web
+
+networks:
+  web:
+    external: false
+
+volumes:
+  postgres_data:

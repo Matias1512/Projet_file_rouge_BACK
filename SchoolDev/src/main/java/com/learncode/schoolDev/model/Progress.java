@@ -1,6 +1,8 @@
 package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,7 +12,9 @@ public class Progress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long progressId;
 
+    @NotNull(message = "L'ID de la leçon est obligatoire")
     private int currentLessonId;
+    @NotNull(message = "Le pourcentage de progression est obligatoire")
     private double percentageCompleted;
     private LocalDateTime lastUpdated;
 

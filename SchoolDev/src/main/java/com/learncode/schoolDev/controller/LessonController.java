@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +44,7 @@ public class LessonController {
 
     @PostMapping
     @Operation(summary = "Créer une nouvelle leçon", description = "Ajoute une nouvelle leçon à la base de données")
-    public Lesson createLesson(@RequestBody Lesson lesson) {
+    public Lesson createLesson(@Valid @RequestBody Lesson lesson) {
         return lessonService.createLesson(lesson);
     }
 

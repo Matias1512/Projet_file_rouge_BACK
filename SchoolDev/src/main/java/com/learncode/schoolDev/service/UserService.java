@@ -6,10 +6,14 @@ import com.learncode.schoolDev.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -27,11 +31,20 @@ public class UserService {
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+    
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 
     public User createUser(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("Un utilisateur avec cet email existe déjà.");
         }
+
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Un utilisateur avec ce nom existe déjà.");
+        }
+
         return userRepository.save(user);
     }
 
@@ -51,5 +64,18 @@ public class UserService {
             throw new RuntimeException("Utilisateur non trouvé avec ID : " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    public UserDetails loadUserByUsername(String username) {
+       User user = userRepository.findByUsername(username)
+               .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec le nom d'utilisateur : " + username));
+        if(user == null) {
+            throw new UsernameNotFoundException("user not found with username: " + username);
+        }
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPasswordHash(),
+                List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
+        );
     }
 }

@@ -2,6 +2,8 @@ package com.learncode.schoolDev.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +45,7 @@ public class UserController {
 
     @PostMapping
     @Operation(summary = "Créer un nouvel utilisateur", description = "Ajoute un nouvel utilisateur à la base de données")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
         try {
             return ResponseEntity.ok(userService.createUser(user));
         } catch (RuntimeException e) {
