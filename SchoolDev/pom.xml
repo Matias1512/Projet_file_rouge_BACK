@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>23</java.version>
+		<sonar.projectKey>Matias1512_Projet_file_rouge_BACK</sonar.projectKey>
 		<sonar.organization>matias1512</sonar.organization>
   		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
