@@ -1,4 +1,4 @@
-package com.learncode.schoolev.config;
+package com.learncode.schoolDev.config;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;

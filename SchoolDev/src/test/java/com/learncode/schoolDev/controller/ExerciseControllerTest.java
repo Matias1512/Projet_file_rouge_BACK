@@ -1,4 +1,4 @@
-package com.learncode.schooldev.controller;
+package com.learncode.schoolDev.controller;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -7,8 +7,8 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.learncode.schooldev.model.Exercise;
-import com.learncode.schooldev.model.Lesson;
+import com.learncode.schoolDev.model.Exercise;
+import com.learncode.schoolDev.model.Lesson;
 
 import java.util.Set;
 

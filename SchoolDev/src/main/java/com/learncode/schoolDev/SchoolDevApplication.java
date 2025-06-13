@@ -1,4 +1,4 @@
-package com.learncode.schooldev;
+package com.learncode.schoolDev;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

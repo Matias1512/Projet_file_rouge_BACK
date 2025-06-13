@@ -1,4 +1,4 @@
-package com.learncode.schooldev.model;
+package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-import com.learncode.schooldev.enums.DifficultyLevel;
+import com.learncode.schoolDev.enums.DifficultyLevel;
 
 @Entity
 @Table(name = "Courses")

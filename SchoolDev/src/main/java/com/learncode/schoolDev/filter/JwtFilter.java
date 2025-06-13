@@ -1,4 +1,4 @@
-package com.learncode.schooldev.filter;
+package com.learncode.schoolDev.filter;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -7,8 +7,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.learncode.schooldev.config.JwtUtils;
-import com.learncode.schooldev.service.UserService;
+import com.learncode.schoolDev.config.JwtUtils;
+import com.learncode.schoolDev.service.UserService;
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.FilterChain;

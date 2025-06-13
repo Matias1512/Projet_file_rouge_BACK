@@ -1,4 +1,4 @@
-package com.learncode.schooldev.exception;
+package com.learncode.schoolDev.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

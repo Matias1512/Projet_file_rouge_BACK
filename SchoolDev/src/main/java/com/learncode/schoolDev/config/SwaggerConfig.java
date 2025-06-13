@@ -1,4 +1,4 @@
-package com.learncode.schooldev.config;
+package com.learncode.schoolDev.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

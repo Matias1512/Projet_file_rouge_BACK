@@ -1,4 +1,4 @@
-package com.learncode.schooldev.config;
+package com.learncode.schoolDev.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.learncode.schooldev.filter.JwtFilter;
-import com.learncode.schooldev.service.UserService;
+import com.learncode.schoolDev.filter.JwtFilter;
+import com.learncode.schoolDev.service.UserService;
 
 
 @Configuration

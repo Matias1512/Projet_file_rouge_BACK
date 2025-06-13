@@ -1,7 +1,7 @@
-package com.learncode.schooldev.controller;
+package com.learncode.schoolDev.controller;
 
-import com.learncode.schooldev.model.Badge;
-import com.learncode.schooldev.service.BadgeService;
+import com.learncode.schoolDev.model.Badge;
+import com.learncode.schoolDev.service.BadgeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

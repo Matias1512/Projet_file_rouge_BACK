@@ -1,4 +1,4 @@
-package com.learncode.schooldev.controller;
+package com.learncode.schoolDev.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,13 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learncode.schooldev.config.JwtUtils;
-import com.learncode.schooldev.model.Badge;
-import com.learncode.schooldev.model.User;
-import com.learncode.schooldev.model.UserBadge;
-import com.learncode.schooldev.repository.BadgeRepository;
-import com.learncode.schooldev.repository.UserBadgeRepository;
-import com.learncode.schooldev.repository.UserRepository;
+import com.learncode.schoolDev.config.JwtUtils;
+import com.learncode.schoolDev.model.Badge;
+import com.learncode.schoolDev.model.User;
+import com.learncode.schoolDev.model.UserBadge;
+import com.learncode.schoolDev.repository.BadgeRepository;
+import com.learncode.schoolDev.repository.UserBadgeRepository;
+import com.learncode.schoolDev.repository.UserRepository;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

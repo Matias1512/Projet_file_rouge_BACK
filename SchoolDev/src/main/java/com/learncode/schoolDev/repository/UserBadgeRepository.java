@@ -1,10 +1,10 @@
-package com.learncode.schooldev.repository;
+package com.learncode.schoolDev.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.learncode.schooldev.model.UserBadge;
-import com.learncode.schooldev.model.UserBadge.UserBadgeKey;
+import com.learncode.schoolDev.model.UserBadge;
+import com.learncode.schoolDev.model.UserBadge.UserBadgeKey;
 
 import java.util.List;
 

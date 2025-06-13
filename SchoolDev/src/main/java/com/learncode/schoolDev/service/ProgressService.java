@@ -1,9 +1,9 @@
-package com.learncode.schooldev.service;
+package com.learncode.schoolDev.service;
 
 import org.springframework.stereotype.Service;
 
-import com.learncode.schooldev.model.Progress;
-import com.learncode.schooldev.repository.ProgressRepository;
+import com.learncode.schoolDev.model.Progress;
+import com.learncode.schoolDev.repository.ProgressRepository;
 
 import java.util.List;
 import java.util.Optional;

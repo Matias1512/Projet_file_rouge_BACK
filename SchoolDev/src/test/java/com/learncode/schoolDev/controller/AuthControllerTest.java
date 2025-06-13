@@ -1,11 +1,11 @@
-package com.learncode.schooldev.controller;
+package com.learncode.schoolDev.controller;
 
-import com.learncode.schooldev.config.JwtUtils;
-import com.learncode.schooldev.model.Badge;
-import com.learncode.schooldev.model.User;
-import com.learncode.schooldev.repository.BadgeRepository;
-import com.learncode.schooldev.repository.UserBadgeRepository;
-import com.learncode.schooldev.repository.UserRepository;
+import com.learncode.schoolDev.config.JwtUtils;
+import com.learncode.schoolDev.model.Badge;
+import com.learncode.schoolDev.model.User;
+import com.learncode.schoolDev.repository.BadgeRepository;
+import com.learncode.schoolDev.repository.UserBadgeRepository;
+import com.learncode.schoolDev.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

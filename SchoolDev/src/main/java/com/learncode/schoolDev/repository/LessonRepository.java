@@ -1,9 +1,9 @@
-package com.learncode.schooldev.repository;
+package com.learncode.schoolDev.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.learncode.schooldev.model.Lesson;
+import com.learncode.schoolDev.model.Lesson;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.learncode.schooldev.enums;
+package com.learncode.schoolDev.enums;
 
 public enum DifficultyLevel {
     EASY,

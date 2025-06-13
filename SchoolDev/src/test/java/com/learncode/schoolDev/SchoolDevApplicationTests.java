@@ -1,4 +1,4 @@
-package com.learncode.schooldev;
+package com.learncode.schoolDev;
 
 import org.junit.jupiter.api.Test;
 

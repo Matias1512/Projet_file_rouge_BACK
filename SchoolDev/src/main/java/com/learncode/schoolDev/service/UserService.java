@@ -1,7 +1,7 @@
-package com.learncode.schooldev.service;
+package com.learncode.schoolDev.service;
 
-import com.learncode.schooldev.model.User;
-import com.learncode.schooldev.repository.UserRepository;
+import com.learncode.schoolDev.model.User;
+import com.learncode.schoolDev.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
