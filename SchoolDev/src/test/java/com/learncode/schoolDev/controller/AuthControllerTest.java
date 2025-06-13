@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthControllerTest {
+class AuthControllerTest {
 
     @InjectMocks
     private AuthController authController;
