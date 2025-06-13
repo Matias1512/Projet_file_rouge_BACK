@@ -14,7 +14,7 @@ jobs:
       - name: 🛎️ Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 🔁 Important pour SonarCloud
+          fetch-depth: 0
 
       - name: ☕ Setup Java 23
         uses: actions/setup-java@v3
@@ -22,13 +22,6 @@ jobs:
           distribution: 'temurin'
           java-version: '23'
           cache: maven
-    
-      - name: 🗃️ Cache SonarQube packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
 
       - name: 🗃️ Cache Maven packages
         uses: actions/cache@v4
@@ -37,20 +30,18 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: 🧪 Run tests and generate JaCoCo report
+      - name: 🧹 Clean before build
+        run: mvn clean
+        working-directory: SchoolDev
+
+      - name: 🧪 Run tests and analyze with SonarCloud
         working-directory: SchoolDev
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
 
-      - name: 🧪 Build and analyze with SonarCloud
-        working-directory: SchoolDev
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn sonar:sonar
-
       - name: 📂 Vérifier le contenu du rapport JaCoCo
-        run: Get-ChildItem SchoolDev/target/site/jacoco | Select-Object Name, Length, LastWriteTime
+        run: ls -lh SchoolDev/target/site/jacoco
 
   
   docker:
