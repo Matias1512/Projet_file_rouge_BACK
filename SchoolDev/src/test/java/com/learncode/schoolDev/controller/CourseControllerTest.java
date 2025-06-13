@@ -31,8 +31,8 @@ class CourseControllerTest {
 
     @BeforeEach
     void setup() {
-        course1 = new Course(1L, "Intro to Java", "Java", "Beginner");
-        course2 = new Course(2L, "Advanced Java", "Java", "Advanced");
+        course1 = new Course(1L, "Intro to Java", "Java", "EASY");
+        course2 = new Course(2L, "Advanced Java", "Java", "HARD");
     }
 
     @Test
@@ -80,8 +80,8 @@ class CourseControllerTest {
 
     @Test
     void testUpdateCourse_Success() {
-        Course update = new Course(1L, "Updated Course", "Java", "Advanced");
-        Course updated = new Course(1L, "Updated Course", "Java", "Advanced");
+        Course update = new Course(1L, "Updated Course", "Java", "HARD");
+        Course updated = new Course(1L, "Updated Course", "Java", "HARD");
 
         when(courseService.updateCourse(eq(1L), any(Course.class))).thenReturn(updated);
 
