@@ -22,6 +22,10 @@ jobs:
           distribution: 'temurin'
           java-version: '23'
           cache: maven
+      
+      - name: Clean Maven cache
+        working-directory: SchoolDevz
+        run: mvn -B clean
 
       - name: 🗃️ Cache SonarQube packages
         uses: actions/cache@v4
