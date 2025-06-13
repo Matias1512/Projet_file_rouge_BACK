@@ -1,7 +1,7 @@
-package com.learncode.schoolDev.controller;
+package com.learncode.schooldev.controller;
 
-import com.learncode.schoolDev.model.Course;
-import com.learncode.schoolDev.service.CourseService;
+import com.learncode.schooldev.model.Course;
+import com.learncode.schooldev.service.CourseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
