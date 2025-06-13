@@ -66,8 +66,8 @@ class CourseControllerTest {
 
     @Test
     void testCreateCourse() {
-        Course input = new Course(3L, "New Course", "Python", "Intermediate");
-        Course saved = new Course(3L, "New Course", "Python", "Intermediate");
+        Course input = new Course(3L, "New Course", "Python", "NORMAL");
+        Course saved = new Course(3L, "New Course", "Python", "NORMAL");
 
         when(courseService.createCourse(any(Course.class))).thenReturn(saved);
 
