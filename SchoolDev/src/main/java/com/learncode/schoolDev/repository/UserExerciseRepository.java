@@ -1,8 +1,8 @@
-package com.learncode.schoolDev.repository;
+package com.learncode.schooldev.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.learncode.schoolDev.model.UserExercise;
+import com.learncode.schooldev.model.UserExercise;
 
 import java.util.List;
 

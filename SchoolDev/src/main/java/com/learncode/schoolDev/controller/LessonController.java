@@ -1,4 +1,4 @@
-package com.learncode.schoolDev.controller;
+package com.learncode.schooldev.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,8 +10,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.learncode.schoolDev.model.Lesson;
-import com.learncode.schoolDev.service.LessonService;
+import com.learncode.schooldev.model.Lesson;
+import com.learncode.schooldev.service.LessonService;
 
 @RestController
 @RequestMapping("/api/lessons")

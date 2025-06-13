@@ -1,11 +1,11 @@
-package com.learncode.schoolDev.service;
+package com.learncode.schooldev.service;
 
 import org.springframework.stereotype.Service;
 
-import com.learncode.schoolDev.model.Badge;
-import com.learncode.schoolDev.model.User;
-import com.learncode.schoolDev.model.UserBadge;
-import com.learncode.schoolDev.repository.UserBadgeRepository;
+import com.learncode.schooldev.model.Badge;
+import com.learncode.schooldev.model.User;
+import com.learncode.schooldev.model.UserBadge;
+import com.learncode.schooldev.repository.UserBadgeRepository;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
-package com.learncode.schoolDev.repository;
+package com.learncode.schooldev.repository;
 
-import com.learncode.schoolDev.model.User;
+import com.learncode.schooldev.model.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

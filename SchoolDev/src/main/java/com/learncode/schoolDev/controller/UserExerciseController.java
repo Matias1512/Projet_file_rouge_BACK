@@ -1,4 +1,4 @@
-package com.learncode.schoolDev.controller;
+package com.learncode.schooldev.controller;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learncode.schoolDev.model.UserExercise;
-import com.learncode.schoolDev.service.UserExerciseService;
+import com.learncode.schooldev.model.UserExercise;
+import com.learncode.schooldev.service.UserExerciseService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

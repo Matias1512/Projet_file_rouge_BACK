@@ -1,4 +1,4 @@
-package com.learncode.schoolDev.model;
+package com.learncode.schooldev.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

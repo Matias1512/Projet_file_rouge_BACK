@@ -1,9 +1,9 @@
-package com.learncode.schoolDev.service;
+package com.learncode.schooldev.service;
 
 import org.springframework.stereotype.Service;
 
-import com.learncode.schoolDev.model.Course;
-import com.learncode.schoolDev.repository.CourseRepository;
+import com.learncode.schooldev.model.Course;
+import com.learncode.schooldev.repository.CourseRepository;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.learncode.schoolDev.controller;
+package com.learncode.schooldev.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -7,8 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.learncode.schoolDev.model.User;
-import com.learncode.schoolDev.service.UserService;
+import com.learncode.schooldev.model.User;
+import com.learncode.schooldev.service.UserService;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
-package com.learncode.schoolDev.repository;
+package com.learncode.schooldev.repository;
 
-import com.learncode.schoolDev.model.Course;
+import com.learncode.schooldev.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,11 +1,11 @@
-package com.learncode.schoolDev.service;
+package com.learncode.schooldev.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.learncode.schoolDev.model.UserExercise;
-import com.learncode.schoolDev.repository.UserExerciseRepository;
+import com.learncode.schooldev.model.UserExercise;
+import com.learncode.schooldev.repository.UserExerciseRepository;
 
 @Service
 public class UserExerciseService {

@@ -1,4 +1,4 @@
-package com.learncode.schoolDev.config;
+package com.learncode.schooldev.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;

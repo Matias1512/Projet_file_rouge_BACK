@@ -1,4 +1,4 @@
-package com.learncode.schoolDev.dataInitializer;
+package com.learncode.schooldev.dataInitializer;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.learncode.schoolDev.model.Badge;
-import com.learncode.schoolDev.repository.BadgeRepository;
+import com.learncode.schooldev.model.Badge;
+import com.learncode.schooldev.repository.BadgeRepository;
 
 @Component
 public class BadgeDataInitializer implements CommandLineRunner {
