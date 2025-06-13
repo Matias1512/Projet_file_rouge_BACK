@@ -26,7 +26,6 @@ public class BadgeDataInitializer implements CommandLineRunner {
         this.objectMapper.registerModule(new JavaTimeModule());
         this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
-
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Initializing Badge data...");
