@@ -20,6 +20,18 @@ public class Badge {
     private String iconUrl;
     private LocalDateTime createdAt;
 
+
+    public Badge() {
+        // Constructeur par défaut
+    }
+
+    public Badge(Long id, String name, String description, String iconUrl) {
+        this.badgeId = id;
+        this.name = name;
+        this.description = description;
+        this.iconUrl = iconUrl;
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

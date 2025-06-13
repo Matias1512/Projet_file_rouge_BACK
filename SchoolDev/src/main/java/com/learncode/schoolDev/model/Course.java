@@ -25,6 +25,16 @@ public class Course {
     @Enumerated(EnumType.STRING)
     private DifficultyLevel difficultyLevel;
 
+    public Course(long courseId, String title, String language, String difficultyLevel) {
+        this.courseId = courseId;
+        this.title = title;
+        this.language = language;
+        this.difficultyLevel = DifficultyLevel.valueOf(difficultyLevel);
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Course() {}
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

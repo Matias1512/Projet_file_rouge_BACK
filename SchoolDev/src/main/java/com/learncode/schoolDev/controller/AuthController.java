@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,11 +34,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public class AuthController {
 
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils, AuthenticationManager authenticationManager, UserBadgeRepository userBadgeRepository, BadgeRepository badgeRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
+        this.userBadgeRepository = userBadgeRepository;
+        this.badgeRepository = badgeRepository;
     }
 
     private final UserRepository userRepository;
@@ -47,10 +48,8 @@ public class AuthController {
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
 
-    @Autowired
     private UserBadgeRepository userBadgeRepository;
 
-    @Autowired
     private BadgeRepository badgeRepository;
 
     @PostMapping("/register")
