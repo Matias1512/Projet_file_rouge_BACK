@@ -34,7 +34,7 @@ public class UserExerciseService {
 
     public List<UserExercise> getAllSuccessfulExercice(Long userId) {
         return repository.findByUser_UserId(userId).stream()
-                .filter(userExercise -> userExercise.getSuccess())
+                .filter(UserExercise::getSuccess)
                 .toList();
     }
 
