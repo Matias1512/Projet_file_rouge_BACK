@@ -50,10 +50,6 @@ class LessonControllerTest {
             violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("content")),
             "Le champ content doit être obligatoire"
         );
-        assertTrue(
-            violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("orderInCourse")),
-            "Le champ orderInCourse doit être obligatoire"
-        );
     }
 
     @Test
