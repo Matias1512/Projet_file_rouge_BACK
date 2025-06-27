@@ -34,14 +34,14 @@ public class UserExerciseService {
 
     public List<UserExercise> getAllSuccessfulExercice(Long userId) {
         return repository.findByUser_UserId(userId).stream()
-                .filter(userExercise -> userExercise.getSuccess() == true)
+                .filter(userExercise -> userExercise.getSuccess())
                 .toList();
     }
 
     public List<UserExercise> getSuccessfulExercicebyLanguage(Long userId, String language) {
         return repository.findByUser_UserId(userId).stream()
-                .filter(userExercise -> userExercise.getExercise().getLesson().getCourse().getLanguage() == language 
-                && userExercise.getSuccess() == true)
+                .filter(userExercise -> userExercise.getExercise().getLesson().getCourse().getLanguage().equals(language) 
+                && userExercise.getSuccess())
                 .toList();
     }
 }
