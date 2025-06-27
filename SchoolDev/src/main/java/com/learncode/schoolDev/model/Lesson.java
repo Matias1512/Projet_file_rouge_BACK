@@ -18,7 +18,7 @@ public class Lesson {
     @NotBlank(message = "Le contenu est obligatoire")
     private String content;
     @NotNull(message = "L'ordre dans le cours est obligatoire")
-    private int orderInCourse;
+    private Integer orderInCourse;
     private LocalDateTime createdAt;
 
     @ManyToOne

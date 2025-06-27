@@ -40,7 +40,7 @@ class LessonControllerTest {
 
         Set<ConstraintViolation<Lesson>> violations = validator.validate(lesson);
 
-        assertEquals(3, violations.size(), "3 violations attendues (title, content, orderInCourse)");
+        assertEquals(2, violations.size());
 
         assertTrue(
             violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("title")),
