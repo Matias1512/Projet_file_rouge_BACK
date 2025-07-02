@@ -120,7 +120,7 @@ class UserBadgeControllerTest {
 
     @Test
     void testUpdateUserBadge_NotFound() {
-        when(userBadgeService.updateUserBadge(eq(key), any(UserBadge.class)))
+        when(userBadgeService.updateUserBadge(key, userBadge))
                 .thenThrow(new RuntimeException("UserBadge non trouvé avec clé : " + key));
     
         ResponseEntity<UserBadge> response = userBadgeController.updateUserBadge(
@@ -128,7 +128,7 @@ class UserBadgeControllerTest {
     
         assertEquals(404, response.getStatusCode().value());
         assertNull(response.getBody());
-        verify(userBadgeService).updateUserBadge(eq(key), eq(userBadge));
+        verify(userBadgeService).updateUserBadge(key, userBadge);
     }
     
 
