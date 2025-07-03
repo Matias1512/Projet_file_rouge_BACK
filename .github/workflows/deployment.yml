@@ -107,6 +107,6 @@ jobs:
             key: ${{ secrets.VM_SSH_KEY }}
             script: |
               cd /home/azureuser/Projet_file_rouge_BACK/SchoolDev
-              git pull origin master
+              git pull origin main
               docker-compose pull
               docker-compose up -d
