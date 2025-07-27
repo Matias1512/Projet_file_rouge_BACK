@@ -142,4 +142,28 @@ class SubmissionControllerTest {
         assertEquals(204, response.getStatusCode().value());
         verify(submissionService).deleteSubmission(1L);
     }
+
+    @Test
+    void testGetSubmissionsByUser() {
+        List<Submission> userSubmissions = Arrays.asList(submission, new Submission());
+        when(submissionService.getSubmissionsByUser(2L)).thenReturn(userSubmissions);
+
+        List<Submission> result = submissionController.getSubmissionsByUser(2L);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(submissionService).getSubmissionsByUser(2L);
+    }
+
+    @Test
+    void testGetSubmissionsByExercise() {
+        List<Submission> exerciseSubmissions = Arrays.asList(submission, new Submission());
+        when(submissionService.getSubmissionsByExercise(3L)).thenReturn(exerciseSubmissions);
+
+        List<Submission> result = submissionController.getSubmissionsByExercise(3L);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(submissionService).getSubmissionsByExercise(3L);
+    }
 }
