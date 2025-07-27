@@ -7,6 +7,8 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,5 +66,20 @@ class ExerciseTest {
         assertEquals("if (x > 0) {}", exercise.getStarterCode());
         assertEquals("assert check(1) == true", exercise.getTestCases());
         assertEquals(lesson, exercise.getLesson());
+    }
+
+    @Test
+    void testOnCreate_setsCreatedAt() throws Exception {
+        // Arrange
+        Exercise exercise = new Exercise();
+
+        // Act
+        Method onCreateMethod = Exercise.class.getDeclaredMethod("onCreate");
+        onCreateMethod.setAccessible(true); // car c'est protected
+        onCreateMethod.invoke(exercise);
+
+        // Assert
+        assertNotNull(exercise.getCreatedAt(), "createdAt should be set by onCreate()");
+        assertTrue(exercise.getCreatedAt().isBefore(LocalDateTime.now().plusSeconds(1)));
     }
 }
