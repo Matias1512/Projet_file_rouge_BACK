@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -117,6 +118,26 @@ class AuthControllerTest {
 
         ResponseEntity<?> response = authController.login(loginData);
 
+        assertEquals(401, response.getStatusCode().value());
+        assertEquals("Invalid username or password", response.getBody());
+    }
+
+    @Test
+    void testLogin_Unauthorized_whenAuthenticationNotAuthenticated() {
+        // Arrange
+        Map<String, String> loginData = Map.of("username", "testuser", "password", "wrong");
+
+        // Mock du retour de authenticationManager.authenticate(...) : ne lève pas d'exception
+        Authentication fakeAuthentication = mock(Authentication.class);
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .thenReturn(fakeAuthentication);
+        // ... mais isAuthenticated() retourne false !
+        when(fakeAuthentication.isAuthenticated()).thenReturn(false);
+
+        // Act
+        ResponseEntity<?> response = authController.login(loginData);
+
+        // Assert
         assertEquals(401, response.getStatusCode().value());
         assertEquals("Invalid username or password", response.getBody());
     }
