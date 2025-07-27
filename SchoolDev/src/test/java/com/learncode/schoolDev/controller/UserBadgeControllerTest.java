@@ -136,7 +136,7 @@ class UserBadgeControllerTest {
     void testDeleteUserBadge() {
         doNothing().when(userBadgeService).deleteUserBadge(key);
 
-        ResponseEntity<Object> response = userBadgeController.deleteUserBadge(user.getUserId(), badge.getBadgeId());
+        ResponseEntity<Void> response = userBadgeController.deleteUserBadge(user.getUserId(), badge.getBadgeId());
 
         assertEquals(204, response.getStatusCode().value());
         verify(userBadgeService).deleteUserBadge(key);
