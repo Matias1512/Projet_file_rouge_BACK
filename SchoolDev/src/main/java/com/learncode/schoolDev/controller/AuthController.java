@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learncode.schoolDev.config.JwtUtils;
+import com.learncode.schoolDev.dto.LoginRequest;
 import com.learncode.schoolDev.model.Badge;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.model.UserBadge;
@@ -77,12 +78,10 @@ public class AuthController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody Map<String, String> loginData) {
-        String username = loginData.get("username");
-        String password = loginData.get("password"); // ⚠️ le champ "password" ici
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
         try {
-            System.out.println("Registering user: " + username);
-            System.out.println("Passport user: " + password);
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
             ); 
