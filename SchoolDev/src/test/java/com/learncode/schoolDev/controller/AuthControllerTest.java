@@ -62,7 +62,7 @@ class AuthControllerTest {
     void testRegisterFailsWhenUserExists() {
         when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(user));
 
-        ResponseEntity<?> response = authController.register(user);
+        ResponseEntity<Object> response = authController.register(user);
 
         assertEquals(400, response.getStatusCode().value());
         assertEquals("Username already exists", response.getBody());
@@ -81,7 +81,7 @@ class AuthControllerTest {
         List<Badge> badges = List.of(new Badge(), new Badge());
         when(badgeRepository.findAll()).thenReturn(badges);
 
-        ResponseEntity<?> response = authController.register(user);
+        ResponseEntity<Object> response = authController.register(user);
 
         assertEquals(200, response.getStatusCode().value());
         User savedUser = (User) response.getBody();
@@ -102,7 +102,7 @@ class AuthControllerTest {
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
         when(jwtUtils.generateToken("testuser")).thenReturn("token123");
 
-        ResponseEntity<?> response = authController.login(loginRequest);
+        ResponseEntity<Object> response = authController.login(loginRequest);
 
         assertEquals(200, response.getStatusCode().value());
         assertTrue(response.getBody() instanceof Map);
@@ -120,7 +120,7 @@ class AuthControllerTest {
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new RuntimeException("Bad credentials"));
 
-        ResponseEntity<?> response = authController.login(loginRequest);
+        ResponseEntity<Object> response = authController.login(loginRequest);
 
         assertEquals(401, response.getStatusCode().value());
         assertEquals("Invalid username or password", response.getBody());
@@ -141,7 +141,7 @@ class AuthControllerTest {
         when(fakeAuthentication.isAuthenticated()).thenReturn(false);
 
         // Act
-        ResponseEntity<?> response = authController.login(loginRequest);
+        ResponseEntity<Object> response = authController.login(loginRequest);
 
         // Assert
         assertEquals(401, response.getStatusCode().value());

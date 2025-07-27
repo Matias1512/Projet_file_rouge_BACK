@@ -54,7 +54,7 @@ public class AuthController {
     private BadgeRepository badgeRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody User user) {
+    public ResponseEntity<Object> register(@Valid @RequestBody User user) {
         if(userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already exists");
             //System.out.println("Username already exists");
@@ -78,7 +78,7 @@ public class AuthController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Object> login(@Valid @RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
         try {
@@ -94,7 +94,6 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
