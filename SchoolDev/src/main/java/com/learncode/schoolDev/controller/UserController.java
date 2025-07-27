@@ -45,7 +45,7 @@ public class UserController {
 
     @PostMapping
     @Operation(summary = "Créer un nouvel utilisateur", description = "Ajoute un nouvel utilisateur à la base de données")
-    public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
+    public ResponseEntity<Object> createUser(@Valid @RequestBody User user) {
         try {
             return ResponseEntity.ok(userService.createUser(user));
         } catch (RuntimeException e) {
@@ -65,7 +65,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprimer un utilisateur", description = "Supprime un utilisateur de la base de données")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
         try {
             userService.deleteUser(id);
             return ResponseEntity.noContent().build();

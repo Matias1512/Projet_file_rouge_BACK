@@ -95,7 +95,7 @@ class UserControllerTest {
     void testCreateUser_Success() {
         when(userService.createUser(any(User.class))).thenReturn(user);
 
-        ResponseEntity<?> response = userController.createUser(user);
+        ResponseEntity<Object> response = userController.createUser(user);
 
         assertEquals(200, response.getStatusCode().value());
         assertEquals(user, response.getBody());
@@ -106,7 +106,7 @@ class UserControllerTest {
     void testCreateUser_Failure() {
         when(userService.createUser(any(User.class))).thenThrow(new RuntimeException("User already exists"));
 
-        ResponseEntity<?> response = userController.createUser(user);
+        ResponseEntity<Object> response = userController.createUser(user);
 
         assertEquals(400, response.getStatusCode().value());
         assertEquals("User already exists", response.getBody());
@@ -139,7 +139,7 @@ class UserControllerTest {
     void testDeleteUser_Success() {
         doNothing().when(userService).deleteUser(1L);
 
-        ResponseEntity<?> response = userController.deleteUser(1L);
+        ResponseEntity<Object> response = userController.deleteUser(1L);
 
         assertEquals(204, response.getStatusCode().value());
         assertNull(response.getBody());
@@ -150,7 +150,7 @@ class UserControllerTest {
     void testDeleteUser_Failure() {
         doThrow(new RuntimeException("Cannot delete")).when(userService).deleteUser(1L);
 
-        ResponseEntity<?> response = userController.deleteUser(1L);
+        ResponseEntity<Object> response = userController.deleteUser(1L);
 
         assertEquals(400, response.getStatusCode().value());
         assertEquals("Cannot delete", response.getBody());

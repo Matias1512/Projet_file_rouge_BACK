@@ -137,7 +137,7 @@ class SubmissionControllerTest {
     void testDeleteSubmission() {
         doNothing().when(submissionService).deleteSubmission(1L);
 
-        ResponseEntity<?> response = submissionController.deleteSubmission(1L);
+        ResponseEntity<Object> response = submissionController.deleteSubmission(1L);
 
         assertEquals(204, response.getStatusCode().value());
         verify(submissionService).deleteSubmission(1L);
