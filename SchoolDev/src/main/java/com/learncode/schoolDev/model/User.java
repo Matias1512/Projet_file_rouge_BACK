@@ -84,4 +84,16 @@ public class User {
     public String getRole() {
         return role;
     }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

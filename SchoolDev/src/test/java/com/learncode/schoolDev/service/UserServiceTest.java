@@ -15,6 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -291,9 +294,28 @@ class UserServiceTest {
     void testLoadUserByUsername_NotFound() {
         when(userRepository.findByUsername("noone")).thenReturn(Optional.empty());
 
-        RuntimeException ex = assertThrows(RuntimeException.class,
+        UsernameNotFoundException ex = assertThrows(UsernameNotFoundException.class,
                 () -> userService.loadUserByUsername("noone"));
         assertTrue(ex.getMessage().contains("Utilisateur non trouvé"));
         verify(userRepository).findByUsername("noone");
+    }
+
+    @Test
+    void testLoadUserByUsername_Found() {
+        User user = new User();
+        user.setUsername("testuser");
+        user.setPasswordHash("hashedpassword");
+        user.setRole("USER");
+        
+        when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(user));
+
+        UserDetails result = userService.loadUserByUsername("testuser");
+
+        assertNotNull(result);
+        assertEquals("testuser", result.getUsername());
+        assertEquals("hashedpassword", result.getPassword());
+        assertTrue(result.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_USER")));
+        verify(userRepository).findByUsername("testuser");
     }
 }

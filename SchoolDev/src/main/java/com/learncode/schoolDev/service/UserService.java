@@ -68,10 +68,8 @@ public class UserService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username) {
        User user = userRepository.findByUsername(username)
-               .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec le nom d'utilisateur : " + username));
-        if(user == null) {
-            throw new UsernameNotFoundException("user not found with username: " + username);
-        }
+               .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé avec le nom d'utilisateur : " + username));
+       
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPasswordHash(),

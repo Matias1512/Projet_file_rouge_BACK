@@ -7,6 +7,7 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,5 +68,39 @@ class LessonTest {
         assertEquals("Introduction aux List, Set et Map en Java", lesson.getContent());
         assertEquals(2, lesson.getOrderInCourse());
         assertEquals(course, lesson.getCourse());
+    }
+
+    @Test
+    void testOnCreateMethod() {
+        Lesson lesson = new Lesson();
+        lesson.setTitle("Test Lesson");
+        lesson.setContent("Test Content");
+        lesson.setOrderInCourse(1);
+
+        // Vérifier que createdAt est null avant onCreate
+        assertNull(lesson.getCreatedAt());
+
+        // Appeler la méthode onCreate
+        LocalDateTime before = LocalDateTime.now();
+        lesson.onCreate();
+        LocalDateTime after = LocalDateTime.now();
+
+        // Vérifier que createdAt a été défini
+        LocalDateTime createdAt = lesson.getCreatedAt();
+        assertNotNull(createdAt);
+        assertTrue(createdAt.isAfter(before) || createdAt.isEqual(before));
+        assertTrue(createdAt.isBefore(after) || createdAt.isEqual(after));
+    }
+
+    @Test
+    void testGetCreatedAt() {
+        Lesson lesson = new Lesson();
+        
+        // Initialement null
+        assertNull(lesson.getCreatedAt());
+        
+        // Après onCreate
+        lesson.onCreate();
+        assertNotNull(lesson.getCreatedAt());
     }
 }
