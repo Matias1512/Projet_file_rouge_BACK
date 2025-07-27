@@ -53,5 +53,13 @@ public class UserBadgeService {
             userBadgeRepository.save(userBadge);
         }
     }
+
+    public List<UserBadge> getUserBadgesByUser(Long userId) {
+        return userBadgeRepository.findByUser_UserId(userId);
+    }
+
+    public List<UserBadge> getUserBadgesByBadge(Long badgeId) {
+        return userBadgeRepository.findByBadge_BadgeId(badgeId);
+    }
 }
 
