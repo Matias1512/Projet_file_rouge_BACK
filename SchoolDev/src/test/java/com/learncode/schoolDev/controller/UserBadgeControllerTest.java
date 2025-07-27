@@ -141,4 +141,27 @@ class UserBadgeControllerTest {
         assertEquals(204, response.getStatusCode().value());
         verify(userBadgeService).deleteUserBadge(key);
     }
+
+    @Test
+    void testGetUserBadgesByUser() {
+        UserBadge ub1 = new UserBadge();
+        UserBadge ub2 = new UserBadge();
+        when(userBadgeService.getUserBadgesByUser(123L)).thenReturn(List.of(ub1, ub2));
+
+        List<UserBadge> result = userBadgeController.getUserBadgesByUser(123L);
+
+        assertEquals(2, result.size());
+        verify(userBadgeService).getUserBadgesByUser(123L);
+    }
+
+    @Test
+    void testGetUserBadgesByBadge() {
+        UserBadge ub = new UserBadge();
+        when(userBadgeService.getUserBadgesByBadge(77L)).thenReturn(List.of(ub));
+
+        List<UserBadge> result = userBadgeController.getUserBadgesByBadge(77L);
+
+        assertEquals(1, result.size());
+        verify(userBadgeService).getUserBadgesByBadge(77L);
+    }
 }

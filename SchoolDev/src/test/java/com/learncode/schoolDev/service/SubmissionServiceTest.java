@@ -144,4 +144,27 @@ class SubmissionServiceTest {
 
         verify(submissionRepository).deleteById(1L);
     }
+
+    @Test
+    void testGetSubmissionsByUser() {
+        Submission sub1 = new Submission();
+        Submission sub2 = new Submission();
+        when(submissionRepository.findByUser_UserId(42L)).thenReturn(List.of(sub1, sub2));
+
+        List<Submission> result = submissionService.getSubmissionsByUser(42L);
+
+        assertEquals(2, result.size());
+        verify(submissionRepository).findByUser_UserId(42L);
+    }
+
+    @Test
+    void testGetSubmissionsByExercise() {
+        Submission sub = new Submission();
+        when(submissionRepository.findByExercise_ExerciseId(99L)).thenReturn(List.of(sub));
+
+        List<Submission> result = submissionService.getSubmissionsByExercise(99L);
+
+        assertEquals(1, result.size());
+        verify(submissionRepository).findByExercise_ExerciseId(99L);
+    }
 }
