@@ -1,5 +1,7 @@
 package com.learncode.schoolDev.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,8 @@ import java.nio.file.Paths;
 @Component
 public class JwtSecretReader {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtSecretReader.class);
+
     @Value("${app.jwt.secret-key:your-256-bit-secret-key-change-in-production}")
     private String jwtSecretKey;
 
@@ -21,7 +25,7 @@ public class JwtSecretReader {
             try {
                 return Files.readString(secretPath).trim();
             } catch (IOException e) {
-                System.err.println("Erreur lecture secret JWT: " + e.getMessage());
+                logger.warn("Erreur lecture secret JWT: {}", e.getMessage());
             }
         }
         
