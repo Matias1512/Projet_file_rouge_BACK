@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -110,5 +111,61 @@ class SecurityConfigTest {
         assertTrue(config.getAllowedHeaders().contains("*"));
         assertTrue(config.getAllowCredentials());
         assertEquals(3600L, config.getMaxAge());
+    }
+
+    @Test
+    void testSecurityConfigConstructor() {
+        // Vérifier que le constructeur fonctionne correctement
+        assertNotNull(securityConfig);
+        
+        // Créer une nouvelle instance pour tester le constructeur
+        SecurityConfig newConfig = new SecurityConfig(userService, jwtUtils);
+        assertNotNull(newConfig);
+    }
+
+    @Test
+    void testUrlBasedCorsConfigurationSourceCreation() {
+        CorsConfigurationSource source = securityConfig.corsConfigurationSource();
+        
+        assertNotNull(source);
+        assertTrue(source instanceof UrlBasedCorsConfigurationSource);
+    }
+
+    @Test
+    void testSecurityFilterChainConfiguration() throws Exception {
+        HttpSecurity httpSecurity = mock(HttpSecurity.class, RETURNS_DEEP_STUBS);
+        
+        // Mock la chaîne complète des appels fluents
+        when(httpSecurity.cors(any())).thenReturn(httpSecurity);
+        when(httpSecurity.csrf(any())).thenReturn(httpSecurity);
+        when(httpSecurity.headers(any())).thenReturn(httpSecurity);
+        when(httpSecurity.authorizeHttpRequests(any())).thenReturn(httpSecurity);
+        when(httpSecurity.addFilterBefore(any(), any())).thenReturn(httpSecurity);
+        when(httpSecurity.build()).thenReturn(mock(DefaultSecurityFilterChain.class));
+        
+        SecurityFilterChain filterChain = securityConfig.securityFilterChain(httpSecurity);
+        
+        assertNotNull(filterChain);
+        
+        // Vérifier que toutes les configurations ont été appelées
+        verify(httpSecurity).cors(any());
+        verify(httpSecurity).csrf(any());
+        verify(httpSecurity).headers(any());
+        verify(httpSecurity).authorizeHttpRequests(any());
+        verify(httpSecurity).addFilterBefore(any(), any());
+        verify(httpSecurity).build();
+    }
+
+    @Test
+    void testAuthenticationManagerConfiguration() throws Exception {
+        HttpSecurity httpSecurity = mock(HttpSecurity.class, RETURNS_DEEP_STUBS);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        
+        when(httpSecurity.getSharedObject(any())).thenReturn(mock(AuthenticationManagerBuilder.class, RETURNS_DEEP_STUBS));
+        
+        AuthenticationManager result = securityConfig.authenticationManager(httpSecurity, passwordEncoder);
+        
+        assertNotNull(result);
+        verify(httpSecurity).getSharedObject(AuthenticationManagerBuilder.class);
     }
 }

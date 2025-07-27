@@ -184,6 +184,66 @@ class JwtUtilsTest {
         assertEquals(username2, jwtUtils.extractUsername(token2));
     }
 
+    @Test
+    void testGetSignInKeyMethod() throws Exception {
+        // Tester la méthode getSignInKey indirectement via la génération de token
+        String username = "testuser";
+        String token = jwtUtils.generateToken(username);
+        
+        // Vérifier que le token peut être décodé (donc la clé fonctionne)
+        String extractedUsername = jwtUtils.extractUsername(token);
+        assertEquals(username, extractedUsername);
+    }
+
+    @Test
+    void testCreateTokenMethod() {
+        // Tester createToken indirectement via generateToken
+        String username = "testuser";
+        String token = jwtUtils.generateToken(username);
+        
+        assertNotNull(token);
+        assertTrue(token.contains("."));
+        assertEquals(3, token.split("\\.").length);
+        
+        // Vérifier que le token contient le bon username
+        assertEquals(username, jwtUtils.extractUsername(token));
+    }
+
+    @Test
+    void testIsTokenExpiredMethod() {
+        // Test avec un token valide
+        String username = "testuser";
+        String validToken = jwtUtils.generateToken(username);
+        
+        // Le token devrait être valide
+        UserDetails userDetails = new User(username, "password", 
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+        assertTrue(jwtUtils.isTokenValid(validToken, userDetails));
+        
+        // Test avec un token expiré
+        ReflectionTestUtils.setField(jwtUtils, "jwtExpiration", -1000L);
+        String expiredToken = jwtUtils.generateToken(username);
+        
+        // Le token expiré devrait être invalide
+        assertThrows(ExpiredJwtException.class, () -> {
+            jwtUtils.isTokenValid(expiredToken, userDetails);
+        });
+    }
+
+    @Test
+    void testExtractClaimMethod() {
+        String username = "testuser";
+        String token = jwtUtils.generateToken(username);
+        
+        // Tester extractClaim via extractUsername et extractExpirationDate
+        String extractedUsername = jwtUtils.extractUsername(token);
+        assertEquals(username, extractedUsername);
+        
+        Date expirationDate = extractExpirationDateUsingReflection(token);
+        assertNotNull(expirationDate);
+        assertTrue(expirationDate.after(new Date()));
+    }
+
     // Méthodes utilitaires pour accéder aux méthodes privées via réflexion
     private Date extractExpirationDateUsingReflection(String token) {
         try {
