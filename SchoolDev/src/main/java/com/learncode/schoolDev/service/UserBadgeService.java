@@ -26,14 +26,6 @@ public class UserBadgeService {
         return userBadgeRepository.findById(id);
     }
 
-    public List<UserBadge> getUserBadgesByUser(Long userId) {
-        return userBadgeRepository.findByUser_UserId(userId);
-    }
-
-    public List<UserBadge> getUserBadgesByBadge(Long badgeId) {
-        return userBadgeRepository.findByBadge_BadgeId(badgeId);
-    }
-
     public UserBadge createUserBadge(UserBadge userBadge) {
         return userBadgeRepository.save(userBadge);
     }

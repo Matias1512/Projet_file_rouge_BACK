@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,8 @@ import com.learncode.schoolDev.repository.BadgeRepository;
 @Component
 public class BadgeDataInitializer implements CommandLineRunner {
 
+    private static final Logger logger = LoggerFactory.getLogger(BadgeDataInitializer.class);
+    
     private final BadgeRepository badgeRepository;
     private final ObjectMapper objectMapper;
 
@@ -28,7 +32,7 @@ public class BadgeDataInitializer implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Initializing Badge data...");
+        logger.info("Initializing Badge data...");
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("ListOfBadge.json");
         if (inputStream == null) {
             throw new FileNotFoundException("ListOfBadge.json not found");
@@ -45,6 +49,6 @@ public class BadgeDataInitializer implements CommandLineRunner {
                 badgeRepository.save(badge);
             }
         }
-        System.out.println("Badge data initialized successfully.");
+        logger.info("Badge data initialized successfully.");
     }
 }

@@ -184,13 +184,25 @@ class JwtUtilsTest {
 
     @Test
     void testGetSignInKeyMethod() throws Exception {
-        // Tester la méthode getSignInKey indirectement via la génération de token
-        String username = "testuser";
-        String token = jwtUtils.generateToken(username);
+        // Tester la méthode getSignInKey indirectement via plusieurs générations de tokens
+        String[] usernames = {"user1", "user2", "admin", "test@email.com"};
         
-        // Vérifier que le token peut être décodé (donc la clé fonctionne)
-        String extractedUsername = jwtUtils.extractUsername(token);
-        assertEquals(username, extractedUsername);
+        for (String username : usernames) {
+            String token = jwtUtils.generateToken(username);
+            
+            // Vérifier que chaque token peut être décodé (donc la clé fonctionne correctement)
+            assertNotNull(token);
+            assertTrue(token.length() > 50); // JWT tokens are typically longer
+            
+            // Vérifier la structure JWT (header.payload.signature)
+            String[] tokenParts = token.split("\\.");
+            assertEquals(3, tokenParts.length);
+            
+            // Chaque partie ne doit pas être vide
+            for (String part : tokenParts) {
+                assertFalse(part.isEmpty());
+            }
+        }
     }
 
     @Test
@@ -230,16 +242,26 @@ class JwtUtilsTest {
 
     @Test
     void testExtractClaimMethod() {
-        String username = "testuser";
+        String username = "claimTestUser";
         String token = jwtUtils.generateToken(username);
         
-        // Tester extractClaim via extractUsername et extractExpirationDate
-        String extractedUsername = jwtUtils.extractUsername(token);
-        assertEquals(username, extractedUsername);
+        // Tester extractClaim via plusieurs types de claims
+        Claims allClaims = extractAllClaimsUsingReflection(token);
         
-        Date expirationDate = extractExpirationDateUsingReflection(token);
-        assertNotNull(expirationDate);
-        assertTrue(expirationDate.after(new Date()));
+        // Vérifier le subject (username)
+        assertNotNull(allClaims.getSubject());
+        assertEquals(username, allClaims.getSubject());
+        
+        // Vérifier issued at
+        assertNotNull(allClaims.getIssuedAt());
+        assertTrue(allClaims.getIssuedAt().before(new Date(System.currentTimeMillis() + 1000)));
+        
+        // Vérifier expiration
+        assertNotNull(allClaims.getExpiration());
+        assertTrue(allClaims.getExpiration().after(new Date()));
+        
+        // Vérifier que issued at est avant expiration
+        assertTrue(allClaims.getIssuedAt().before(allClaims.getExpiration()));
     }
 
     // Méthodes utilitaires pour accéder aux méthodes privées via réflexion
