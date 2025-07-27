@@ -1,6 +1,7 @@
 package com.learncode.schoolDev.controller;
 
 import com.learncode.schoolDev.config.JwtUtils;
+import com.learncode.schoolDev.dto.LoginRequest;
 import com.learncode.schoolDev.model.Badge;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.repository.BadgeRepository;
@@ -92,14 +93,16 @@ class AuthControllerTest {
 
     @Test
     void testLoginSuccess() {
-        Map<String, String> loginData = Map.of("username", "testuser", "password", "password");
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("testuser");
+        loginRequest.setPassword("password");
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
         when(jwtUtils.generateToken("testuser")).thenReturn("token123");
 
-        ResponseEntity<?> response = authController.login(loginData);
+        ResponseEntity<?> response = authController.login(loginRequest);
 
         assertEquals(200, response.getStatusCode().value());
         assertTrue(response.getBody() instanceof Map);
@@ -110,12 +113,14 @@ class AuthControllerTest {
 
     @Test
     void testLoginFailure() {
-        Map<String, String> loginData = Map.of("username", "testuser", "password", "wrong");
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("testuser");
+        loginRequest.setPassword("wrong");
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new RuntimeException("Bad credentials"));
 
-        ResponseEntity<?> response = authController.login(loginData);
+        ResponseEntity<?> response = authController.login(loginRequest);
 
         assertEquals(401, response.getStatusCode().value());
         assertEquals("Invalid username or password", response.getBody());
@@ -124,7 +129,9 @@ class AuthControllerTest {
     @Test
     void testLogin_Unauthorized_whenAuthenticationNotAuthenticated() {
         // Arrange
-        Map<String, String> loginData = Map.of("username", "testuser", "password", "wrong");
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("testuser");
+        loginRequest.setPassword("wrong");
 
         // Mock du retour de authenticationManager.authenticate(...) : ne lève pas d'exception
         Authentication fakeAuthentication = mock(Authentication.class);
@@ -134,7 +141,7 @@ class AuthControllerTest {
         when(fakeAuthentication.isAuthenticated()).thenReturn(false);
 
         // Act
-        ResponseEntity<?> response = authController.login(loginData);
+        ResponseEntity<?> response = authController.login(loginRequest);
 
         // Assert
         assertEquals(401, response.getStatusCode().value());
