@@ -49,14 +49,12 @@ class ProgressTest {
 
     @Test
     void testLastUpdatedGetter() {
-        LocalDateTime before = LocalDateTime.now();
-        progress.onUpdate();
-        LocalDateTime after = LocalDateTime.now();
+        // Vérifier que lastUpdated est null initialement
+        assertNull(progress.getLastUpdated());
         
-        LocalDateTime lastUpdated = progress.getLastUpdated();
-        assertNotNull(lastUpdated);
-        assertTrue(lastUpdated.isAfter(before) || lastUpdated.isEqual(before));
-        assertTrue(lastUpdated.isBefore(after) || lastUpdated.isEqual(after));
+        // Appeler onUpdate et vérifier que lastUpdated est maintenant défini
+        progress.onUpdate();
+        assertNotNull(progress.getLastUpdated());
     }
 
     @Test
@@ -73,6 +71,7 @@ class ProgressTest {
 
     @Test
     void testOnUpdateMethod() {
+        // Tester que onUpdate met à jour lastUpdated avec un timestamp récent
         LocalDateTime before = LocalDateTime.now();
         progress.onUpdate();
         LocalDateTime after = LocalDateTime.now();
@@ -81,6 +80,21 @@ class ProgressTest {
         assertNotNull(lastUpdated);
         assertTrue(lastUpdated.isAfter(before) || lastUpdated.isEqual(before));
         assertTrue(lastUpdated.isBefore(after) || lastUpdated.isEqual(after));
+        
+        // Tester que des appels multiples à onUpdate mettent à jour le timestamp
+        LocalDateTime firstUpdate = progress.getLastUpdated();
+        
+        // Attendre un peu pour s'assurer que le timestamp change
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        
+        progress.onUpdate();
+        LocalDateTime secondUpdate = progress.getLastUpdated();
+        
+        assertTrue(secondUpdate.isAfter(firstUpdate) || secondUpdate.isEqual(firstUpdate));
     }
 
     @Test

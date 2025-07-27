@@ -302,7 +302,7 @@ class UserServiceTest {
 
     @Test
     void testLoadUserByUsername_Found() {
-        User user = new User();
+        user = new User();
         user.setUsername("testuser");
         user.setPasswordHash("hashedpassword");
         user.setRole("USER");
