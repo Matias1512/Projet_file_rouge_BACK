@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -145,4 +146,62 @@ class UserBadgeServiceTest {
 
         verify(userBadgeRepository).deleteById(key);
     }
+
+    @Test
+    void testGetUserBadgesByUser() {
+        UserBadge ub1 = new UserBadge();
+        UserBadge ub2 = new UserBadge();
+        when(userBadgeRepository.findByUser_UserId(5L)).thenReturn(List.of(ub1, ub2));
+
+        List<UserBadge> result = userBadgeService.getUserBadgesByUser(5L);
+
+        assertEquals(2, result.size());
+        verify(userBadgeRepository).findByUser_UserId(5L);
+    }
+
+    @Test
+    void testGetUserBadgesByBadge() {
+        UserBadge ub = new UserBadge();
+        when(userBadgeRepository.findByBadge_BadgeId(8L)).thenReturn(List.of(ub));
+
+        List<UserBadge> result = userBadgeService.getUserBadgesByBadge(8L);
+
+        assertEquals(1, result.size());
+        verify(userBadgeRepository).findByBadge_BadgeId(8L);
+    }
+
+    @Test
+    void testAssignBadgeIfNotExists_assignsBadge() {
+        User user = new User();
+        user.setUserId(11L);
+        Badge badge = new Badge();
+        badge.setBadgeId(22L);
+
+        when(userBadgeRepository.existsByUser_UserIdAndBadge_BadgeId(11L, 22L)).thenReturn(false);
+
+        userBadgeService.assignBadgeIfNotExists(user, badge);
+
+        ArgumentCaptor<UserBadge> captor = ArgumentCaptor.forClass(UserBadge.class);
+        verify(userBadgeRepository).save(captor.capture());
+        UserBadge saved = captor.getValue();
+
+        assertEquals(user, saved.getUser());
+        assertEquals(badge, saved.getBadge());
+    }
+
+    @Test
+    void testAssignBadgeIfNotExists_doesNothingIfExists() {
+        User user = new User();
+        user.setUserId(15L);
+        Badge badge = new Badge();
+        badge.setBadgeId(88L);
+
+        when(userBadgeRepository.existsByUser_UserIdAndBadge_BadgeId(15L, 88L)).thenReturn(true);
+
+        userBadgeService.assignBadgeIfNotExists(user, badge);
+
+        verify(userBadgeRepository, never()).save(any(UserBadge.class));
+    }
+
+
 }
