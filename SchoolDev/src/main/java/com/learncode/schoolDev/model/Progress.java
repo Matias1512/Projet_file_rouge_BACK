@@ -13,7 +13,7 @@ public class Progress {
     private Long progressId;
 
     @NotNull(message = "L'ID de la leçon est obligatoire")
-    private int currentLessonId;
+    private Long currentLessonId;
     @NotNull(message = "Le pourcentage de progression est obligatoire")
     private double percentageCompleted;
     private LocalDateTime lastUpdated;
@@ -41,11 +41,11 @@ public class Progress {
         this.progressId = progressId;
     }
 
-    public int getCurrentLessonId() {
+    public Long getCurrentLessonId() {
         return currentLessonId;
     }
 
-    public void setCurrentLessonId(int currentLessonId) {
+    public void setCurrentLessonId(Long currentLessonId) {
         this.currentLessonId = currentLessonId;
     }
 
