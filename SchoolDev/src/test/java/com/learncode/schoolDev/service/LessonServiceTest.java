@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class LessonServiceTest {
@@ -107,5 +108,17 @@ class LessonServiceTest {
         lessonService.deleteLesson(7L);
 
         verify(lessonRepository).deleteById(7L);
+    }
+
+    @Test
+    void testGetLessonsByCourse() {
+        Lesson lesson1 = new Lesson();
+        Lesson lesson2 = new Lesson();
+        when(lessonRepository.findByCourse_CourseId(7L)).thenReturn(List.of(lesson1, lesson2));
+
+        List<Lesson> result = lessonService.getLessonsByCourse(7L);
+
+        assertEquals(2, result.size());
+        verify(lessonRepository).findByCourse_CourseId(7L);
     }
 }
