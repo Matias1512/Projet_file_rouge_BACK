@@ -84,16 +84,11 @@ class ProgressTest {
         // Tester que des appels multiples à onUpdate mettent à jour le timestamp
         LocalDateTime firstUpdate = progress.getLastUpdated();
         
-        // Attendre un peu pour s'assurer que le timestamp change
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        
+        // Faire un deuxième appel immédiatement
         progress.onUpdate();
         LocalDateTime secondUpdate = progress.getLastUpdated();
         
+        // Le timestamp doit être égal ou après le premier (même nanoseconde possible)
         assertTrue(secondUpdate.isAfter(firstUpdate) || secondUpdate.isEqual(firstUpdate));
     }
 

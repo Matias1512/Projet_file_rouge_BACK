@@ -88,21 +88,14 @@ class JwtUtilsTest {
 
     @Test
     void testIsTokenValid_ExpiredToken() {
-        // Créer un token avec une expiration très courte
-        ReflectionTestUtils.setField(jwtUtils, "jwtExpiration", 1L); // 1ms d'expiration
+        // Créer un token avec une expiration négative (déjà expiré)
+        ReflectionTestUtils.setField(jwtUtils, "jwtExpiration", -1000L); // Token expiré
         
         String username = "testuser";
         String token = jwtUtils.generateToken(username);
         
         UserDetails userDetails = new User(username, "password", 
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
-        
-        // Attendre pour que le token expire
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
         
         // Vérifier que le token est expiré en catchant l'exception
         assertThrows(ExpiredJwtException.class, () -> {
@@ -143,7 +136,7 @@ class JwtUtilsTest {
         
         // Vérifier que le token contient les claims attendus
         assertNotNull(token);
-        assertTrue(token.split("\\.").length == 3); // JWT doit avoir 3 parties
+        assertEquals(3, token.split("\\.").length); // JWT doit avoir 3 parties
         
         String extractedUsername = jwtUtils.extractUsername(token);
         assertEquals(username, extractedUsername);
