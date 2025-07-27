@@ -172,7 +172,7 @@ class UserBadgeServiceTest {
 
     @Test
     void testAssignBadgeIfNotExists_assignsBadge() {
-        User user = new User();
+        user = new User();
         user.setUserId(11L);
         Badge badge = new Badge();
         badge.setBadgeId(22L);
@@ -191,9 +191,9 @@ class UserBadgeServiceTest {
 
     @Test
     void testAssignBadgeIfNotExists_doesNothingIfExists() {
-        User user = new User();
+        user = new User();
         user.setUserId(15L);
-        Badge badge = new Badge();
+        badge = new Badge();
         badge.setBadgeId(88L);
 
         when(userBadgeRepository.existsByUser_UserIdAndBadge_BadgeId(15L, 88L)).thenReturn(true);

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.List;
@@ -235,4 +236,65 @@ class UserServiceTest {
         verify(userBadgeRepository, never()).save(any(UserBadge.class));
     }
 
+    @Test
+    void testGetUserByUsername_Found() {
+        User user = new User();
+        when(userRepository.findByUsername("jane")).thenReturn(Optional.of(user));
+
+        Optional<User> result = userService.getUserByUsername("jane");
+
+        assertTrue(result.isPresent());
+        assertEquals(user, result.get());
+        verify(userRepository).findByUsername("jane");
+    }
+
+    @Test
+    void testGetUserByUsername_NotFound() {
+        when(userRepository.findByUsername("inconnu")).thenReturn(Optional.empty());
+
+        Optional<User> result = userService.getUserByUsername("inconnu");
+
+        assertFalse(result.isPresent());
+        verify(userRepository).findByUsername("inconnu");
+    }
+
+    @Test
+    void testCreateUser_EmailExists() {
+        User user = new User();
+        user.setEmail("mail@test.com");
+        user.setUsername("alex");
+
+        when(userRepository.findByEmail("mail@test.com")).thenReturn(Optional.of(new User()));
+
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> userService.createUser(user));
+        assertTrue(ex.getMessage().contains("email existe déjà"));
+        verify(userRepository).findByEmail("mail@test.com");
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void testCreateUser_UsernameExists() {
+        User user = new User();
+        user.setEmail("ok@mail.com");
+        user.setUsername("alex");
+
+        when(userRepository.findByEmail("ok@mail.com")).thenReturn(Optional.empty());
+        when(userRepository.findByUsername("alex")).thenReturn(Optional.of(new User()));
+
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> userService.createUser(user));
+        assertTrue(ex.getMessage().contains("nom existe déjà"));
+        verify(userRepository).findByEmail("ok@mail.com");
+        verify(userRepository).findByUsername("alex");
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void testLoadUserByUsername_NotFound() {
+        when(userRepository.findByUsername("noone")).thenReturn(Optional.empty());
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> userService.loadUserByUsername("noone"));
+        assertTrue(ex.getMessage().contains("Utilisateur non trouvé"));
+        verify(userRepository).findByUsername("noone");
+    }
 }
