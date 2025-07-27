@@ -20,11 +20,15 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtUtils {
 
-    @Value("${app.jwt.secret-key}")
-    private String jwtSecret;
+    private final JwtSecretReader jwtSecretReader;
+
+    public JwtUtils(JwtSecretReader jwtSecretReader) {
+        this.jwtSecretReader = jwtSecretReader;
+    }
 
     private Key getSignInKey() {
-        byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
+        String secret = jwtSecretReader.getJwtSecretKey();
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 

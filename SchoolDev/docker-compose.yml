@@ -1,5 +1,9 @@
 version: '3.8'
 
+secrets:
+  jwt_secret_key:
+    external: true
+
 services:
   traefik:
     image: traefik:v2.10
@@ -51,6 +55,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/schoolDevDatabase
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Saxomat+15
+      JWT_EXPIRATION: "3600000"
+    secrets:
+      - jwt_secret_key
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.springboot.rule=Host(`schooldev.duckdns.org`)"

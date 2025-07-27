@@ -14,7 +14,6 @@ public class RateLimitingConfig {
 
     private final ConcurrentHashMap<String, Bucket> cache = new ConcurrentHashMap<>();
 
-    @Bean
     public Bucket createBucket(String key) {
         return cache.computeIfAbsent(key, this::newBucket);
     }
