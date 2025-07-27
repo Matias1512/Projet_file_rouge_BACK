@@ -205,7 +205,7 @@ class UserServiceTest {
 
     @Test
     void testAssignBadgeIfNotExists_assignsBadge() {
-        User user = new User();
+        user = new User();
         user.setUserId(11L);
         Badge badge = new Badge();
         badge.setBadgeId(22L);
@@ -224,7 +224,7 @@ class UserServiceTest {
 
     @Test
     void testAssignBadgeIfNotExists_doesNothingIfExists() {
-        User user = new User();
+        user = new User();
         user.setUserId(15L);
         Badge badge = new Badge();
         badge.setBadgeId(88L);
@@ -238,7 +238,7 @@ class UserServiceTest {
 
     @Test
     void testGetUserByUsername_Found() {
-        User user = new User();
+        user = new User();
         when(userRepository.findByUsername("jane")).thenReturn(Optional.of(user));
 
         Optional<User> result = userService.getUserByUsername("jane");
@@ -260,7 +260,7 @@ class UserServiceTest {
 
     @Test
     void testCreateUser_EmailExists() {
-        User user = new User();
+        user = new User();
         user.setEmail("mail@test.com");
         user.setUsername("alex");
 
@@ -274,7 +274,7 @@ class UserServiceTest {
 
     @Test
     void testCreateUser_UsernameExists() {
-        User user = new User();
+        user = new User();
         user.setEmail("ok@mail.com");
         user.setUsername("alex");
 
