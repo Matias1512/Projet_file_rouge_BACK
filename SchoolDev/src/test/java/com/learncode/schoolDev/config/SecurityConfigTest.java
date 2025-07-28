@@ -4,6 +4,8 @@ import com.learncode.schoolDev.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -124,15 +126,23 @@ class SecurityConfigTest {
     }
 
     @Test
-    void testUrlBasedCorsConfigurationSourceCreation() {
-        CorsConfigurationSource source = securityConfig.corsConfigurationSource();
+    void testCorsConfigurationSourceInstantiation() {
+        // Test multiple instantiations to ensure consistency
+        CorsConfigurationSource source1 = securityConfig.corsConfigurationSource();
+        CorsConfigurationSource source2 = securityConfig.corsConfigurationSource();
         
-        assertNotNull(source);
-        assertTrue(source instanceof UrlBasedCorsConfigurationSource);
+        assertNotNull(source1);
+        assertNotNull(source2);
+        assertTrue(source1 instanceof UrlBasedCorsConfigurationSource);
+        assertTrue(source2 instanceof UrlBasedCorsConfigurationSource);
+        
+        // Each call should create a new instance
+        assertNotSame(source1, source2);
     }
 
-    @Test
-    void testSecurityFilterChainConfiguration() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"headers", "authorization", "complete"})
+    void testSecurityFilterChainConfigurations(String configType) throws Exception {
         HttpSecurity httpSecurity = mock(HttpSecurity.class, RETURNS_DEEP_STUBS);
         
         // Mock la chaîne complète des appels fluents
@@ -147,13 +157,19 @@ class SecurityConfigTest {
         
         assertNotNull(filterChain);
         
-        // Vérifier que toutes les configurations ont été appelées
-        verify(httpSecurity).cors(any());
-        verify(httpSecurity).csrf(any());
-        verify(httpSecurity).headers(any());
-        verify(httpSecurity).authorizeHttpRequests(any());
-        verify(httpSecurity).addFilterBefore(any(), any());
-        verify(httpSecurity).build();
+        // Vérifications spécifiques selon le type de configuration
+        switch (configType) {
+            case "headers" -> verify(httpSecurity).headers(any());
+            case "authorization" -> verify(httpSecurity).authorizeHttpRequests(any());
+            case "complete" -> {
+                verify(httpSecurity).cors(any());
+                verify(httpSecurity).csrf(any());
+                verify(httpSecurity).headers(any());
+                verify(httpSecurity).authorizeHttpRequests(any());
+                verify(httpSecurity).addFilterBefore(any(), any());
+                verify(httpSecurity).build();
+            }
+        }
     }
 
     @Test
@@ -167,71 +183,6 @@ class SecurityConfigTest {
         
         assertNotNull(result);
         verify(httpSecurity).getSharedObject(AuthenticationManagerBuilder.class);
-    }
-
-    @Test
-    void testSecurityFilterChainHeadersConfiguration() throws Exception {
-        HttpSecurity httpSecurity = mock(HttpSecurity.class, RETURNS_DEEP_STUBS);
-        
-        // Mock la chaîne complète avec focus sur les headers
-        when(httpSecurity.cors(any())).thenReturn(httpSecurity);
-        when(httpSecurity.csrf(any())).thenReturn(httpSecurity);
-        when(httpSecurity.headers(any())).thenReturn(httpSecurity);
-        when(httpSecurity.authorizeHttpRequests(any())).thenReturn(httpSecurity);
-        when(httpSecurity.addFilterBefore(any(), any())).thenReturn(httpSecurity);
-        when(httpSecurity.build()).thenReturn(mock(DefaultSecurityFilterChain.class));
-        
-        SecurityFilterChain filterChain = securityConfig.securityFilterChain(httpSecurity);
-        
-        assertNotNull(filterChain);
-        
-        // Vérifier que headers() est appelé (cela couvre les configurations de headers)
-        verify(httpSecurity).headers(any());
-    }
-
-    @Test
-    void testSecurityFilterChainAuthorizationConfiguration() throws Exception {
-        HttpSecurity httpSecurity = mock(HttpSecurity.class, RETURNS_DEEP_STUBS);
-        
-        // Mock la chaîne complète avec focus sur authorization
-        when(httpSecurity.cors(any())).thenReturn(httpSecurity);
-        when(httpSecurity.csrf(any())).thenReturn(httpSecurity);
-        when(httpSecurity.headers(any())).thenReturn(httpSecurity);
-        when(httpSecurity.authorizeHttpRequests(any())).thenReturn(httpSecurity);
-        when(httpSecurity.addFilterBefore(any(), any())).thenReturn(httpSecurity);
-        when(httpSecurity.build()).thenReturn(mock(DefaultSecurityFilterChain.class));
-        
-        SecurityFilterChain filterChain = securityConfig.securityFilterChain(httpSecurity);
-        
-        assertNotNull(filterChain);
-        
-        // Vérifier que authorizeHttpRequests() est appelé (cela couvre requestMatchers)
-        verify(httpSecurity).authorizeHttpRequests(any());
-    }
-
-    @Test
-    void testSecurityFilterChainCompleteFlow() throws Exception {
-        HttpSecurity httpSecurity = mock(HttpSecurity.class, RETURNS_DEEP_STUBS);
-        
-        // Configuration complète pour déclencher l'exécution des lambdas
-        when(httpSecurity.cors(any())).thenReturn(httpSecurity);
-        when(httpSecurity.csrf(any())).thenReturn(httpSecurity);
-        when(httpSecurity.headers(any())).thenReturn(httpSecurity);
-        when(httpSecurity.authorizeHttpRequests(any())).thenReturn(httpSecurity);
-        when(httpSecurity.addFilterBefore(any(), any())).thenReturn(httpSecurity);
-        when(httpSecurity.build()).thenReturn(mock(DefaultSecurityFilterChain.class));
-        
-        SecurityFilterChain filterChain = securityConfig.securityFilterChain(httpSecurity);
-        
-        assertNotNull(filterChain);
-        
-        // Vérifier l'ordre des appels
-        verify(httpSecurity).cors(any());
-        verify(httpSecurity).csrf(any());
-        verify(httpSecurity).headers(any());
-        verify(httpSecurity).authorizeHttpRequests(any());
-        verify(httpSecurity).addFilterBefore(any(), any());
-        verify(httpSecurity).build();
     }
 
     @Test
@@ -269,16 +220,21 @@ class SecurityConfigTest {
     }
 
     @Test
-    void testSecurityHeadersConfigurationProperties() {
-        // Test pour vérifier que les propriétés de sécurité sont correctement définies
-        CorsConfigurationSource source = securityConfig.corsConfigurationSource();
-        assertNotNull(source);
+    void testSecurityComponentIntegration() {
+        // Test d'intégration des composants de sécurité
+        PasswordEncoder encoder = securityConfig.passwordEncoder();
+        CorsConfigurationSource corsSource = securityConfig.corsConfigurationSource();
         
-        // Vérifier que c'est bien une UrlBasedCorsConfigurationSource
-        assertTrue(source instanceof UrlBasedCorsConfigurationSource);
+        // Vérifier la compatibilité des composants
+        assertNotNull(encoder);
+        assertNotNull(corsSource);
         
-        // Les headers de sécurité sont testés indirectement via les appels de méthodes
-        // frameOptions.deny(), contentTypeOptions, httpStrictTransportSecurity, referrerPolicy
-        // sont couverts par l'exécution de la méthode securityFilterChain
+        // Test de l'interaction entre les composants
+        String password = "testPassword";
+        String encoded = encoder.encode(password);
+        assertTrue(encoder.matches(password, encoded));
+        
+        // Vérifier que CORS est bien configuré pour les composants de sécurité
+        assertTrue(corsSource instanceof UrlBasedCorsConfigurationSource);
     }
 }

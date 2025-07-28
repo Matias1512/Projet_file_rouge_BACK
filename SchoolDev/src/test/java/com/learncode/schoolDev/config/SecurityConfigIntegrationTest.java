@@ -22,11 +22,9 @@ class SecurityConfigIntegrationTest {
     @Mock
     private ApplicationContext applicationContext;
 
-    private SecurityConfig securityConfig;
-
     @BeforeEach
     void setUp() {
-        securityConfig = new SecurityConfig(userService, jwtUtils);
+        // Setup if needed
     }
 
     @Test

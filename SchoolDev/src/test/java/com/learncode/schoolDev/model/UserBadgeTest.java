@@ -120,8 +120,8 @@ class UserBadgeTest {
         UserBadge.UserBadgeKey key3 = new UserBadge.UserBadgeKey(2L, 3L);
         
         // Test equality
-        assertEquals(key1, key2);
-        assertNotEquals(key1, key3);
+        assertEquals(key2, key1);
+        assertNotEquals(key3, key1);
         
         // Test self equality
         assertEquals(key1, key1);
@@ -142,7 +142,7 @@ class UserBadgeTest {
         UserBadge.UserBadgeKey key2 = new UserBadge.UserBadgeKey(userId, badgeId);
         
         // Les objets égaux doivent avoir le même hashCode
-        assertEquals(key1.hashCode(), key2.hashCode());
+        assertEquals(key2.hashCode(), key1.hashCode());
     }
 
     @Test
@@ -160,8 +160,8 @@ class UserBadgeTest {
         UserBadge.UserBadgeKey key2 = new UserBadge.UserBadgeKey(null, null);
         UserBadge.UserBadgeKey key3 = new UserBadge.UserBadgeKey(1L, null);
         
-        assertEquals(key1, key2);
-        assertNotEquals(key1, key3);
+        assertEquals(key2, key1);
+        assertNotEquals(key3, key1);
     }
 
     @Test
