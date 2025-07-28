@@ -1,0 +1,24 @@
+# Dockerfile for local development with hot reload
+FROM eclipse-temurin:23-jdk-alpine
+
+# Install Maven
+RUN apk add --no-cache maven
+
+# Set working directory
+WORKDIR /app
+
+# Copy Maven configuration first (for better layer caching)
+COPY pom.xml .
+
+# Download dependencies (this layer will be cached if pom.xml doesn't change)
+RUN mvn dependency:resolve
+
+# Copy source code
+COPY src ./src
+
+# Expose port
+EXPOSE 8080
+
+# Use Maven to run the application with hot reload
+# The application will recompile automatically when source files change
+CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]

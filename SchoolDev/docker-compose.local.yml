@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_local
+    restart: always
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: localpassword
+      POSTGRES_DB: schoolDevDatabase
+    volumes:
+      - postgres_local_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - local-network
+
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    container_name: spring_boot_local
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/schoolDevDatabase
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: localpassword
+      JWT_SECRET_KEY: your-local-256-bit-secret-key-for-development-only
+      JWT_EXPIRATION: "3600000"
+      SPRING_PROFILES_ACTIVE: local
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./target:/app/target
+      - ./src:/app/src
+      - ./pom.xml:/app/pom.xml
+      - ~/.m2:/root/.m2
+    networks:
+      - local-network
+
+networks:
+  local-network:
+    driver: bridge
+
+volumes:
+  postgres_local_data:
