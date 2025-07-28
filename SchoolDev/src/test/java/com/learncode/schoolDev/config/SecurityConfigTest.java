@@ -169,6 +169,7 @@ class SecurityConfigTest {
                 verify(httpSecurity).addFilterBefore(any(), any());
                 verify(httpSecurity).build();
             }
+            default -> fail("Unknown configuration type: " + configType);
         }
     }
 
