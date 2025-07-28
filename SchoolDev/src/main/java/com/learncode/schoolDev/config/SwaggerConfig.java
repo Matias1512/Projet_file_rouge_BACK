@@ -16,9 +16,13 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        Server server = new Server();
-        server.setUrl("https://schooldev.duckdns.org");
-        server.setDescription("Serveur principal");
+        Server prodServer = new Server();
+        prodServer.setUrl("https://schooldev.duckdns.org");
+        prodServer.setDescription("Serveur principal");
+        
+        Server localServer = new Server();
+        localServer.setUrl("http://localhost:8080");
+        localServer.setDescription("Serveur de développement");
 
         SecurityScheme jwtScheme = new SecurityScheme()
         .type(SecurityScheme.Type.HTTP)
@@ -32,7 +36,7 @@ public class SwaggerConfig {
         return new OpenAPI()
             .addSecurityItem(securityRequirement)
             .components(new Components().addSecuritySchemes("bearerAuth", jwtScheme))
-            .servers(List.of(server))
+            .servers(List.of(prodServer, localServer))
             .info(new Info()
                 .title("SchoolDev API")
                 .version("1.0")
