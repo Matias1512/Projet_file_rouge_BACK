@@ -55,7 +55,6 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/schoolDevDatabase
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Saxomat+15
-      JWT_EXPIRATION: "3600000"
     secrets:
       - jwt_secret_key
     labels:
@@ -71,7 +70,7 @@ services:
 
 networks:
   web:
-    external: false
+    external: bridge
 
 volumes:
   postgres_data:
