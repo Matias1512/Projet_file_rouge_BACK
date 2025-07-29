@@ -70,7 +70,7 @@ services:
 
 networks:
   web:
-    external: bridge
+    external: true
 
 volumes:
   postgres_data:
