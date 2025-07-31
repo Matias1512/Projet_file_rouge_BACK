@@ -80,9 +80,10 @@ class ExerciseControllerTest {
         Exercise saved = createExercise(12L, "ToCreate");
         when(exerciseService.createExercise(input)).thenReturn(saved);
 
-        Exercise result = exerciseController.createExercise(input);
+        ResponseEntity<?> response = exerciseController.createExercise(input);
 
-        assertEquals(saved, result);
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(saved, response.getBody());
         verify(exerciseService).createExercise(input);
     }
 

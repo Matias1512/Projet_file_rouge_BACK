@@ -2,6 +2,8 @@ package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.learncode.schoolDev.dto.QcmPropositionRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +26,10 @@ public class Exercise {
     private ExerciseType type = ExerciseType.CODE;
     
     // Champs pour les exercices de code (optionnels, validés selon le type)
+    @Column(nullable = true)
     private String starterCode;
+    
+    @Column(nullable = true)
     private String testCases;
     
     private LocalDateTime createdAt;
@@ -36,6 +41,15 @@ public class Exercise {
     // Relation pour les propositions QCM
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QcmProposition> qcmPropositions = new ArrayList<>();
+    
+    // Propriétés transientes pour simplifier l'API
+    @Transient
+    @JsonProperty("lessonId")
+    private Long lessonIdForApi;
+    
+    @Transient
+    @JsonProperty("propositions")
+    private List<QcmPropositionRequest> propositionsForApi;
 
     @PrePersist
     protected void onCreate() {
@@ -126,5 +140,22 @@ public class Exercise {
     
     public boolean isQcmExercise() {
         return type == ExerciseType.QCM;
+    }
+    
+    // Getters/Setters pour les propriétés transientes API
+    public Long getLessonIdForApi() {
+        return lessonIdForApi;
+    }
+    
+    public void setLessonIdForApi(Long lessonIdForApi) {
+        this.lessonIdForApi = lessonIdForApi;
+    }
+    
+    public List<QcmPropositionRequest> getPropositionsForApi() {
+        return propositionsForApi;
+    }
+    
+    public void setPropositionsForApi(List<QcmPropositionRequest> propositionsForApi) {
+        this.propositionsForApi = propositionsForApi;
     }
 }

@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(./mvnw:*)",
-      "Bash(docker-compose:*)"
+      "Bash(docker-compose:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

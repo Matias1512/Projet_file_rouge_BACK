@@ -1,6 +1,7 @@
 package com.learncode.schoolDev.service;
 
 import com.learncode.schoolDev.model.Exercise;
+import com.learncode.schoolDev.model.ExerciseType;
 import com.learncode.schoolDev.repository.ExerciseRepository;
 import com.learncode.schoolDev.repository.QcmPropositionRepository;
 import com.learncode.schoolDev.repository.LessonRepository;
@@ -84,6 +85,10 @@ class ExerciseServiceTest {
     void createExercise_ReturnsSaved() {
         Exercise exercise = new Exercise();
         exercise.setTitle("Test Title");
+        exercise.setDescription("Test Description");
+        exercise.setType(ExerciseType.CODE);
+        exercise.setStarterCode("int x = 0;");
+        exercise.setTestCases("assert x == 0");
         when(exerciseRepository.save(exercise)).thenReturn(exercise);
 
         Exercise result = exerciseService.createExercise(exercise);

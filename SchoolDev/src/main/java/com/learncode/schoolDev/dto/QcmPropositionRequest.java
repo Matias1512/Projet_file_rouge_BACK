@@ -3,7 +3,7 @@ package com.learncode.schoolDev.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class QcmPropositionDto {
+public class QcmPropositionRequest {
     @NotBlank(message = "Le texte de la proposition est obligatoire")
     private String text;
     

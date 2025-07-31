@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.learncode.schoolDev.dto.ExerciseCreateRequest;
 import com.learncode.schoolDev.model.Exercise;
 import com.learncode.schoolDev.model.QcmProposition;
 import com.learncode.schoolDev.service.ExerciseService;
@@ -45,17 +44,11 @@ public class ExerciseController {
     }
 
     @PostMapping
-    @Operation(summary = "Créer un nouvel exercice", description = "Ajoute un nouvel exercice à la base de données")
-    public Exercise createExercise(@Valid @RequestBody Exercise exercise) {
-        return exerciseService.createExercise(exercise);
-    }
-    
-    @PostMapping("/create")
-    @Operation(summary = "Créer un exercice avec DTO", description = "Crée un nouvel exercice (code ou QCM) en utilisant un DTO")
-    public ResponseEntity<?> createExerciseFromRequest(@Valid @RequestBody ExerciseCreateRequest request) {
+    @Operation(summary = "Créer un nouvel exercice", description = "Ajoute un nouvel exercice à la base de données. Utilise 'lessonId' pour la leçon et 'propositions' pour les exercices QCM.")
+    public ResponseEntity<?> createExercise(@Valid @RequestBody Exercise exercise) {
         try {
-            Exercise exercise = exerciseService.createExerciseFromRequest(request);
-            return ResponseEntity.ok(exercise);
+            Exercise savedExercise = exerciseService.createExercise(exercise);
+            return ResponseEntity.ok(savedExercise);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
