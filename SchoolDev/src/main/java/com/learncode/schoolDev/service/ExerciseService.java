@@ -128,6 +128,11 @@ public class ExerciseService {
         return qcmPropositionRepository.findCorrectPropositionsByExerciseId(exerciseId);
     }
     
+    public Optional<ExerciseResponse> getExerciseByIdAsDto(Long id) {
+        Optional<Exercise> exercise = exerciseRepository.findById(id);
+        return exercise.map(this::convertToDto);
+    }
+    
     public List<ExerciseResponse> getExercisesByLessonAsDto(Long lessonId) {
         List<Exercise> exercises = exerciseRepository.findByLesson_LessonId(lessonId);
         return exercises.stream()
