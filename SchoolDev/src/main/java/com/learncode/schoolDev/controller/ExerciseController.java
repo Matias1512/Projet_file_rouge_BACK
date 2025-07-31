@@ -52,12 +52,12 @@ public class ExerciseController {
     
     @PostMapping("/create")
     @Operation(summary = "Créer un exercice avec DTO", description = "Crée un nouvel exercice (code ou QCM) en utilisant un DTO")
-    public ResponseEntity<Exercise> createExerciseFromRequest(@Valid @RequestBody ExerciseCreateRequest request) {
+    public ResponseEntity<?> createExerciseFromRequest(@Valid @RequestBody ExerciseCreateRequest request) {
         try {
             Exercise exercise = exerciseService.createExerciseFromRequest(request);
             return ResponseEntity.ok(exercise);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

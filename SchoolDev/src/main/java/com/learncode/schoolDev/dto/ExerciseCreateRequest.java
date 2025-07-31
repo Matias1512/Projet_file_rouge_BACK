@@ -25,9 +25,8 @@ public class ExerciseCreateRequest {
     private String starterCode;
     private String testCases;
     
-    // Champs pour exercices QCM (exactement 3 propositions)
+    // Champs pour exercices QCM (validation conditionnelle dans le service)
     @Valid
-    @Size(min = 3, max = 3, message = "Un exercice QCM doit avoir exactement 3 propositions")
     private List<QcmPropositionDto> propositions;
 
     public String getTitle() {
