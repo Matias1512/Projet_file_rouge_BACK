@@ -26,6 +26,9 @@ class SubmissionServiceTest {
 
     @Mock
     private SubmissionRepository submissionRepository;
+    
+    @Mock
+    private ProgressService progressService;
 
     private Submission submission;
 
@@ -89,31 +92,66 @@ class SubmissionServiceTest {
     @Test
     void testCreateSubmission() {
         when(submissionRepository.save(any(Submission.class))).thenReturn(submission);
+        doNothing().when(progressService).updateProgressAfterSubmission(any(Long.class), any(Long.class));
 
         Submission input = new Submission();
         input.setUser(user);
         input.setExercise(exercise);
         input.setCode("code");
-        input.setCorrect(false);
+        input.setCorrect(true); // Changé en true pour déclencher la mise à jour
 
         Submission result = submissionService.createSubmission(input);
 
         assertNotNull(result);
         assertEquals(2L, result.getUser().getUserId());
         verify(submissionRepository).save(input);
+        verify(progressService).updateProgressAfterSubmission(user.getUserId(), exercise.getExerciseId());
+    }
+
+    @Test
+    void testCreateSubmission_NotCorrect() {
+        Submission notCorrectSubmission = new Submission();
+        notCorrectSubmission.setSubmissionId(1L);
+        notCorrectSubmission.setUser(user);
+        notCorrectSubmission.setExercise(exercise);
+        notCorrectSubmission.setCode("code");
+        notCorrectSubmission.setCorrect(false); // Pas correct
+        
+        when(submissionRepository.save(any(Submission.class))).thenReturn(notCorrectSubmission);
+
+        Submission input = new Submission();
+        input.setUser(user);
+        input.setExercise(exercise);
+        input.setCode("code");
+        input.setCorrect(false); // Pas correct, ne doit pas déclencher la mise à jour
+
+        Submission result = submissionService.createSubmission(input);
+
+        assertNotNull(result);
+        assertEquals(2L, result.getUser().getUserId());
+        verify(submissionRepository).save(input);
+        verify(progressService, never()).updateProgressAfterSubmission(any(Long.class), any(Long.class));
     }
 
     @Test
     void testUpdateSubmission_Found() {
+        Submission originalSubmission = new Submission();
+        originalSubmission.setSubmissionId(1L);
+        originalSubmission.setUser(user);
+        originalSubmission.setExercise(exercise);
+        originalSubmission.setCode("old code");
+        originalSubmission.setCorrect(false); // Pas correct au départ
+        
         Submission updated = new Submission();
         updated.setSubmissionId(1L);
         updated.setUser(user);
         updated.setExercise(exercise);
         updated.setCode("new content");
-        updated.setCorrect(true);
+        updated.setCorrect(true); // Devient correct
 
-        when(submissionRepository.findById(1L)).thenReturn(Optional.of(submission));
+        when(submissionRepository.findById(1L)).thenReturn(Optional.of(originalSubmission));
         when(submissionRepository.save(any(Submission.class))).thenReturn(updated);
+        doNothing().when(progressService).updateProgressAfterSubmission(any(Long.class), any(Long.class));
 
         Submission result = submissionService.updateSubmission(1L, updated);
 
@@ -121,6 +159,7 @@ class SubmissionServiceTest {
         assertEquals("new content", result.getCode());
         verify(submissionRepository).findById(1L);
         verify(submissionRepository).save(any(Submission.class));
+        verify(progressService).updateProgressAfterSubmission(user.getUserId(), exercise.getExerciseId());
     }
 
     @Test
@@ -166,5 +205,27 @@ class SubmissionServiceTest {
 
         assertEquals(1, result.size());
         verify(submissionRepository).findByExercise_ExerciseId(99L);
+    }
+
+    @Test
+    void testHasUserCompletedExercise_True() {
+        when(submissionRepository.findCorrectSubmissionsByUserAndExercise(1L, 2L))
+            .thenReturn(List.of(new Submission()));
+
+        boolean result = submissionService.hasUserCompletedExercise(1L, 2L);
+
+        assertTrue(result);
+        verify(submissionRepository).findCorrectSubmissionsByUserAndExercise(1L, 2L);
+    }
+
+    @Test
+    void testHasUserCompletedExercise_False() {
+        when(submissionRepository.findCorrectSubmissionsByUserAndExercise(1L, 2L))
+            .thenReturn(List.of());
+
+        boolean result = submissionService.hasUserCompletedExercise(1L, 2L);
+
+        assertFalse(result);
+        verify(submissionRepository).findCorrectSubmissionsByUserAndExercise(1L, 2L);
     }
 }
