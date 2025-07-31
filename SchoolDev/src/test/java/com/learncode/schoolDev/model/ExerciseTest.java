@@ -40,12 +40,12 @@ class ExerciseTest {
         Exercise exercise = new Exercise(); // tous les champs sont null
 
         Set<ConstraintViolation<Exercise>> violations = validator.validate(exercise);
-        assertEquals(4, violations.size(), "4 violations attendues pour les champs @NotBlank");
+        // Maintenant seuls title et description sont @NotBlank
+        // starterCode et testCases sont optionnels selon le type
+        assertEquals(2, violations.size(), "2 violations attendues pour les champs @NotBlank");
 
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("title")));
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("description")));
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("starterCode")));
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("testCases")));
     }
 
     @Test

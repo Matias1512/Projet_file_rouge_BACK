@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "exercises")
@@ -14,17 +16,26 @@ public class Exercise {
 
     @NotBlank(message = "Le titre est obligatoire")
     private String title;
+    
     @NotBlank(message = "La description est obligatoire")
     private String description;
-    @NotBlank(message = "Le code de démarrage est obligatoire")
+    
+    @Enumerated(EnumType.STRING)
+    private ExerciseType type = ExerciseType.CODE;
+    
+    // Champs pour les exercices de code (optionnels, validés selon le type)
     private String starterCode;
-    @NotBlank(message = "Les cas de test sont obligatoires")
     private String testCases;
+    
     private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "lesson_id")
     private Lesson lesson;
+    
+    // Relation pour les propositions QCM
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<QcmProposition> qcmPropositions = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
@@ -81,5 +92,39 @@ public class Exercise {
 
     public void setLesson(Lesson lesson) {
         this.lesson = lesson;
+    }
+    
+    public ExerciseType getType() {
+        return type;
+    }
+    
+    public void setType(ExerciseType type) {
+        this.type = type;
+    }
+    
+    public List<QcmProposition> getQcmPropositions() {
+        return qcmPropositions;
+    }
+    
+    public void setQcmPropositions(List<QcmProposition> qcmPropositions) {
+        this.qcmPropositions = qcmPropositions;
+    }
+    
+    public void addQcmProposition(QcmProposition proposition) {
+        qcmPropositions.add(proposition);
+        proposition.setExercise(this);
+    }
+    
+    public void removeQcmProposition(QcmProposition proposition) {
+        qcmPropositions.remove(proposition);
+        proposition.setExercise(null);
+    }
+    
+    public boolean isCodeExercise() {
+        return type == ExerciseType.CODE;
+    }
+    
+    public boolean isQcmExercise() {
+        return type == ExerciseType.QCM;
     }
 }

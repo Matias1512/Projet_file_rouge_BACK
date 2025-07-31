@@ -7,7 +7,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.learncode.schoolDev.dto.ExerciseCreateRequest;
 import com.learncode.schoolDev.model.Exercise;
+import com.learncode.schoolDev.model.QcmProposition;
 import com.learncode.schoolDev.service.ExerciseService;
 
 import java.util.List;
@@ -47,6 +49,17 @@ public class ExerciseController {
     public Exercise createExercise(@Valid @RequestBody Exercise exercise) {
         return exerciseService.createExercise(exercise);
     }
+    
+    @PostMapping("/create")
+    @Operation(summary = "Créer un exercice avec DTO", description = "Crée un nouvel exercice (code ou QCM) en utilisant un DTO")
+    public ResponseEntity<Exercise> createExerciseFromRequest(@Valid @RequestBody ExerciseCreateRequest request) {
+        try {
+            Exercise exercise = exerciseService.createExerciseFromRequest(request);
+            return ResponseEntity.ok(exercise);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     @PutMapping("/{id}")
     @Operation(summary = "Mettre à jour un exercice", description = "Met à jour les informations d'un exercice existant")
@@ -63,5 +76,17 @@ public class ExerciseController {
     public ResponseEntity<Void> deleteExercise(@PathVariable Long id) {
         exerciseService.deleteExercise(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("/{id}/qcm-propositions")
+    @Operation(summary = "Obtenir les propositions QCM", description = "Retourne les propositions d'un exercice QCM")
+    public List<QcmProposition> getQcmPropositions(@PathVariable Long id) {
+        return exerciseService.getQcmPropositionsByExercise(id);
+    }
+    
+    @GetMapping("/{id}/qcm-correct-propositions")
+    @Operation(summary = "Obtenir les bonnes réponses QCM", description = "Retourne les bonnes réponses d'un exercice QCM")
+    public List<QcmProposition> getCorrectPropositions(@PathVariable Long id) {
+        return exerciseService.getCorrectPropositionsByExercise(id);
     }
 }

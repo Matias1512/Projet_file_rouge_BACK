@@ -2,6 +2,8 @@ package com.learncode.schoolDev.service;
 
 import com.learncode.schoolDev.model.Exercise;
 import com.learncode.schoolDev.repository.ExerciseRepository;
+import com.learncode.schoolDev.repository.QcmPropositionRepository;
+import com.learncode.schoolDev.repository.LessonRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,6 +19,12 @@ class ExerciseServiceTest {
 
     @Mock
     private ExerciseRepository exerciseRepository;
+    
+    @Mock
+    private QcmPropositionRepository qcmPropositionRepository;
+    
+    @Mock
+    private LessonRepository lessonRepository;
 
     @InjectMocks
     private ExerciseService exerciseService;
@@ -125,10 +133,14 @@ class ExerciseServiceTest {
 
     @Test
     void deleteExercise_CallsRepository() {
+        when(qcmPropositionRepository.findByExercise_ExerciseId(7L)).thenReturn(Collections.emptyList());
+        doNothing().when(qcmPropositionRepository).deleteAll(any());
         doNothing().when(exerciseRepository).deleteById(7L);
 
         exerciseService.deleteExercise(7L);
 
+        verify(qcmPropositionRepository).findByExercise_ExerciseId(7L);
+        verify(qcmPropositionRepository).deleteAll(any());
         verify(exerciseRepository).deleteById(7L);
     }
 }
