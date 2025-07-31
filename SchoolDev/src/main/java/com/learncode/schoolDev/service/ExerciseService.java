@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.learncode.schoolDev.dto.QcmPropositionRequest;
+import com.learncode.schoolDev.dto.ExerciseResponse;
+import com.learncode.schoolDev.dto.QcmPropositionResponse;
 import com.learncode.schoolDev.model.Exercise;
 import com.learncode.schoolDev.model.ExerciseType;
 import com.learncode.schoolDev.model.QcmProposition;
@@ -124,5 +126,35 @@ public class ExerciseService {
     
     public List<QcmProposition> getCorrectPropositionsByExercise(Long exerciseId) {
         return qcmPropositionRepository.findCorrectPropositionsByExerciseId(exerciseId);
+    }
+    
+    public List<ExerciseResponse> getExercisesByLessonAsDto(Long lessonId) {
+        List<Exercise> exercises = exerciseRepository.findByLesson_LessonId(lessonId);
+        return exercises.stream()
+            .map(this::convertToDto)
+            .toList();
+    }
+    
+    private ExerciseResponse convertToDto(Exercise exercise) {
+        ExerciseResponse dto = new ExerciseResponse(
+            exercise.getExerciseId(),
+            exercise.getTitle(),
+            exercise.getDescription(),
+            exercise.getType(),
+            exercise.getStarterCode(),
+            exercise.getTestCases(),
+            exercise.getCreatedAt()
+        );
+        
+        // Ajouter les propositions QCM si c'est un exercice QCM
+        if (exercise.getType() == ExerciseType.QCM) {
+            List<QcmProposition> propositions = qcmPropositionRepository.findByExercise_ExerciseId(exercise.getExerciseId());
+            List<QcmPropositionResponse> propositionDtos = propositions.stream()
+                .map(prop -> new QcmPropositionResponse(prop.getPropositionId(), prop.getText(), prop.isCorrect()))
+                .toList();
+            dto.setPropositions(propositionDtos);
+        }
+        
+        return dto;
     }
 }
