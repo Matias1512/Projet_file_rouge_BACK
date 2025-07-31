@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.learncode.schoolDev.dto.LessonCreateRequest;
 import com.learncode.schoolDev.model.Lesson;
 import com.learncode.schoolDev.service.LessonService;
 
@@ -44,8 +45,13 @@ public class LessonController {
 
     @PostMapping
     @Operation(summary = "Créer une nouvelle leçon", description = "Ajoute une nouvelle leçon à la base de données")
-    public Lesson createLesson(@Valid @RequestBody Lesson lesson) {
-        return lessonService.createLesson(lesson);
+    public ResponseEntity<Lesson> createLesson(@Valid @RequestBody LessonCreateRequest request) {
+        try {
+            Lesson lesson = lessonService.createLessonFromRequest(request);
+            return ResponseEntity.ok(lesson);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")

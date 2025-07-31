@@ -1,5 +1,6 @@
 package com.learncode.schoolDev.controller;
 
+import com.learncode.schoolDev.dto.LessonCreateRequest;
 import com.learncode.schoolDev.model.Lesson;
 import com.learncode.schoolDev.service.LessonService;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,14 +77,37 @@ class LessonControllerTest {
 
     @Test
     void testCreateLesson() {
-        Lesson input = createLesson(null, "ToCreate");
+        LessonCreateRequest request = new LessonCreateRequest();
+        request.setTitle("ToCreate");
+        request.setContent("Content");
+        request.setOrderInCourse(1);
+        request.setCourseId(1L);
+        
         Lesson saved = createLesson(12L, "ToCreate");
-        when(lessonService.createLesson(input)).thenReturn(saved);
+        when(lessonService.createLessonFromRequest(request)).thenReturn(saved);
 
-        Lesson result = lessonController.createLesson(input);
+        ResponseEntity<Lesson> response = lessonController.createLesson(request);
 
-        assertEquals(saved, result);
-        verify(lessonService).createLesson(input);
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(saved, response.getBody());
+        verify(lessonService).createLessonFromRequest(request);
+    }
+
+    @Test
+    void testCreateLesson_BadRequest() {
+        LessonCreateRequest request = new LessonCreateRequest();
+        request.setTitle("ToCreate");
+        request.setContent("Content");
+        request.setOrderInCourse(1);
+        request.setCourseId(999L);
+        
+        when(lessonService.createLessonFromRequest(request)).thenThrow(new RuntimeException("Course not found"));
+
+        ResponseEntity<Lesson> response = lessonController.createLesson(request);
+
+        assertEquals(400, response.getStatusCode().value());
+        assertNull(response.getBody());
+        verify(lessonService).createLessonFromRequest(request);
     }
 
     @Test

@@ -70,4 +70,59 @@ public class ProgressController {
         progressService.deleteProgress(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/user/{userId}/course/{courseId}/update")
+    @Operation(summary = "Mettre à jour automatiquement la progression", description = "Calcule et met à jour automatiquement la progression d'un utilisateur pour un cours")
+    public ResponseEntity<Progress> updateProgressAutomatically(@PathVariable Long userId, @PathVariable Long courseId) {
+        try {
+            Progress progress = progressService.updateProgressAutomatically(userId, courseId);
+            return ResponseEntity.ok(progress);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/user/{userId}/course/{courseId}/initialize")
+    @Operation(summary = "Initialiser la progression", description = "Initialise la progression d'un utilisateur pour un cours")
+    public ResponseEntity<Progress> initializeProgressForCourse(@PathVariable Long userId, @PathVariable Long courseId) {
+        try {
+            Progress progress = progressService.initializeProgressForCourse(userId, courseId);
+            return ResponseEntity.ok(progress);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/user/{userId}/course/{courseId}/percentage")
+    @Operation(summary = "Calculer le pourcentage de progression", description = "Retourne le pourcentage de progression d'un utilisateur pour un cours")
+    public ResponseEntity<Double> calculateProgressPercentage(@PathVariable Long userId, @PathVariable Long courseId) {
+        try {
+            double percentage = progressService.calculateProgressPercentage(userId, courseId);
+            return ResponseEntity.ok(percentage);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/user/{userId}/course/{courseId}/completed")
+    @Operation(summary = "Vérifier si le cours est terminé", description = "Vérifie si un utilisateur a terminé un cours")
+    public ResponseEntity<Boolean> isCourseCompleted(@PathVariable Long userId, @PathVariable Long courseId) {
+        try {
+            boolean completed = progressService.isCourseCompleted(userId, courseId);
+            return ResponseEntity.ok(completed);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/user/{userId}/course/{courseId}/current-lesson")
+    @Operation(summary = "Obtenir la leçon courante", description = "Retourne l'ID de la leçon courante d'un utilisateur dans un cours")
+    public ResponseEntity<Long> getCurrentLessonId(@PathVariable Long userId, @PathVariable Long courseId) {
+        try {
+            Long currentLessonId = progressService.getCurrentLessonId(userId, courseId);
+            return ResponseEntity.ok(currentLessonId);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

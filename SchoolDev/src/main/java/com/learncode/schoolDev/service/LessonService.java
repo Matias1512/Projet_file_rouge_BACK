@@ -2,7 +2,10 @@ package com.learncode.schoolDev.service;
 
 import org.springframework.stereotype.Service;
 
+import com.learncode.schoolDev.dto.LessonCreateRequest;
+import com.learncode.schoolDev.model.Course;
 import com.learncode.schoolDev.model.Lesson;
+import com.learncode.schoolDev.repository.CourseRepository;
 import com.learncode.schoolDev.repository.LessonRepository;
 
 import java.util.List;
@@ -11,9 +14,11 @@ import java.util.Optional;
 @Service
 public class LessonService {
     private final LessonRepository lessonRepository;
+    private final CourseRepository courseRepository;
 
-    public LessonService(LessonRepository lessonRepository) {
+    public LessonService(LessonRepository lessonRepository, CourseRepository courseRepository) {
         this.lessonRepository = lessonRepository;
+        this.courseRepository = courseRepository;
     }
 
     public List<Lesson> getAllLessons() {
@@ -29,6 +34,19 @@ public class LessonService {
     }
 
     public Lesson createLesson(Lesson lesson) {
+        return lessonRepository.save(lesson);
+    }
+
+    public Lesson createLessonFromRequest(LessonCreateRequest request) {
+        Course course = courseRepository.findById(request.getCourseId())
+            .orElseThrow(() -> new RuntimeException("Cours non trouvé avec ID : " + request.getCourseId()));
+        
+        Lesson lesson = new Lesson();
+        lesson.setTitle(request.getTitle());
+        lesson.setContent(request.getContent());
+        lesson.setOrderInCourse(request.getOrderInCourse());
+        lesson.setCourse(course);
+        
         return lessonRepository.save(lesson);
     }
 
