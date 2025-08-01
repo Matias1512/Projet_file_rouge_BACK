@@ -1,6 +1,7 @@
 package com.learncode.schoolDev.controller;
 
 import com.learncode.schoolDev.dto.ExerciseResponse;
+import com.learncode.schoolDev.dto.ExerciseListResponse;
 import com.learncode.schoolDev.model.Exercise;
 import com.learncode.schoolDev.service.ExerciseService;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,10 +66,10 @@ class ExerciseControllerTest {
 
     @Test
     void testGetExercisesByLesson() {
-        ExerciseResponse exDto = createExerciseResponse(3L, "LessonEx");
+        ExerciseListResponse exDto = createExerciseListResponse(3L, "LessonEx");
         when(exerciseService.getExercisesByLessonAsDto(5L)).thenReturn(List.of(exDto));
 
-        List<ExerciseResponse> result = exerciseController.getExercisesByLesson(5L);
+        List<ExerciseListResponse> result = exerciseController.getExercisesByLesson(5L);
 
         assertEquals(1, result.size());
         assertEquals("LessonEx", result.get(0).getTitle());
@@ -134,6 +135,15 @@ class ExerciseControllerTest {
     // Méthode utilitaire pour créer des ExerciseResponse
     private ExerciseResponse createExerciseResponse(Long id, String title) {
         ExerciseResponse dto = new ExerciseResponse();
+        dto.setExerciseId(id);
+        dto.setTitle(title);
+        dto.setDescription("desc");
+        return dto;
+    }
+    
+    // Méthode utilitaire pour créer des ExerciseListResponse
+    private ExerciseListResponse createExerciseListResponse(Long id, String title) {
+        ExerciseListResponse dto = new ExerciseListResponse();
         dto.setExerciseId(id);
         dto.setTitle(title);
         dto.setDescription("desc");

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.learncode.schoolDev.dto.ExerciseResponse;
+import com.learncode.schoolDev.dto.ExerciseListResponse;
 import com.learncode.schoolDev.model.Exercise;
 import com.learncode.schoolDev.model.QcmProposition;
 import com.learncode.schoolDev.service.ExerciseService;
@@ -39,8 +40,8 @@ public class ExerciseController {
     }
 
     @GetMapping("/lesson/{lessonId}")
-    @Operation(summary = "Obtenir les exercices par leçon", description = "Retourne la liste des exercices d'une leçon spécifique (format optimisé)")
-    public List<ExerciseResponse> getExercisesByLesson(@PathVariable Long lessonId) {
+    @Operation(summary = "Obtenir les exercices par leçon", description = "Retourne la liste des exercices d'une leçon spécifique (format optimisé sans starterCode/testCases)")
+    public List<ExerciseListResponse> getExercisesByLesson(@PathVariable Long lessonId) {
         return exerciseService.getExercisesByLessonAsDto(lessonId);
     }
 

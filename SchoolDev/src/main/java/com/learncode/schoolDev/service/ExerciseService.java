@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.learncode.schoolDev.dto.QcmPropositionRequest;
 import com.learncode.schoolDev.dto.ExerciseResponse;
+import com.learncode.schoolDev.dto.ExerciseListResponse;
 import com.learncode.schoolDev.dto.QcmPropositionResponse;
 import com.learncode.schoolDev.model.Exercise;
 import com.learncode.schoolDev.model.ExerciseType;
@@ -133,10 +134,10 @@ public class ExerciseService {
         return exercise.map(this::convertToDto);
     }
     
-    public List<ExerciseResponse> getExercisesByLessonAsDto(Long lessonId) {
+    public List<ExerciseListResponse> getExercisesByLessonAsDto(Long lessonId) {
         List<Exercise> exercises = exerciseRepository.findByLesson_LessonId(lessonId);
         return exercises.stream()
-            .map(this::convertToDto)
+            .map(this::convertToListDto)
             .toList();
     }
     
@@ -161,5 +162,15 @@ public class ExerciseService {
         }
         
         return dto;
+    }
+    
+    private ExerciseListResponse convertToListDto(Exercise exercise) {
+        return new ExerciseListResponse(
+            exercise.getExerciseId(),
+            exercise.getTitle(),
+            exercise.getDescription(),
+            exercise.getType(),
+            exercise.getCreatedAt()
+        );
     }
 }
