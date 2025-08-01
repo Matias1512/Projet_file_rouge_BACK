@@ -2,6 +2,7 @@ package com.learncode.schoolDev.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "qcm_propositions")
@@ -17,6 +18,7 @@ public class QcmProposition {
 
     @ManyToOne
     @JoinColumn(name = "exercise_id")
+    @JsonBackReference
     private Exercise exercise;
 
     public Long getPropositionId() {

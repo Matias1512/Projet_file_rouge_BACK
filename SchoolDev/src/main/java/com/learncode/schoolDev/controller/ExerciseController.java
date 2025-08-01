@@ -33,9 +33,9 @@ public class ExerciseController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Obtenir un exercice par ID", description = "Retourne les détails d'un exercice spécifique")
-    public ResponseEntity<Exercise> getExerciseById(@PathVariable Long id) {
-        Optional<Exercise> exercise = exerciseService.getExerciseById(id);
+    @Operation(summary = "Obtenir un exercice par ID", description = "Retourne les détails d'un exercice spécifique avec propositions QCM si applicable")
+    public ResponseEntity<ExerciseResponse> getExerciseById(@PathVariable Long id) {
+        Optional<ExerciseResponse> exercise = exerciseService.getExerciseByIdAsDto(id);
         return exercise.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

@@ -45,20 +45,20 @@ class ExerciseControllerTest {
 
     @Test
     void testGetExerciseById_Found() {
-        Exercise ex = createExercise(10L, "Test");
-        when(exerciseService.getExerciseById(10L)).thenReturn(Optional.of(ex));
+        ExerciseResponse exDto = createExerciseResponse(10L, "Test");
+        when(exerciseService.getExerciseByIdAsDto(10L)).thenReturn(Optional.of(exDto));
 
-        ResponseEntity<Exercise> response = exerciseController.getExerciseById(10L);
+        ResponseEntity<ExerciseResponse> response = exerciseController.getExerciseById(10L);
 
         assertEquals(200, response.getStatusCode().value());
-        assertEquals(ex, response.getBody());
+        assertEquals(exDto, response.getBody());
     }
 
     @Test
     void testGetExerciseById_NotFound() {
-        when(exerciseService.getExerciseById(99L)).thenReturn(Optional.empty());
+        when(exerciseService.getExerciseByIdAsDto(99L)).thenReturn(Optional.empty());
 
-        ResponseEntity<Exercise> response = exerciseController.getExerciseById(99L);
+        ResponseEntity<ExerciseResponse> response = exerciseController.getExerciseById(99L);
 
         assertEquals(404, response.getStatusCode().value());
         assertNull(response.getBody());

@@ -3,6 +3,7 @@ package com.learncode.schoolDev.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.learncode.schoolDev.dto.QcmPropositionRequest;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class Exercise {
     
     // Relation pour les propositions QCM
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<QcmProposition> qcmPropositions = new ArrayList<>();
     
     // Propriétés transientes pour simplifier l'API
