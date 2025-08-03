@@ -280,4 +280,26 @@ class JwtUtilsTest {
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    void testGenerateTokenWithUser() {
+        // Créer un utilisateur mock
+        com.learncode.schoolDev.model.User user = new com.learncode.schoolDev.model.User();
+        user.setUserId(123L);
+        user.setUsername("testuser");
+        
+        String token = jwtUtils.generateToken(user);
+        
+        assertNotNull(token);
+        assertFalse(token.isEmpty());
+        
+        // Vérifier que le username est correct
+        String extractedUsername = jwtUtils.extractUsername(token);
+        assertEquals("testuser", extractedUsername);
+        
+        // Vérifier que le userId est présent dans le token
+        Long extractedUserId = jwtUtils.extractUserId(token);
+        assertNotNull(extractedUserId);
+        assertEquals(123L, extractedUserId);
+    }
 }
