@@ -1,6 +1,7 @@
 package com.learncode.schoolDev.dto;
 
 import com.learncode.schoolDev.model.ExerciseType;
+import com.learncode.schoolDev.model.Lesson;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,6 +14,8 @@ public class ExerciseResponse {
     private String testCases;
     private LocalDateTime createdAt;
     private List<QcmPropositionResponse> propositions;
+    private Long lessonId;
+    private Lesson lesson;
 
     // Constructeurs
     public ExerciseResponse() {}
@@ -91,5 +94,21 @@ public class ExerciseResponse {
 
     public void setPropositions(List<QcmPropositionResponse> propositions) {
         this.propositions = propositions;
+    }
+
+    public Long getLessonId() {
+        return lessonId;
+    }
+
+    public void setLessonId(Long lessonId) {
+        this.lessonId = lessonId;
+    }
+
+    public Lesson getLesson() {
+        return lesson;
+    }
+
+    public void setLesson(Lesson lesson) {
+        this.lesson = lesson;
     }
 }

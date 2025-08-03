@@ -152,6 +152,12 @@ public class ExerciseService {
             exercise.getCreatedAt()
         );
         
+        // Ajouter les informations de la leçon
+        if (exercise.getLesson() != null) {
+            dto.setLessonId(exercise.getLesson().getLessonId());
+            dto.setLesson(exercise.getLesson());
+        }
+        
         // Ajouter les propositions QCM si c'est un exercice QCM
         if (exercise.getType() == ExerciseType.QCM) {
             List<QcmProposition> propositions = qcmPropositionRepository.findByExercise_ExerciseId(exercise.getExerciseId());
