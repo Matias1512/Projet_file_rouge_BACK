@@ -100,7 +100,8 @@ class AuthControllerTest {
         Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
-        when(jwtUtils.generateToken("testuser")).thenReturn("token123");
+        when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(user));
+        when(jwtUtils.generateToken(any(User.class))).thenReturn("token123");
 
         ResponseEntity<Object> response = authController.login(loginRequest);
 
