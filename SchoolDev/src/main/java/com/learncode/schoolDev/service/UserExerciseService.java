@@ -104,4 +104,13 @@ public class UserExerciseService {
                 && userExercise.getSuccess())
                 .toList();
     }
+
+    public Optional<UserExercise> updateSuccess(Long id, Boolean success) {
+        return repository.findById(id)
+                .map(userExercise -> {
+                    userExercise.setSuccess(success);
+                    userExercise.setCompletedAt(LocalDateTime.now());
+                    return repository.save(userExercise);
+                });
+    }
 }

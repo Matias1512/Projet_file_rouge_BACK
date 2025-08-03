@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,5 +68,15 @@ public class UserExerciseController {
         Optional<UserExercise> userExercise = service.findByUserIdAndExerciseId(userId, exerciseId);
         return userExercise.map(ResponseEntity::ok)
                           .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}/success")
+    @Operation(summary = "Mettre à jour le statut de réussite d'un UserExercise")
+    public ResponseEntity<UserExercise> updateSuccess(
+            @PathVariable Long id,
+            @RequestParam Boolean success) {
+        Optional<UserExercise> updated = service.updateSuccess(id, success);
+        return updated.map(ResponseEntity::ok)
+                     .orElse(ResponseEntity.notFound().build());
     }
 }
