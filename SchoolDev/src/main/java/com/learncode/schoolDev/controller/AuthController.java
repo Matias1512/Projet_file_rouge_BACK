@@ -86,8 +86,9 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(username, password)
             ); 
             if(authentication.isAuthenticated()) {
+                User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
                 Map<String, Object> authData =  new HashMap<>();
-                authData.put("token", jwtUtils.generateToken(username));
+                authData.put("token", jwtUtils.generateToken(user));
                 authData.put("type", "Bearer");
                 return ResponseEntity.ok(authData);
             } else {
