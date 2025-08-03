@@ -1,22 +1,46 @@
 package com.learncode.schoolDev.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.learncode.schoolDev.model.UserExercise;
+import com.learncode.schoolDev.model.User;
+import com.learncode.schoolDev.model.Exercise;
 import com.learncode.schoolDev.repository.UserExerciseRepository;
+import com.learncode.schoolDev.repository.UserRepository;
+import com.learncode.schoolDev.repository.ExerciseRepository;
 
 @Service
 public class UserExerciseService {
 
     private final UserExerciseRepository repository;
+    private final UserRepository userRepository;
+    private final ExerciseRepository exerciseRepository;
 
-    public UserExerciseService(UserExerciseRepository repository) {
+    public UserExerciseService(UserExerciseRepository repository, UserRepository userRepository, ExerciseRepository exerciseRepository) {
         this.repository = repository;
+        this.userRepository = userRepository;
+        this.exerciseRepository = exerciseRepository;
     }
 
     public UserExercise save(UserExercise userExercise) {
+        return repository.save(userExercise);
+    }
+
+    public UserExercise createUserExercise(Long userId, Long exerciseId, Boolean success) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        Exercise exercise = exerciseRepository.findById(exerciseId)
+            .orElseThrow(() -> new RuntimeException("Exercice non trouvé"));
+        
+        UserExercise userExercise = new UserExercise();
+        userExercise.setUser(user);
+        userExercise.setExercise(exercise);
+        userExercise.setSuccess(success);
+        userExercise.setCompletedAt(LocalDateTime.now());
+        
         return repository.save(userExercise);
     }
 
