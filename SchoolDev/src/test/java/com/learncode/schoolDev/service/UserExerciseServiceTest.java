@@ -209,4 +209,34 @@ class UserExerciseServiceTest {
         assertFalse(result.isPresent());
         verify(repository).findByUser_UserIdAndExercise_ExerciseId(1L, 2L);
     }
+
+    @Test
+    void updateSuccess_UpdatesAndReturns_WhenFound() {
+        UserExercise existing = new UserExercise();
+        existing.setId(1L);
+        existing.setSuccess(false);
+        existing.setCompletedAt(null);
+        
+        when(repository.findById(1L)).thenReturn(Optional.of(existing));
+        when(repository.save(any(UserExercise.class))).thenReturn(existing);
+
+        Optional<UserExercise> result = service.updateSuccess(1L, true);
+
+        assertTrue(result.isPresent());
+        assertTrue(result.get().getSuccess());
+        assertNotNull(result.get().getCompletedAt());
+        verify(repository).findById(1L);
+        verify(repository).save(existing);
+    }
+
+    @Test
+    void updateSuccess_ReturnsEmpty_WhenNotFound() {
+        when(repository.findById(999L)).thenReturn(Optional.empty());
+
+        Optional<UserExercise> result = service.updateSuccess(999L, true);
+
+        assertFalse(result.isPresent());
+        verify(repository).findById(999L);
+        verify(repository, never()).save(any());
+    }
 }

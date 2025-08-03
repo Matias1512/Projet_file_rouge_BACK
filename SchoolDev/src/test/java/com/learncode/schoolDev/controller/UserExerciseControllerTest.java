@@ -136,4 +136,30 @@ class UserExerciseControllerTest {
         assertTrue(result.getSuccess());
         verify(service).createUserExercise(1L, 2L, true);
     }
+
+    @Test
+    void testUpdateSuccess_Found() {
+        when(service.updateSuccess(1L, true)).thenReturn(Optional.of(userExercise));
+
+        ResponseEntity<UserExercise> result = userExerciseController.updateSuccess(1L, true);
+
+        assertNotNull(result);
+        assertEquals(200, result.getStatusCode().value());
+        assertNotNull(result.getBody());
+        assertEquals(user, result.getBody().getUser());
+        assertEquals(exercise, result.getBody().getExercise());
+        verify(service).updateSuccess(1L, true);
+    }
+
+    @Test
+    void testUpdateSuccess_NotFound() {
+        when(service.updateSuccess(999L, true)).thenReturn(Optional.empty());
+
+        ResponseEntity<UserExercise> result = userExerciseController.updateSuccess(999L, true);
+
+        assertNotNull(result);
+        assertEquals(404, result.getStatusCode().value());
+        assertNull(result.getBody());
+        verify(service).updateSuccess(999L, true);
+    }
 }
