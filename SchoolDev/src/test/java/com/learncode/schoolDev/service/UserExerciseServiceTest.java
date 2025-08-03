@@ -6,6 +6,8 @@ import com.learncode.schoolDev.model.Course;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.model.UserExercise;
 import com.learncode.schoolDev.repository.UserExerciseRepository;
+import com.learncode.schoolDev.repository.UserRepository;
+import com.learncode.schoolDev.repository.ExerciseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -22,6 +25,12 @@ class UserExerciseServiceTest {
 
     @Mock
     private UserExerciseRepository repository;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private ExerciseRepository exerciseRepository;
 
     @InjectMocks
     private UserExerciseService service;
@@ -129,5 +138,53 @@ class UserExerciseServiceTest {
         assertEquals(1, result.size());
         assertTrue(result.get(0).getSuccess());
         assertEquals("Java", result.get(0).getExercise().getLesson().getCourse().getLanguage());
+    }
+
+    @Test
+    void createUserExercise_ThrowsException_WhenDuplicateExists() {
+        when(repository.existsByUser_UserIdAndExercise_ExerciseId(1L, 2L)).thenReturn(true);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, 
+            () -> service.createUserExercise(1L, 2L, true));
+
+        assertEquals("Un UserExercise existe déjà pour cet utilisateur et cet exercice", exception.getMessage());
+        verify(repository).existsByUser_UserIdAndExercise_ExerciseId(1L, 2L);
+        verify(repository, never()).save(any());
+    }
+
+    @Test
+    void updateOrCreateUserExercise_UpdatesExisting_WhenFound() {
+        UserExercise existing = new UserExercise();
+        existing.setId(1L);
+        existing.setSuccess(false);
+        
+        when(repository.findByUser_UserIdAndExercise_ExerciseId(1L, 2L)).thenReturn(Optional.of(existing));
+        when(repository.save(any(UserExercise.class))).thenReturn(existing);
+
+        UserExercise result = service.updateOrCreateUserExercise(1L, 2L, true);
+
+        assertNotNull(result);
+        assertTrue(result.getSuccess());
+        assertNotNull(result.getCompletedAt());
+        verify(repository).findByUser_UserIdAndExercise_ExerciseId(1L, 2L);
+        verify(repository).save(existing);
+    }
+
+    @Test
+    void updateOrCreateUserExercise_CreatesNew_WhenNotFound() {
+        when(repository.findByUser_UserIdAndExercise_ExerciseId(1L, 2L)).thenReturn(Optional.empty());
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(exerciseRepository.findById(2L)).thenReturn(Optional.of(exercise));
+        when(repository.save(any(UserExercise.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        UserExercise result = service.updateOrCreateUserExercise(1L, 2L, true);
+
+        assertNotNull(result);
+        assertTrue(result.getSuccess());
+        assertNotNull(result.getCompletedAt());
+        assertEquals(user, result.getUser());
+        assertEquals(exercise, result.getExercise());
+        verify(repository).findByUser_UserIdAndExercise_ExerciseId(1L, 2L);
+        verify(repository).save(any(UserExercise.class));
     }
 }

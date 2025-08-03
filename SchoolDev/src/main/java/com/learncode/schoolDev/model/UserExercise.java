@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_exercises")
+@Table(name = "user_exercises", 
+       uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "exercise_id"}))
 public class UserExercise {
 
     @Id

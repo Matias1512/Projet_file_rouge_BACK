@@ -30,6 +30,11 @@ public class UserExerciseService {
     }
 
     public UserExercise createUserExercise(Long userId, Long exerciseId, Boolean success) {
+        // Vérifier si une entrée existe déjà en premier
+        if (repository.existsByUser_UserIdAndExercise_ExerciseId(userId, exerciseId)) {
+            throw new RuntimeException("Un UserExercise existe déjà pour cet utilisateur et cet exercice");
+        }
+        
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
         Exercise exercise = exerciseRepository.findById(exerciseId)
@@ -42,6 +47,32 @@ public class UserExerciseService {
         userExercise.setCompletedAt(LocalDateTime.now());
         
         return repository.save(userExercise);
+    }
+
+    public UserExercise updateOrCreateUserExercise(Long userId, Long exerciseId, Boolean success) {
+        // Vérifier si une entrée existe déjà
+        return repository.findByUser_UserIdAndExercise_ExerciseId(userId, exerciseId)
+                .map(existing -> {
+                    // Mettre à jour l'entrée existante
+                    existing.setSuccess(success);
+                    existing.setCompletedAt(LocalDateTime.now());
+                    return repository.save(existing);
+                })
+                .orElseGet(() -> {
+                    // Créer une nouvelle entrée sans vérification (car on sait qu'elle n'existe pas)
+                    User user = userRepository.findById(userId)
+                        .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                    Exercise exercise = exerciseRepository.findById(exerciseId)
+                        .orElseThrow(() -> new RuntimeException("Exercice non trouvé"));
+                    
+                    UserExercise userExercise = new UserExercise();
+                    userExercise.setUser(user);
+                    userExercise.setExercise(exercise);
+                    userExercise.setSuccess(success);
+                    userExercise.setCompletedAt(LocalDateTime.now());
+                    
+                    return repository.save(userExercise);
+                });
     }
 
     public List<UserExercise> getAll() {
