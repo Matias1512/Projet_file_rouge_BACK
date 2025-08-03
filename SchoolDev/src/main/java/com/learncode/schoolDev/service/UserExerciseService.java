@@ -2,6 +2,7 @@ package com.learncode.schoolDev.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -85,6 +86,10 @@ public class UserExerciseService {
 
     public List<UserExercise> getByExerciseId(Long exerciseId) {
         return repository.findByExercise_ExerciseId(exerciseId);
+    }
+
+    public Optional<UserExercise> findByUserIdAndExerciseId(Long userId, Long exerciseId) {
+        return repository.findByUser_UserIdAndExercise_ExerciseId(userId, exerciseId);
     }
 
     public List<UserExercise> getAllSuccessfulExercice(Long userId) {

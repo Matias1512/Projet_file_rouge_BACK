@@ -187,4 +187,26 @@ class UserExerciseServiceTest {
         verify(repository).findByUser_UserIdAndExercise_ExerciseId(1L, 2L);
         verify(repository).save(any(UserExercise.class));
     }
+
+    @Test
+    void findByUserIdAndExerciseId_ReturnsOptional() {
+        UserExercise userExercise = new UserExercise();
+        when(repository.findByUser_UserIdAndExercise_ExerciseId(1L, 2L)).thenReturn(Optional.of(userExercise));
+
+        Optional<UserExercise> result = service.findByUserIdAndExerciseId(1L, 2L);
+
+        assertTrue(result.isPresent());
+        assertEquals(userExercise, result.get());
+        verify(repository).findByUser_UserIdAndExercise_ExerciseId(1L, 2L);
+    }
+
+    @Test
+    void findByUserIdAndExerciseId_ReturnsEmpty_WhenNotFound() {
+        when(repository.findByUser_UserIdAndExercise_ExerciseId(1L, 2L)).thenReturn(Optional.empty());
+
+        Optional<UserExercise> result = service.findByUserIdAndExerciseId(1L, 2L);
+
+        assertFalse(result.isPresent());
+        verify(repository).findByUser_UserIdAndExercise_ExerciseId(1L, 2L);
+    }
 }

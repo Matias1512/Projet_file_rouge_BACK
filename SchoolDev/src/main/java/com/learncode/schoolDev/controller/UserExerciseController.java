@@ -1,7 +1,9 @@
 package com.learncode.schoolDev.controller;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,5 +57,15 @@ public class UserExerciseController {
     @GetMapping("/exercise/{exerciseId}")
     public List<UserExercise> getByExercise(@PathVariable Long exerciseId) {
         return service.getByExerciseId(exerciseId);
+    }
+
+    @GetMapping("/user/{userId}/exercise/{exerciseId}")
+    @Operation(summary = "Trouver un UserExercise spécifique par userId et exerciseId")
+    public ResponseEntity<UserExercise> getByUserAndExercise(
+            @PathVariable Long userId,
+            @PathVariable Long exerciseId) {
+        Optional<UserExercise> userExercise = service.findByUserIdAndExerciseId(userId, exerciseId);
+        return userExercise.map(ResponseEntity::ok)
+                          .orElse(ResponseEntity.notFound().build());
     }
 }
