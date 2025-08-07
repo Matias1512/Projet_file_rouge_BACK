@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "qcm_propositions")
+@SuppressWarnings("java:S1200") // Cycle nécessaire pour relation JPA bidirectionnelle
 public class QcmProposition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

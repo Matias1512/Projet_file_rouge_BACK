@@ -46,48 +46,69 @@ public class ExerciseService {
 
     @Transactional
     public Exercise createExercise(Exercise exercise) {
-        // Validation conditionnelle selon le type
+        validateExercise(exercise);
+        setLessonIfProvided(exercise);
+        Exercise savedExercise = exerciseRepository.save(exercise);
+        createQcmPropositionsIfNeeded(savedExercise, exercise.getPropositionsForApi());
+        return savedExercise;
+    }
+
+    private void validateExercise(Exercise exercise) {
         if (exercise.getType() == ExerciseType.CODE) {
-            if (exercise.getStarterCode() == null || exercise.getStarterCode().trim().isEmpty()) {
-                throw new RuntimeException("Le code de démarrage est obligatoire pour un exercice de code");
-            }
-            if (exercise.getTestCases() == null || exercise.getTestCases().trim().isEmpty()) {
-                throw new RuntimeException("Les cas de test sont obligatoires pour un exercice de code");
-            }
-            if (exercise.getPropositionsForApi() != null && !exercise.getPropositionsForApi().isEmpty()) {
-                throw new RuntimeException("Un exercice de code ne doit pas avoir de propositions QCM");
-            }
+            validateCodeExercise(exercise);
         } else if (exercise.getType() == ExerciseType.QCM) {
-            if (exercise.getPropositionsForApi() == null || exercise.getPropositionsForApi().size() != 3) {
-                throw new RuntimeException("Un exercice QCM doit avoir exactement 3 propositions");
-            }
-            // Vérifier qu'au moins une proposition est correcte
-            boolean hasCorrectAnswer = exercise.getPropositionsForApi().stream()
-                .anyMatch(QcmPropositionRequest::getIsCorrect);
-            if (!hasCorrectAnswer) {
-                throw new RuntimeException("Un exercice QCM doit avoir au moins une bonne réponse");
-            }
-            if (exercise.getStarterCode() != null && !exercise.getStarterCode().trim().isEmpty()) {
-                throw new RuntimeException("Un exercice QCM ne doit pas avoir de code de démarrage");
-            }
-            if (exercise.getTestCases() != null && !exercise.getTestCases().trim().isEmpty()) {
-                throw new RuntimeException("Un exercice QCM ne doit pas avoir de cas de test");
-            }
+            validateQcmExercise(exercise);
         }
-        
-        // Gérer lessonId si fourni
+    }
+
+    private void validateCodeExercise(Exercise exercise) {
+        if (exercise.getStarterCode() == null || exercise.getStarterCode().trim().isEmpty()) {
+            throw new RuntimeException("Le code de démarrage est obligatoire pour un exercice de code");
+        }
+        if (exercise.getTestCases() == null || exercise.getTestCases().trim().isEmpty()) {
+            throw new RuntimeException("Les cas de test sont obligatoires pour un exercice de code");
+        }
+        if (exercise.getPropositionsForApi() != null && !exercise.getPropositionsForApi().isEmpty()) {
+            throw new RuntimeException("Un exercice de code ne doit pas avoir de propositions QCM");
+        }
+    }
+
+    private void validateQcmExercise(Exercise exercise) {
+        validateQcmPropositions(exercise.getPropositionsForApi());
+        validateQcmHasNoCodeFields(exercise);
+    }
+
+    private void validateQcmPropositions(List<QcmPropositionRequest> propositions) {
+        if (propositions == null || propositions.size() != 3) {
+            throw new RuntimeException("Un exercice QCM doit avoir exactement 3 propositions");
+        }
+        boolean hasCorrectAnswer = propositions.stream()
+            .anyMatch(QcmPropositionRequest::getIsCorrect);
+        if (!hasCorrectAnswer) {
+            throw new RuntimeException("Un exercice QCM doit avoir au moins une bonne réponse");
+        }
+    }
+
+    private void validateQcmHasNoCodeFields(Exercise exercise) {
+        if (exercise.getStarterCode() != null && !exercise.getStarterCode().trim().isEmpty()) {
+            throw new RuntimeException("Un exercice QCM ne doit pas avoir de code de démarrage");
+        }
+        if (exercise.getTestCases() != null && !exercise.getTestCases().trim().isEmpty()) {
+            throw new RuntimeException("Un exercice QCM ne doit pas avoir de cas de test");
+        }
+    }
+
+    private void setLessonIfProvided(Exercise exercise) {
         if (exercise.getLessonIdForApi() != null) {
             Lesson lesson = lessonRepository.findById(exercise.getLessonIdForApi())
                 .orElseThrow(() -> new RuntimeException("Leçon non trouvée avec ID : " + exercise.getLessonIdForApi()));
             exercise.setLesson(lesson);
         }
-        
-        // Sauvegarder l'exercice
-        Exercise savedExercise = exerciseRepository.save(exercise);
-        
-        // Créer les propositions QCM si nécessaire
-        if (exercise.getType() == ExerciseType.QCM && exercise.getPropositionsForApi() != null) {
-            for (QcmPropositionRequest propRequest : exercise.getPropositionsForApi()) {
+    }
+
+    private void createQcmPropositionsIfNeeded(Exercise savedExercise, List<QcmPropositionRequest> propositions) {
+        if (savedExercise.getType() == ExerciseType.QCM && propositions != null) {
+            for (QcmPropositionRequest propRequest : propositions) {
                 QcmProposition proposition = new QcmProposition();
                 proposition.setText(propRequest.getText());
                 proposition.setCorrect(propRequest.getIsCorrect());
@@ -95,8 +116,6 @@ public class ExerciseService {
                 qcmPropositionRepository.save(proposition);
             }
         }
-        
-        return savedExercise;
     }
     
 

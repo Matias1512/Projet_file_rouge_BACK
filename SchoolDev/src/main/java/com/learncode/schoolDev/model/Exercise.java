@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 @Entity
 @Table(name = "exercises")
+@SuppressWarnings("java:S1200") // Cycle nécessaire pour relation JPA bidirectionnelle
 public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
