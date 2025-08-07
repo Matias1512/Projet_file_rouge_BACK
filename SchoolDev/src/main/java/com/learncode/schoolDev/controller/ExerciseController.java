@@ -47,12 +47,12 @@ public class ExerciseController {
 
     @PostMapping
     @Operation(summary = "Créer un nouvel exercice", description = "Ajoute un nouvel exercice à la base de données. Utilise 'lessonId' pour la leçon et 'propositions' pour les exercices QCM.")
-    public ResponseEntity<?> createExercise(@Valid @RequestBody Exercise exercise) {
+    public ResponseEntity<Exercise> createExercise(@Valid @RequestBody Exercise exercise) {
         try {
             Exercise savedExercise = exerciseService.createExercise(exercise);
             return ResponseEntity.ok(savedExercise);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 
