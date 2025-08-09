@@ -8,11 +8,13 @@ import com.learncode.schoolDev.model.Exercise;
 import com.learncode.schoolDev.model.Lesson;
 import com.learncode.schoolDev.model.Progress;
 import com.learncode.schoolDev.model.User;
+import com.learncode.schoolDev.model.UserExercise;
 import com.learncode.schoolDev.repository.CourseRepository;
 import com.learncode.schoolDev.repository.ExerciseRepository;
 import com.learncode.schoolDev.repository.LessonRepository;
 import com.learncode.schoolDev.repository.ProgressRepository;
 import com.learncode.schoolDev.repository.SubmissionRepository;
+import com.learncode.schoolDev.repository.UserExerciseRepository;
 import com.learncode.schoolDev.repository.UserRepository;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.Optional;
 public class ProgressService {
     private final ProgressRepository progressRepository;
     private final SubmissionRepository submissionRepository;
+    private final UserExerciseRepository userExerciseRepository;
     private final ExerciseRepository exerciseRepository;
     private final LessonRepository lessonRepository;
     private final CourseRepository courseRepository;
@@ -30,12 +33,14 @@ public class ProgressService {
 
     public ProgressService(ProgressRepository progressRepository, 
                           SubmissionRepository submissionRepository,
+                          UserExerciseRepository userExerciseRepository,
                           ExerciseRepository exerciseRepository,
                           LessonRepository lessonRepository,
                           CourseRepository courseRepository,
                           UserRepository userRepository) {
         this.progressRepository = progressRepository;
         this.submissionRepository = submissionRepository;
+        this.userExerciseRepository = userExerciseRepository;
         this.exerciseRepository = exerciseRepository;
         this.lessonRepository = lessonRepository;
         this.courseRepository = courseRepository;
@@ -92,7 +97,7 @@ public class ProgressService {
             return 0.0;
         }
         
-        long completedExercises = submissionRepository.countCompletedExercisesByUserAndCourse(userId, courseId);
+        long completedExercises = userExerciseRepository.countCompletedExercisesByUserAndCourse(userId, courseId);
         return (double) completedExercises / totalExercises * 100.0;
     }
 
@@ -107,13 +112,10 @@ public class ProgressService {
             List<Exercise> exercises = exerciseRepository.findByLesson_LessonId(lesson.getLessonId());
             
             for (Exercise exercise : exercises) {
-                List<Exercise> correctSubmissions = submissionRepository
-                    .findCorrectSubmissionsByUserAndExercise(userId, exercise.getExerciseId())
-                    .stream()
-                    .map(submission -> submission.getExercise())
-                    .toList();
+                List<UserExercise> successfulUserExercises = userExerciseRepository
+                    .findSuccessfulUserExercisesByUserAndExercise(userId, exercise.getExerciseId());
                 
-                if (correctSubmissions.isEmpty()) {
+                if (successfulUserExercises.isEmpty()) {
                     return lesson.getLessonId();
                 }
             }
