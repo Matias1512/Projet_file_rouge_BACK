@@ -330,6 +330,8 @@ Cette approche garantit un déploiement continu fiable, traçable et conforme au
 
 ## C2.2.2 Développer un harnais de test unitaire en tenant compte des fonctionnalités demandées afin de prévenir les régressions et de s’assurer du bon fonctionnement du logiciel 
 
+Analyse statique et détection de code smells - [Tableau de bord du projet](https://sonarcloud.io/project/overview?id=Matias1512_Projet_file_rouge_BACK)
+
 **✅ Les tests unitaires couvrent la majorité du code développé** :
 
 ### Couverture Complète par Couches
