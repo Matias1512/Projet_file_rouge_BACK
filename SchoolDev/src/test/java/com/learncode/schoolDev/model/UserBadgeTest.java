@@ -213,4 +213,36 @@ class UserBadgeTest {
         assertEquals(75, userBadge.getCurrent());
         assertTrue(userBadge.getUnlocked());
     }
+
+    @Test
+    void testConstructorWithUserIdBadgeIdAndSuccess_Success() {
+        Long userId = 123L;
+        Long badgeId = 456L;
+        Boolean success = true;
+
+        UserBadge userBadge = new UserBadge(userId, badgeId, success);
+
+        assertNotNull(userBadge.getUser());
+        assertEquals(userId, userBadge.getUser().getUserId());
+        assertNotNull(userBadge.getBadge());
+        assertEquals(badgeId, userBadge.getBadge().getId());
+        assertTrue(userBadge.getUnlocked());
+        assertEquals(1, userBadge.getCurrent());
+    }
+
+    @Test
+    void testConstructorWithUserIdBadgeIdAndSuccess_Failure() {
+        Long userId = 789L;
+        Long badgeId = 101L;
+        Boolean success = false;
+
+        UserBadge userBadge = new UserBadge(userId, badgeId, success);
+
+        assertNotNull(userBadge.getUser());
+        assertEquals(userId, userBadge.getUser().getUserId());
+        assertNotNull(userBadge.getBadge());
+        assertEquals(badgeId, userBadge.getBadge().getId());
+        assertFalse(userBadge.getUnlocked());
+        assertEquals(0, userBadge.getCurrent());
+    }
 }
