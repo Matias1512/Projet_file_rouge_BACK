@@ -45,7 +45,7 @@ public class UserBadgeController {
 
     @GetMapping("/badge/{badgeId}")
     @Operation(summary = "Obtenir les utilisateurs ayant un badge", description = "Retourne la liste des utilisateurs ayant un badge spécifique")
-    public List<UserBadge> getUserBadgesByBadge(@PathVariable Long badgeId) {
+    public List<UserBadge> getUserBadgesByBadge(@PathVariable long badgeId) {
         return userBadgeService.getUserBadgesByBadge(badgeId);
     }
 

@@ -1,13 +1,9 @@
 package com.learncode.schoolDev.service;
 
-import com.learncode.schoolDev.model.*;
 import com.learncode.schoolDev.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import java.util.List;
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

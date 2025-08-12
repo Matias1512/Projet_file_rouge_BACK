@@ -46,7 +46,7 @@ public class UserBadgeService {
     }
 
     public void assignBadgeIfNotExists(User user, Badge badge) {
-        if (!userBadgeRepository.existsByUser_UserIdAndBadge_BadgeId(user.getUserId(), badge.getBadgeId())) {
+        if (!userBadgeRepository.existsByUser_UserIdAndBadge_Id(user.getUserId(), badge.getId())) {
             UserBadge userBadge = new UserBadge();
             userBadge.setUser(user);
             userBadge.setBadge(badge);
@@ -58,8 +58,8 @@ public class UserBadgeService {
         return userBadgeRepository.findByUser_UserId(userId);
     }
 
-    public List<UserBadge> getUserBadgesByBadge(Long badgeId) {
-        return userBadgeRepository.findByBadge_BadgeId(badgeId);
+    public List<UserBadge> getUserBadgesByBadge(long badgeId) {
+        return userBadgeRepository.findByBadge_Id(badgeId);
     }
 }
 

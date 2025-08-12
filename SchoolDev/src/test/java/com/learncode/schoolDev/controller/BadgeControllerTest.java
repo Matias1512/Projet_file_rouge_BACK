@@ -31,8 +31,8 @@ class BadgeControllerTest {
 
     @BeforeEach
     void setup() {
-        badge1 = new Badge(1L, "Badge 1", "Description 1", "icon1.png");
-        badge2 = new Badge(2L, "Badge 2", "Description 2", "icon2.png");
+        badge1 = new Badge(1L, "Badge 1", "Description 1", "icon1.png", 1, "blue.500", 0, 1, true, null);
+        badge2 = new Badge(2L, "Badge 2", "Description 2", "icon2.png", 1, "blue.500", 0, 1, true, null);
     }
 
     @Test
@@ -42,7 +42,7 @@ class BadgeControllerTest {
         List<Badge> result = badgeController.getAllBadges();
 
         assertEquals(2, result.size());
-        assertEquals("Badge 1", result.get(0).getName());
+        assertEquals("Badge 1", result.get(0).getTitle());
     }
 
     @Test
@@ -52,7 +52,7 @@ class BadgeControllerTest {
         ResponseEntity<Badge> response = badgeController.getBadgeById(1L);
 
         assertEquals(200, response.getStatusCode().value());
-        assertEquals("Badge 1", response.getBody().getName());
+        assertEquals("Badge 1", response.getBody().getTitle());
     }
 
     @Test
@@ -66,35 +66,35 @@ class BadgeControllerTest {
 
     @Test
     void testCreateBadge() {
-        Badge input = new Badge(null, "New", "Desc", "url.png");
-        Badge saved = new Badge(3L, "New", "Desc", "url.png");
+        Badge input = new Badge(null, "New", "Desc", "url.png", 1, "blue.500", 0, 1, true, null);
+        Badge saved = new Badge(3L, "New", "Desc", "url.png", 1, "blue.500", 0, 1, true, null);
 
         when(badgeService.createBadge(any(Badge.class))).thenReturn(saved);
 
         Badge result = badgeController.createBadge(input);
 
-        assertEquals("New", result.getName());
-        assertEquals(3L, result.getBadgeId());
+        assertEquals("New", result.getTitle());
+        assertEquals(3L, result.getId());
     }
 
     @Test
     void testUpdateBadge_Success() {
-        Badge update = new Badge(null, "Updated", "New desc", "new.png");
-        Badge updated = new Badge(1L, "Updated", "New desc", "new.png");
+        Badge update = new Badge(null, "New", "Desc", "url.png", 1, "blue.500", 0, 1, true, null);
+        Optional<Badge> updated = Optional.ofNullable(new Badge(1L, "Updated", "New desc", "new.png", 2, "blue.600", 1, 2, false, "New requirement"));
 
         when(badgeService.updateBadge(eq(1L), any(Badge.class))).thenReturn(updated);
 
-        ResponseEntity<Badge> response = badgeController.updateBadge(1L, update);
+        ResponseEntity<Optional<Badge>> response = badgeController.updateBadge(1L, update);
 
         assertEquals(200, response.getStatusCode().value());
-        assertEquals("Updated", response.getBody().getName());
+        assertEquals("Updated", response.getBody().get().getTitle());
     }
 
     @Test
     void testUpdateBadge_NotFound() {
         when(badgeService.updateBadge(eq(99L), any(Badge.class))).thenThrow(new RuntimeException("Not found"));
 
-        ResponseEntity<Badge> response = badgeController.updateBadge(99L, new Badge());
+        ResponseEntity<Optional<Badge>> response = badgeController.updateBadge(99L, new Badge());
 
         assertEquals(404, response.getStatusCode().value());
     }

@@ -197,12 +197,12 @@ class UserServiceTest {
     @Test
     void testGetUserBadgesByBadge() {
         UserBadge ub = new UserBadge();
-        when(userBadgeRepository.findByBadge_BadgeId(8L)).thenReturn(List.of(ub));
+        when(userBadgeRepository.findByBadge_Id(8L)).thenReturn(List.of(ub));
 
         List<UserBadge> result = userBadgeService.getUserBadgesByBadge(8L);
 
         assertEquals(1, result.size());
-        verify(userBadgeRepository).findByBadge_BadgeId(8L);
+        verify(userBadgeRepository).findByBadge_Id(8L);
     }
 
     @Test
@@ -210,9 +210,9 @@ class UserServiceTest {
         user = new User();
         user.setUserId(11L);
         Badge badge = new Badge();
-        badge.setBadgeId(22L);
+        badge.setId(22L);
 
-        when(userBadgeRepository.existsByUser_UserIdAndBadge_BadgeId(11L, 22L)).thenReturn(false);
+        when(userBadgeRepository.existsByUser_UserIdAndBadge_Id(11L, 22L)).thenReturn(false);
 
         userBadgeService.assignBadgeIfNotExists(user, badge);
 
@@ -229,9 +229,9 @@ class UserServiceTest {
         user = new User();
         user.setUserId(15L);
         Badge badge = new Badge();
-        badge.setBadgeId(88L);
+        badge.setId(88L);
 
-        when(userBadgeRepository.existsByUser_UserIdAndBadge_BadgeId(15L, 88L)).thenReturn(true);
+        when(userBadgeRepository.existsByUser_UserIdAndBadge_Id(15L, 88L)).thenReturn(true);
 
         userBadgeService.assignBadgeIfNotExists(user, badge);
 

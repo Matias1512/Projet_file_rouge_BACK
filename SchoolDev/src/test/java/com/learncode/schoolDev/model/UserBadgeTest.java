@@ -22,8 +22,8 @@ class UserBadgeTest {
         user.setUsername("testuser");
         
         badge = new Badge();
-        badge.setBadgeId(1L);
-        badge.setName("Test Badge");
+        badge.setId(1L);
+        badge.setTitle("Test Badge");
     }
 
     @Test

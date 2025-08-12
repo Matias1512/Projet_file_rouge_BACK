@@ -7,5 +7,5 @@ import com.learncode.schoolDev.model.Badge;
 
 @Repository
 public interface BadgeRepository extends JpaRepository<Badge, Long> {
-    boolean existsByName(String name);
+    boolean existsByTitle(String title);
 }

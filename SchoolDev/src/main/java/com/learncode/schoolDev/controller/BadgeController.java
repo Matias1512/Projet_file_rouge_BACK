@@ -39,16 +39,12 @@ public class BadgeController {
     @PostMapping
     @Operation(summary = "Créer un nouveau badge", description = "Ajoute un nouveau badge à la base de données")
     public Badge createBadge(@Valid @RequestBody Badge request) {
-        Badge badge = new Badge();
-        badge.setName(request.getName());
-        badge.setDescription(request.getDescription());
-        badge.setIconUrl(request.getIconUrl());
-        return badgeService.createBadge(badge);
+        return badgeService.createBadge(request);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Mettre à jour un badge", description = "Met à jour les informations d'un badge existant")
-    public ResponseEntity<Badge> updateBadge(@PathVariable Long id, @RequestBody Badge updatedBadge) {
+    public ResponseEntity<Optional<Badge>> updateBadge(@PathVariable Long id, @RequestBody Badge updatedBadge) {
         try {
             return ResponseEntity.ok(badgeService.updateBadge(id, updatedBadge));
         } catch (RuntimeException e) {

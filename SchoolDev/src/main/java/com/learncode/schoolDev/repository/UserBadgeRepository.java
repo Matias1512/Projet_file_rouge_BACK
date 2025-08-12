@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public interface UserBadgeRepository extends JpaRepository<UserBadge, UserBadgeKey> {
     List<UserBadge> findByUser_UserId(Long userId);
-    List<UserBadge> findByBadge_BadgeId(Long badgeId);
-    boolean existsByUser_UserIdAndBadge_BadgeId(Long userId, Long badgeId);
+    List<UserBadge> findByBadge_Id(long badgeId);
+    boolean existsByUser_UserIdAndBadge_Id(Long userId, Long badgeId);
 
 }
 

@@ -3,7 +3,6 @@ package com.learncode.schoolDev.service;
 import com.learncode.schoolDev.dto.QcmPropositionRequest;
 import com.learncode.schoolDev.dto.ExerciseResponse;
 import com.learncode.schoolDev.dto.ExerciseListResponse;
-import com.learncode.schoolDev.dto.QcmPropositionResponse;
 import com.learncode.schoolDev.model.Exercise;
 import com.learncode.schoolDev.model.ExerciseType;
 import com.learncode.schoolDev.model.QcmProposition;
@@ -17,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;

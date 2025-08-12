@@ -42,15 +42,15 @@ class UserBadgeControllerTest {
         user.setUsername("testuser");
 
         badge = new Badge();
-        badge.setBadgeId(10L);
-        badge.setName("Gold Badge");
+        badge.setId(10L);
+        badge.setTitle("Gold Badge");
 
         userBadge = new UserBadge();
         userBadge.setUser(user);
         userBadge.setBadge(badge);
         userBadge.setUnlockedAt(LocalDateTime.now());
 
-        key = new UserBadge.UserBadgeKey(user.getUserId(), badge.getBadgeId());
+        key = new UserBadge.UserBadgeKey(user.getUserId(), badge.getId());
     }
 
     @Test
@@ -69,7 +69,7 @@ class UserBadgeControllerTest {
     void testGetUserBadgeById_Found() {
         when(userBadgeService.getUserBadgeById(key)).thenReturn(Optional.of(userBadge));
 
-        ResponseEntity<UserBadge> response = userBadgeController.getUserBadgeById(user.getUserId(), badge.getBadgeId());
+        ResponseEntity<UserBadge> response = userBadgeController.getUserBadgeById(user.getUserId(), badge.getId());
 
         assertEquals(200, response.getStatusCode().value());
         assertEquals(userBadge, response.getBody());
@@ -80,7 +80,7 @@ class UserBadgeControllerTest {
     void testGetUserBadgeById_NotFound() {
         when(userBadgeService.getUserBadgeById(key)).thenReturn(Optional.empty());
 
-        ResponseEntity<UserBadge> response = userBadgeController.getUserBadgeById(user.getUserId(), badge.getBadgeId());
+        ResponseEntity<UserBadge> response = userBadgeController.getUserBadgeById(user.getUserId(), badge.getId());
 
         assertEquals(404, response.getStatusCode().value());
         assertNull(response.getBody());
@@ -111,7 +111,7 @@ class UserBadgeControllerTest {
     void testUpdateUserBadge_Success() {
         when(userBadgeService.updateUserBadge(eq(key), any(UserBadge.class))).thenReturn(userBadge);
 
-        ResponseEntity<UserBadge> response = userBadgeController.updateUserBadge(user.getUserId(), badge.getBadgeId(), userBadge);
+        ResponseEntity<UserBadge> response = userBadgeController.updateUserBadge(user.getUserId(), badge.getId(), userBadge);
 
         assertEquals(200, response.getStatusCode().value());
         assertEquals(userBadge, response.getBody());
@@ -124,7 +124,7 @@ class UserBadgeControllerTest {
                 .thenThrow(new RuntimeException("UserBadge non trouvé avec clé : " + key));
     
         ResponseEntity<UserBadge> response = userBadgeController.updateUserBadge(
-            user.getUserId(), badge.getBadgeId(), userBadge);
+            user.getUserId(), badge.getId(), userBadge);
     
         assertEquals(404, response.getStatusCode().value());
         assertNull(response.getBody());
@@ -136,7 +136,7 @@ class UserBadgeControllerTest {
     void testDeleteUserBadge() {
         doNothing().when(userBadgeService).deleteUserBadge(key);
 
-        ResponseEntity<Void> response = userBadgeController.deleteUserBadge(user.getUserId(), badge.getBadgeId());
+        ResponseEntity<Void> response = userBadgeController.deleteUserBadge(user.getUserId(), badge.getId());
 
         assertEquals(204, response.getStatusCode().value());
         verify(userBadgeService).deleteUserBadge(key);

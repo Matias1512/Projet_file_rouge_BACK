@@ -40,9 +40,15 @@ class UserBadgeServiceTest {
         // Ajoute d'autres champs si besoin
 
         badge = new Badge();
-        badge.setBadgeId(10L);
-        badge.setName("Gold Badge");
-        // Ajoute d'autres champs si besoin
+        badge.setId(10L);
+        badge.setTitle("Gold Badge");
+        badge.setDescription("Test badge description");
+        badge.setIcon("gold-icon");
+        badge.setLevel(1);
+        badge.setColor("gold.500");
+        badge.setCurrent(0);
+        badge.setTotal(10);
+        badge.setUnlocked(true);
 
         userBadge = new UserBadge();
         userBadge.setUser(user);
@@ -64,7 +70,7 @@ class UserBadgeServiceTest {
 
     @Test
     void testGetUserBadgeById_Found() {
-        UserBadge.UserBadgeKey key = new UserBadge.UserBadgeKey(user.getUserId(), badge.getBadgeId());
+        UserBadge.UserBadgeKey key = new UserBadge.UserBadgeKey(user.getUserId(), badge.getId());
         when(userBadgeRepository.findById(any())).thenReturn(Optional.of(userBadge));
 
         Optional<UserBadge> result = userBadgeService.getUserBadgeById(key);
@@ -108,7 +114,7 @@ class UserBadgeServiceTest {
         updated.setBadge(badge);
         updated.setUnlockedAt(LocalDateTime.now());
 
-        UserBadge.UserBadgeKey key = new UserBadge.UserBadgeKey(user.getUserId(), badge.getBadgeId());
+        UserBadge.UserBadgeKey key = new UserBadge.UserBadgeKey(user.getUserId(), badge.getId());
 
         when(userBadgeRepository.findById(key)).thenReturn(Optional.of(userBadge));
         when(userBadgeRepository.save(any(UserBadge.class))).thenReturn(updated);
@@ -139,7 +145,7 @@ class UserBadgeServiceTest {
 
     @Test
     void testDeleteUserBadge_Success() {
-        UserBadge.UserBadgeKey key = new UserBadge.UserBadgeKey(user.getUserId(), badge.getBadgeId());
+        UserBadge.UserBadgeKey key = new UserBadge.UserBadgeKey(user.getUserId(), badge.getId());
         doNothing().when(userBadgeRepository).deleteById(key);
 
         userBadgeService.deleteUserBadge(key);
@@ -162,12 +168,12 @@ class UserBadgeServiceTest {
     @Test
     void testGetUserBadgesByBadge() {
         UserBadge ub = new UserBadge();
-        when(userBadgeRepository.findByBadge_BadgeId(8L)).thenReturn(List.of(ub));
+        when(userBadgeRepository.findByBadge_Id(8L)).thenReturn(List.of(ub));
 
         List<UserBadge> result = userBadgeService.getUserBadgesByBadge(8L);
 
         assertEquals(1, result.size());
-        verify(userBadgeRepository).findByBadge_BadgeId(8L);
+        verify(userBadgeRepository).findByBadge_Id(8L);
     }
 
     @Test
@@ -175,9 +181,17 @@ class UserBadgeServiceTest {
         user = new User();
         user.setUserId(11L);
         badge = new Badge();
-        badge.setBadgeId(22L);
+        badge.setId(22L);
+        badge.setTitle("Test Badge");
+        badge.setDescription("Test description");
+        badge.setIcon("test-icon");
+        badge.setLevel(1);
+        badge.setColor("blue.500");
+        badge.setCurrent(0);
+        badge.setTotal(5);
+        badge.setUnlocked(false);
 
-        when(userBadgeRepository.existsByUser_UserIdAndBadge_BadgeId(11L, 22L)).thenReturn(false);
+        when(userBadgeRepository.existsByUser_UserIdAndBadge_Id(11L, 22L)).thenReturn(false);
 
         userBadgeService.assignBadgeIfNotExists(user, badge);
 
@@ -194,9 +208,17 @@ class UserBadgeServiceTest {
         user = new User();
         user.setUserId(15L);
         badge = new Badge();
-        badge.setBadgeId(88L);
+        badge.setId(88L);
+        badge.setTitle("Existing Badge");
+        badge.setDescription("Existing description");
+        badge.setIcon("existing-icon");
+        badge.setLevel(2);
+        badge.setColor("green.500");
+        badge.setCurrent(5);
+        badge.setTotal(10);
+        badge.setUnlocked(true);
 
-        when(userBadgeRepository.existsByUser_UserIdAndBadge_BadgeId(15L, 88L)).thenReturn(true);
+        when(userBadgeRepository.existsByUser_UserIdAndBadge_Id(15L, 88L)).thenReturn(true);
 
         userBadgeService.assignBadgeIfNotExists(user, badge);
 

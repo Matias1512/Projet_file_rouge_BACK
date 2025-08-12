@@ -28,15 +28,20 @@ public class BadgeService {
         return badgeRepository.save(badge);
     }
 
-    public Badge updateBadge(Long id, Badge updatedBadge) {
+    public Optional<Badge> updateBadge(Long id, Badge updatedBadge) {
         return badgeRepository.findById(id)
                 .map(badge -> {
-                    badge.setName(updatedBadge.getName());
+                    badge.setTitle(updatedBadge.getTitle());
                     badge.setDescription(updatedBadge.getDescription());
-                    badge.setIconUrl(updatedBadge.getIconUrl());
+                    badge.setIcon(updatedBadge.getIcon());
+                    badge.setLevel(updatedBadge.getLevel());
+                    badge.setColor(updatedBadge.getColor());
+                    badge.setCurrent(updatedBadge.getCurrent());
+                    badge.setTotal(updatedBadge.getTotal());
+                    badge.setUnlocked(updatedBadge.getUnlocked());
+                    badge.setUnlockRequirement(updatedBadge.getUnlockRequirement());
                     return badgeRepository.save(badge);
-                })
-                .orElseThrow(() -> new RuntimeException("Badge non trouvé avec ID : " + id));
+                });
     }
 
     public void deleteBadge(Long id) {
