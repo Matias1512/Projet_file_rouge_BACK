@@ -28,14 +28,8 @@ public class Badge {
     @NotBlank(message = "La couleur est obligatoire")
     private String color;
     
-    @NotNull(message = "La valeur actuelle est obligatoire")
-    private Integer current;
-    
     @NotNull(message = "La valeur totale est obligatoire")
     private Integer total;
-    
-    @NotNull(message = "Le statut débloqué est obligatoire")
-    private Boolean unlocked;
     
     private String unlockRequirement;
     
@@ -55,29 +49,25 @@ public class Badge {
         // Valeurs par défaut
         this.level = 1;
         this.color = "blue.500";
-        this.current = 0;
         this.total = 1;
-        this.unlocked = true;
     }
 
     // Constructeur complet
     public Badge(Long id, String title, String description, String icon, Integer level, 
-                 String color, Integer current, Integer total, Boolean unlocked) {
+                 String color, Integer total) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.icon = icon;
         this.level = level;
         this.color = color;
-        this.current = current;
         this.total = total;
-        this.unlocked = unlocked;
     }
     
     // Constructeur complet avec unlock requirement
     public Badge(Long id, String title, String description, String icon, Integer level, 
-                 String color, Integer current, Integer total, Boolean unlocked, String unlockRequirement) {
-        this(id, title, description, icon, level, color, current, total, unlocked);
+                 String color, Integer total, String unlockRequirement) {
+        this(id, title, description, icon, level, color, total);
         this.unlockRequirement = unlockRequirement;
     }
 
@@ -135,28 +125,12 @@ public class Badge {
         this.color = color;
     }
 
-    public Integer getCurrent() {
-        return current;
-    }
-
-    public void setCurrent(Integer current) {
-        this.current = current;
-    }
-
     public Integer getTotal() {
         return total;
     }
 
     public void setTotal(Integer total) {
         this.total = total;
-    }
-
-    public Boolean getUnlocked() {
-        return unlocked;
-    }
-
-    public void setUnlocked(Boolean unlocked) {
-        this.unlocked = unlocked;
     }
 
     public String getUnlockRequirement() {

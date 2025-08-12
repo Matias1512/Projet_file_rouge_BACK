@@ -24,8 +24,8 @@ class BadgeServiceTest {
     @Test
     void getAllBadges_returnsAllBadges() {
         List<Badge> badges = Arrays.asList(
-                new Badge(1L, "Tout feu tout flamme", "Réaliser une série de 50 jours", "fire-icon", 5, "red.500", 35, 50, true),
-                new Badge(2L, "Puits de science", "Gagner 4000 XP", "flask-icon", 6, "green.500", 3555, 4000, true)
+                new Badge(1L, "Tout feu tout flamme", "Réaliser une série de 50 jours", "fire-icon", 5, "red.500", 50),
+                new Badge(2L, "Puits de science", "Gagner 4000 XP", "flask-icon", 6, "green.500", 4000)
         );
         when(badgeRepository.findAll()).thenReturn(badges);
 
@@ -38,7 +38,7 @@ class BadgeServiceTest {
 
     @Test
     void getBadgeById_returnsBadgeIfExists() {
-        Badge badge = new Badge(1L, "Tout feu tout flamme", "Réaliser une série de 50 jours", "fire-icon", 5, "red.500", 35, 50, true);
+        Badge badge = new Badge(1L, "Tout feu tout flamme", "Réaliser une série de 50 jours", "fire-icon", 5, "red.500", 50);
         when(badgeRepository.findById(1L)).thenReturn(Optional.of(badge));
 
         Optional<Badge> result = badgeService.getBadgeById(1L);
@@ -60,8 +60,8 @@ class BadgeServiceTest {
 
     @Test
     void createBadge_savesBadge() {
-        Badge badge = new Badge(1L, "Spécialiste", "Apprendre 350 nouveaux mots", "file-icon", 5, "red.500", 315, 350, true);
-        Badge savedBadge = new Badge(2L, "Spécialiste", "Apprendre 350 nouveaux mots", "file-icon", 5, "red.500", 315, 350, true);
+        Badge badge = new Badge(1L, "Spécialiste", "Apprendre 350 nouveaux mots", "file-icon", 5, "red.500", 350);
+        Badge savedBadge = new Badge(2L, "Spécialiste", "Apprendre 350 nouveaux mots", "file-icon", 5, "red.500", 350);
         when(badgeRepository.save(badge)).thenReturn(savedBadge);
 
         Badge result = badgeService.createBadge(badge);
@@ -73,9 +73,9 @@ class BadgeServiceTest {
 
     @Test
     void updateBadge_updatesAndReturnsBadge() {
-        Badge existing = new Badge(1L, "Sans-faute", "Terminer 100 leçons sans faute", "bullseye-icon", 5, "green.500", 61, 100, true);
-        Badge updates = new Badge(2L, "Sans-faute Updated", "Terminer 150 leçons sans faute", "bullseye-icon", 6, "blue.500", 75, 150, true);
-        Badge saved = new Badge(3L, "Sans-faute Updated", "Terminer 150 leçons sans faute", "bullseye-icon", 6, "blue.500", 75, 150, true);
+        Badge existing = new Badge(1L, "Sans-faute", "Terminer 100 leçons sans faute", "bullseye-icon", 5, "green.500", 100);
+        Badge updates = new Badge(2L, "Sans-faute Updated", "Terminer 150 leçons sans faute", "bullseye-icon", 6, "blue.500", 150);
+        Badge saved = new Badge(3L, "Sans-faute Updated", "Terminer 150 leçons sans faute", "bullseye-icon", 6, "blue.500", 150);
 
         when(badgeRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(badgeRepository.save(any(Badge.class))).thenReturn(saved);
@@ -88,7 +88,6 @@ class BadgeServiceTest {
         assertEquals("bullseye-icon", result.get().getIcon());
         assertEquals(6, result.get().getLevel());
         assertEquals("blue.500", result.get().getColor());
-        assertEquals(75, result.get().getCurrent());
         assertEquals(150, result.get().getTotal());
         verify(badgeRepository).findById(1L);
         verify(badgeRepository).save(any(Badge.class));
@@ -96,7 +95,7 @@ class BadgeServiceTest {
 
     @Test
     void updateBadge_throwsIfNotFound() {
-        Badge updates = new Badge(1L, "New Title", "New Desc", "new-icon", 1, "color", 0, 10, false);
+        Badge updates = new Badge(1L, "New Title", "New Desc", "new-icon", 1, "color", 10);
         when(badgeRepository.findById(1L)).thenReturn(Optional.empty());
 
         Optional<Badge> result = badgeService.updateBadge(1L, updates);
@@ -118,14 +117,13 @@ class BadgeServiceTest {
     @Test
     void createBadgeWithUnlockRequirement_savesBadge() {
         Badge badge = new Badge(1L, "Éclair de génie", "Compléter 10 leçons en moins de 2 min", 
-                               "bolt-icon", 3, "yellow.500", 0, 10, false, "Atteindre le niveau 5");
+                               "bolt-icon", 3, "yellow.500", 10, "Atteindre le niveau 5");
         when(badgeRepository.save(badge)).thenReturn(badge);
 
         Badge result = badgeService.createBadge(badge);
 
         assertEquals(1L, result.getId());
         assertEquals("Éclair de génie", result.getTitle());
-        assertFalse(result.getUnlocked());
         assertEquals("Atteindre le niveau 5", result.getUnlockRequirement());
         verify(badgeRepository).save(badge);
     }
@@ -133,9 +131,9 @@ class BadgeServiceTest {
     @Test
     void updateBadge_updatesAllFields() {
         Badge existing = new Badge(1L, "Maître linguiste", "Atteindre le niveau max dans 3 compétences", 
-                                  "star-icon", 7, "blue.500", 0, 3, false, "Compléter 'Spécialiste'");
+                                  "star-icon", 7, "blue.500", 3, "Compléter 'Spécialiste'");
         Badge updates = new Badge(1L, "Grand Maître", "Atteindre le niveau max dans 5 compétences", 
-                                 "crown-icon", 8, "gold.500", 2, 5, true, null);
+                                 "crown-icon", 8, "gold.500", 5);
 
         when(badgeRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(badgeRepository.save(any(Badge.class))).thenReturn(updates);
@@ -147,9 +145,7 @@ class BadgeServiceTest {
         assertEquals("crown-icon", result.get().getIcon());
         assertEquals(8, result.get().getLevel());
         assertEquals("gold.500", result.get().getColor());
-        assertEquals(2, result.get().getCurrent());
         assertEquals(5, result.get().getTotal());
-        assertTrue(result.get().getUnlocked());
         assertNull(result.get().getUnlockRequirement());
         verify(badgeRepository).findById(1L);
         verify(badgeRepository).save(existing);

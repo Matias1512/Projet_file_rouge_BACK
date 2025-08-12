@@ -31,8 +31,8 @@ class BadgeControllerTest {
 
     @BeforeEach
     void setup() {
-        badge1 = new Badge(1L, "Badge 1", "Description 1", "icon1.png", 1, "blue.500", 0, 1, true, null);
-        badge2 = new Badge(2L, "Badge 2", "Description 2", "icon2.png", 1, "blue.500", 0, 1, true, null);
+        badge1 = new Badge(1L, "Badge 1", "Description 1", "icon1.png", 1, "blue.500", 1);
+        badge2 = new Badge(2L, "Badge 2", "Description 2", "icon2.png", 1, "blue.500", 1);
     }
 
     @Test
@@ -66,8 +66,8 @@ class BadgeControllerTest {
 
     @Test
     void testCreateBadge() {
-        Badge input = new Badge(null, "New", "Desc", "url.png", 1, "blue.500", 0, 1, true, null);
-        Badge saved = new Badge(3L, "New", "Desc", "url.png", 1, "blue.500", 0, 1, true, null);
+        Badge input = new Badge(null, "New", "Desc", "url.png", 1, "blue.500", 1);
+        Badge saved = new Badge(3L, "New", "Desc", "url.png", 1, "blue.500", 1);
 
         when(badgeService.createBadge(any(Badge.class))).thenReturn(saved);
 
@@ -79,8 +79,8 @@ class BadgeControllerTest {
 
     @Test
     void testUpdateBadge_Success() {
-        Badge update = new Badge(null, "New", "Desc", "url.png", 1, "blue.500", 0, 1, true, null);
-        Optional<Badge> updated = Optional.ofNullable(new Badge(1L, "Updated", "New desc", "new.png", 2, "blue.600", 1, 2, false, "New requirement"));
+        Badge update = new Badge(null, "New", "Desc", "url.png", 1, "blue.500", 1);
+        Optional<Badge> updated = Optional.ofNullable(new Badge(1L, "Updated", "New desc", "new.png", 2, "blue.600", 2, "New requirement"));
 
         when(badgeService.updateBadge(eq(1L), any(Badge.class))).thenReturn(updated);
 

@@ -46,14 +46,14 @@ class UserBadgeServiceTest {
         badge.setIcon("gold-icon");
         badge.setLevel(1);
         badge.setColor("gold.500");
-        badge.setCurrent(0);
         badge.setTotal(10);
-        badge.setUnlocked(true);
 
         userBadge = new UserBadge();
         userBadge.setUser(user);
         userBadge.setBadge(badge);
         userBadge.setUnlockedAt(LocalDateTime.now());
+        userBadge.setCurrent(0);
+        userBadge.setUnlocked(true);
     }
 
     @Test
@@ -187,9 +187,7 @@ class UserBadgeServiceTest {
         badge.setIcon("test-icon");
         badge.setLevel(1);
         badge.setColor("blue.500");
-        badge.setCurrent(0);
         badge.setTotal(5);
-        badge.setUnlocked(false);
 
         when(userBadgeRepository.existsByUser_UserIdAndBadge_Id(11L, 22L)).thenReturn(false);
 
@@ -214,9 +212,7 @@ class UserBadgeServiceTest {
         badge.setIcon("existing-icon");
         badge.setLevel(2);
         badge.setColor("green.500");
-        badge.setCurrent(5);
         badge.setTotal(10);
-        badge.setUnlocked(true);
 
         when(userBadgeRepository.existsByUser_UserIdAndBadge_Id(15L, 88L)).thenReturn(true);
 

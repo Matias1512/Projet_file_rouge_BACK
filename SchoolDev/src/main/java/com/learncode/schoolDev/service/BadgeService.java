@@ -36,9 +36,7 @@ public class BadgeService {
                     badge.setIcon(updatedBadge.getIcon());
                     badge.setLevel(updatedBadge.getLevel());
                     badge.setColor(updatedBadge.getColor());
-                    badge.setCurrent(updatedBadge.getCurrent());
                     badge.setTotal(updatedBadge.getTotal());
-                    badge.setUnlocked(updatedBadge.getUnlocked());
                     badge.setUnlockRequirement(updatedBadge.getUnlockRequirement());
                     return badgeRepository.save(badge);
                 });

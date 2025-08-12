@@ -79,6 +79,8 @@ class UserBadgeTest {
         assertNull(userBadge.getUser());
         assertNull(userBadge.getBadge());
         assertNull(userBadge.getUnlockedAt());
+        assertNull(userBadge.getCurrent());
+        assertNull(userBadge.getUnlocked());
     }
 
     @Test
@@ -177,5 +179,38 @@ class UserBadgeTest {
         
         // Le timestamp doit être égal ou après le premier
         assertTrue(secondUnlock.isAfter(firstUnlock) || secondUnlock.isEqual(firstUnlock));
+    }
+
+    @Test
+    void testCurrentGetterAndSetter() {
+        Integer currentValue = 25;
+        userBadge.setCurrent(currentValue);
+        assertEquals(currentValue, userBadge.getCurrent());
+    }
+
+    @Test
+    void testUnlockedGetterAndSetter() {
+        userBadge.setUnlocked(true);
+        assertTrue(userBadge.getUnlocked());
+        
+        userBadge.setUnlocked(false);
+        assertFalse(userBadge.getUnlocked());
+    }
+
+    @Test
+    void testUserBadgeWithProgressAndUnlock() {
+        LocalDateTime unlockedTime = LocalDateTime.now();
+
+        userBadge.setUser(user);
+        userBadge.setBadge(badge);
+        userBadge.setUnlockedAt(unlockedTime);
+        userBadge.setCurrent(75);
+        userBadge.setUnlocked(true);
+
+        assertEquals(user, userBadge.getUser());
+        assertEquals(badge, userBadge.getBadge());
+        assertEquals(unlockedTime, userBadge.getUnlockedAt());
+        assertEquals(75, userBadge.getCurrent());
+        assertTrue(userBadge.getUnlocked());
     }
 }

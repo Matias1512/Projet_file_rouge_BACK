@@ -27,6 +27,12 @@ public class UserBadge {
     @Column(name = "unlockedAt", nullable = false)
     private LocalDateTime unlockedAt;
 
+    @NotNull(message = "La valeur actuelle est obligatoire")
+    private Integer current;
+    
+    @NotNull(message = "Le statut débloqué est obligatoire")
+    private Boolean unlocked;
+
     @PrePersist
     protected void onUnlock() {
         unlockedAt = LocalDateTime.now();
@@ -54,6 +60,22 @@ public class UserBadge {
 
     public void setUnlockedAt(LocalDateTime unlockedAt) {
         this.unlockedAt = unlockedAt;
+    }
+
+    public Integer getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Integer current) {
+        this.current = current;
+    }
+
+    public Boolean getUnlocked() {
+        return unlocked;
+    }
+
+    public void setUnlocked(Boolean unlocked) {
+        this.unlocked = unlocked;
     }
 
     // Classe de clé composite
