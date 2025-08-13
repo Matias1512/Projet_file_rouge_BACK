@@ -19,11 +19,14 @@ public class UserExerciseService {
     private final UserExerciseRepository repository;
     private final UserRepository userRepository;
     private final ExerciseRepository exerciseRepository;
+    private final BadgeEventService badgeEventService;
 
-    public UserExerciseService(UserExerciseRepository repository, UserRepository userRepository, ExerciseRepository exerciseRepository) {
+    public UserExerciseService(UserExerciseRepository repository, UserRepository userRepository, 
+                             ExerciseRepository exerciseRepository, BadgeEventService badgeEventService) {
         this.repository = repository;
         this.userRepository = userRepository;
         this.exerciseRepository = exerciseRepository;
+        this.badgeEventService = badgeEventService;
     }
 
     public UserExercise save(UserExercise userExercise) {
@@ -47,7 +50,14 @@ public class UserExerciseService {
         userExercise.setSuccess(success);
         userExercise.setCompletedAt(LocalDateTime.now());
         
-        return repository.save(userExercise);
+        UserExercise savedUserExercise = repository.save(userExercise);
+        
+        // Déclencher l'évaluation des badges
+        if (success) {
+            badgeEventService.publishExerciseCompleted(user);
+        }
+        
+        return savedUserExercise;
     }
 
     public UserExercise updateOrCreateUserExercise(Long userId, Long exerciseId, Boolean success) {
@@ -57,7 +67,14 @@ public class UserExerciseService {
                     // Mettre à jour l'entrée existante
                     existing.setSuccess(success);
                     existing.setCompletedAt(LocalDateTime.now());
-                    return repository.save(existing);
+                    UserExercise savedExercise = repository.save(existing);
+                    
+                    // Déclencher l'évaluation des badges si succès
+                    if (success) {
+                        badgeEventService.publishExerciseCompleted(existing.getUser());
+                    }
+                    
+                    return savedExercise;
                 })
                 .orElseGet(() -> {
                     // Créer une nouvelle entrée sans vérification (car on sait qu'elle n'existe pas)
@@ -72,7 +89,14 @@ public class UserExerciseService {
                     userExercise.setSuccess(success);
                     userExercise.setCompletedAt(LocalDateTime.now());
                     
-                    return repository.save(userExercise);
+                    UserExercise savedUserExercise = repository.save(userExercise);
+                    
+                    // Déclencher l'évaluation des badges si succès
+                    if (success) {
+                        badgeEventService.publishExerciseCompleted(user);
+                    }
+                    
+                    return savedUserExercise;
                 });
     }
 

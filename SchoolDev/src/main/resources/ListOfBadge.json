@@ -1,20 +1,102 @@
 [
     {
-      "name": "JAVA X",
-      "description": "Débloqué après avoir terminé 10 exercice de JAVA",
-      "iconUrl": "FaFlask",
+      "name": "Premier pas",
+      "description": "Complétez votre premier exercice",
+      "iconUrl": "FaPlay",
+      "level": 1,
+      "color": "green.500",
+      "total": 1,
+      "unlockRequirement": "exercises_completed:1",
       "createdAt": "2025-04-10T10:00:00"
     },
     {
-      "name": "MEGA JAVA X",
-      "description": "Débloqué après avoir complété 10 lessons de JAVA",
-      "iconUrl": "FaFlask",
+      "name": "Débutant",
+      "description": "Complétez 5 exercices",
+      "iconUrl": "FaLeaf",
+      "level": 1,
+      "color": "green.500",
+      "total": 5,
+      "unlockRequirement": "exercises_completed:5",
       "createdAt": "2025-04-10T10:05:00"
     },
     {
-      "name": "10 soumissions",
-      "description": "Débloqué après 10 soumissions correctes",
+      "name": "En progression",
+      "description": "Complétez 10 exercices",
       "iconUrl": "FaFire",
+      "level": 2,
+      "color": "orange.500",
+      "total": 10,
+      "unlockRequirement": "exercises_completed:10",
       "createdAt": "2025-04-10T10:10:00"
+    },
+    {
+      "name": "Passionné",
+      "description": "Complétez 25 exercices",
+      "iconUrl": "FaHeart",
+      "level": 3,
+      "color": "red.500",
+      "total": 25,
+      "unlockRequirement": "exercises_completed:25",
+      "createdAt": "2025-04-10T10:15:00"
+    },
+    {
+      "name": "Expert",
+      "description": "Complétez 50 exercices",
+      "iconUrl": "FaTrophy",
+      "level": 4,
+      "color": "yellow.500",
+      "total": 50,
+      "unlockRequirement": "exercises_completed:50",
+      "createdAt": "2025-04-10T10:20:00"
+    },
+    {
+      "name": "Premier succès",
+      "description": "Réussissez votre première soumission",
+      "iconUrl": "FaCheckCircle",
+      "level": 1,
+      "color": "green.500",
+      "total": 1,
+      "unlockRequirement": "submission_success:1",
+      "createdAt": "2025-04-10T10:25:00"
+    },
+    {
+      "name": "Série de réussites",
+      "description": "Réussissez 10 soumissions",
+      "iconUrl": "FaTarget",
+      "level": 2,
+      "color": "blue.500",
+      "total": 10,
+      "unlockRequirement": "submission_success:10",
+      "createdAt": "2025-04-10T10:30:00"
+    },
+    {
+      "name": "Perfectionniste",
+      "description": "Réussissez 5 exercices sans erreur",
+      "iconUrl": "FaBullseye",
+      "level": 3,
+      "color": "purple.500",
+      "total": 5,
+      "unlockRequirement": "perfect_score:5",
+      "createdAt": "2025-04-10T10:35:00"
+    },
+    {
+      "name": "Explorateur",
+      "description": "Complétez 3 leçons différentes",
+      "iconUrl": "FaCompass",
+      "level": 2,
+      "color": "teal.500",
+      "total": 3,
+      "unlockRequirement": "lessons_completed:3",
+      "createdAt": "2025-04-10T10:40:00"
+    },
+    {
+      "name": "Persévérant",
+      "description": "Réussissez 20 soumissions",
+      "iconUrl": "FaShieldAlt",
+      "level": 4,
+      "color": "indigo.500",
+      "total": 20,
+      "unlockRequirement": "submission_success:20",
+      "createdAt": "2025-04-10T10:45:00"
     }
   ]

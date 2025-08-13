@@ -23,4 +23,6 @@ public interface UserExerciseRepository extends JpaRepository<UserExercise, Long
     @Query("SELECT ue FROM UserExercise ue WHERE ue.user.userId = :userId " +
            "AND ue.exercise.exerciseId = :exerciseId AND ue.success = true")
     List<UserExercise> findSuccessfulUserExercisesByUserAndExercise(@Param("userId") Long userId, @Param("exerciseId") Long exerciseId);
+    
+    long countByUser_UserIdAndSuccess(Long userId, boolean success);
 }

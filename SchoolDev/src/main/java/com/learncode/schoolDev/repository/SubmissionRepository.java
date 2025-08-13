@@ -22,4 +22,6 @@ public interface SubmissionRepository extends JpaRepository<Submission, Long> {
     @Query("SELECT s FROM Submission s WHERE s.user.userId = :userId " +
            "AND s.exercise.exerciseId = :exerciseId AND s.isCorrect = true")
     List<Submission> findCorrectSubmissionsByUserAndExercise(@Param("userId") Long userId, @Param("exerciseId") Long exerciseId);
+    
+    long countByUser_UserIdAndIsCorrect(Long userId, boolean isCorrect);
 }

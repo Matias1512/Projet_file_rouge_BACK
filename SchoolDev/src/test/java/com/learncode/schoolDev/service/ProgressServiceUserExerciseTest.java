@@ -1,6 +1,12 @@
 package com.learncode.schoolDev.service;
 
-import com.learncode.schoolDev.repository.*;
+import com.learncode.schoolDev.repository.ProgressRepository;
+import com.learncode.schoolDev.repository.SubmissionRepository;
+import com.learncode.schoolDev.repository.UserExerciseRepository;
+import com.learncode.schoolDev.repository.ExerciseRepository;
+import com.learncode.schoolDev.repository.LessonRepository;
+import com.learncode.schoolDev.repository.CourseRepository;
+import com.learncode.schoolDev.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;

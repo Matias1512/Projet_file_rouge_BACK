@@ -22,6 +22,7 @@ import com.learncode.schoolDev.model.UserBadge;
 import com.learncode.schoolDev.repository.BadgeRepository;
 import com.learncode.schoolDev.repository.UserBadgeRepository;
 import com.learncode.schoolDev.repository.UserRepository;
+import com.learncode.schoolDev.service.BadgeEventService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -35,23 +36,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public class AuthController {
 
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils, AuthenticationManager authenticationManager, UserBadgeRepository userBadgeRepository, BadgeRepository badgeRepository) {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
+    private final AuthenticationManager authenticationManager;
+    private final UserBadgeRepository userBadgeRepository;
+    private final BadgeRepository badgeRepository;
+    private final BadgeEventService badgeEventService;
+
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils, 
+                         AuthenticationManager authenticationManager, UserBadgeRepository userBadgeRepository, 
+                         BadgeRepository badgeRepository, BadgeEventService badgeEventService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
         this.userBadgeRepository = userBadgeRepository;
         this.badgeRepository = badgeRepository;
+        this.badgeEventService = badgeEventService;
     }
-
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtUtils jwtUtils;
-    private final AuthenticationManager authenticationManager;
-
-    private UserBadgeRepository userBadgeRepository;
-
-    private BadgeRepository badgeRepository;
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@Valid @RequestBody User user) {
@@ -68,10 +71,15 @@ public class AuthController {
                 UserBadge userBadge = new UserBadge();
                 userBadge.setUser(savedUser);
                 userBadge.setBadge(badge);
+                userBadge.setUnlocked(false); // Badges non débloqués par défaut
+                userBadge.setCurrent(0); // Progression à zéro
                 userBadges.add(userBadge);
             }
 
             userBadgeRepository.saveAll(userBadges);
+            
+            // Déclencher l'évaluation des badges pour le nouvel utilisateur
+            badgeEventService.publishUserRegistered(savedUser);
 
             return ResponseEntity.ok(savedUser);
         } 

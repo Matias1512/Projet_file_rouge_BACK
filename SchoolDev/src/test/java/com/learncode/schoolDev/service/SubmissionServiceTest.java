@@ -4,6 +4,7 @@ import com.learncode.schoolDev.model.Exercise;
 import com.learncode.schoolDev.model.Submission;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.repository.SubmissionRepository;
+import com.learncode.schoolDev.service.BadgeEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,9 @@ class SubmissionServiceTest {
     
     @Mock
     private ProgressService progressService;
+    
+    @Mock
+    private BadgeEventService badgeEventService;
 
     private Submission submission;
 

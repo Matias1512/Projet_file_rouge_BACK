@@ -14,10 +14,13 @@ import java.util.Optional;
 public class SubmissionService {
     private final SubmissionRepository submissionRepository;
     private final ProgressService progressService;
+    private final BadgeEventService badgeEventService;
 
-    public SubmissionService(SubmissionRepository submissionRepository, ProgressService progressService) {
+    public SubmissionService(SubmissionRepository submissionRepository, ProgressService progressService,
+                           BadgeEventService badgeEventService) {
         this.submissionRepository = submissionRepository;
         this.progressService = progressService;
+        this.badgeEventService = badgeEventService;
     }
 
     public List<Submission> getAllSubmissions() {
@@ -48,6 +51,9 @@ public class SubmissionService {
                 savedSubmission.getUser().getUserId(), 
                 savedSubmission.getExercise().getExerciseId()
             );
+            
+            // Déclencher l'évaluation des badges pour soumission réussie
+            badgeEventService.publishSubmissionSuccess(savedSubmission.getUser());
         }
         
         return savedSubmission;
@@ -71,6 +77,9 @@ public class SubmissionService {
                             savedSubmission.getUser().getUserId(), 
                             savedSubmission.getExercise().getExerciseId()
                         );
+                        
+                        // Déclencher l'évaluation des badges pour soumission réussie
+                        badgeEventService.publishSubmissionSuccess(savedSubmission.getUser());
                     }
                     
                     return savedSubmission;

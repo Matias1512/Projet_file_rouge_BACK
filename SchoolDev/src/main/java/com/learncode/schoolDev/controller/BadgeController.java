@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.learncode.schoolDev.model.Badge;
+import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.service.BadgeService;
+import com.learncode.schoolDev.service.BadgeEvaluationService;
+import com.learncode.schoolDev.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +21,14 @@ import java.util.Optional;
 @Tag(name = "Badges", description = "Gestion des badges")
 public class BadgeController {
     private final BadgeService badgeService;
+    private final BadgeEvaluationService badgeEvaluationService;
+    private final UserRepository userRepository;
 
-    public BadgeController(BadgeService badgeService) {
+    public BadgeController(BadgeService badgeService, BadgeEvaluationService badgeEvaluationService,
+                         UserRepository userRepository) {
         this.badgeService = badgeService;
+        this.badgeEvaluationService = badgeEvaluationService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -57,5 +65,17 @@ public class BadgeController {
     public ResponseEntity<Void> deleteBadge(@PathVariable Long id) {
         badgeService.deleteBadge(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/evaluate/{userId}")
+    @Operation(summary = "Évaluer les badges d'un utilisateur", description = "Force l'évaluation et l'attribution des badges pour un utilisateur")
+    public ResponseEntity<List<Badge>> evaluateUserBadges(@PathVariable Long userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        List<Badge> newBadges = badgeEvaluationService.evaluateAndAssignBadges(userOpt.get());
+        return ResponseEntity.ok(newBadges);
     }
 }

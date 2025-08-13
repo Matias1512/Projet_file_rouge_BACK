@@ -7,6 +7,7 @@ import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.repository.BadgeRepository;
 import com.learncode.schoolDev.repository.UserBadgeRepository;
 import com.learncode.schoolDev.repository.UserRepository;
+import com.learncode.schoolDev.service.BadgeEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +49,9 @@ class AuthControllerTest {
 
     @Mock
     private BadgeRepository badgeRepository;
+
+    @Mock
+    private BadgeEventService badgeEventService;
 
     private User user;
 
