@@ -26,6 +26,9 @@ public class Badge {
     @Column(name = "icon_url")
     private String icon;
     
+    @Column(name = "icon")
+    private String iconName;
+    
     @NotNull(message = "Le niveau est obligatoire")
     @Column(name = "level")
     private Integer level;
@@ -116,6 +119,14 @@ public class Badge {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getIconName() {
+        return iconName;
+    }
+
+    public void setIconName(String iconName) {
+        this.iconName = iconName;
     }
 
     public Integer getLevel() {
