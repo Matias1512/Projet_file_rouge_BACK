@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.learncode.schoolDev.dto.UserBadgeCreateRequest;
 import com.learncode.schoolDev.model.UserBadge;
 import com.learncode.schoolDev.service.UserBadgeService;
 
@@ -53,6 +54,12 @@ public class UserBadgeController {
     @Operation(summary = "Attribuer un badge à un utilisateur", description = "Ajoute une nouvelle association utilisateur-badge à la base de données")
     public UserBadge createUserBadge(@Valid @RequestBody UserBadge userBadge) {
         return userBadgeService.createUserBadge(userBadge);
+    }
+
+    @PostMapping("/simple")
+    @Operation(summary = "Attribuer un badge à un utilisateur (simplifié)", description = "Crée une association utilisateur-badge avec seulement userId et badgeId")
+    public UserBadge createUserBadgeSimple(@Valid @RequestBody UserBadgeCreateRequest request) {
+        return userBadgeService.createUserBadge(request);
     }
 
     @PutMapping("/update")

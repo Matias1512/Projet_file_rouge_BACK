@@ -1,5 +1,6 @@
 package com.learncode.schoolDev.controller;
 
+import com.learncode.schoolDev.dto.UserBadgeCreateRequest;
 import com.learncode.schoolDev.model.UserBadge;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.model.Badge;
@@ -163,5 +164,67 @@ class UserBadgeControllerTest {
 
         assertEquals(1, result.size());
         verify(userBadgeService).getUserBadgesByBadge(77L);
+    }
+
+    @Test
+    void testCreateUserBadgeSimple_Success() {
+        UserBadgeCreateRequest request = new UserBadgeCreateRequest(100L, 10L);
+        when(userBadgeService.createUserBadge(any(UserBadgeCreateRequest.class))).thenReturn(userBadge);
+
+        UserBadge response = userBadgeController.createUserBadgeSimple(request);
+
+        assertEquals(userBadge, response);
+        verify(userBadgeService).createUserBadge(request);
+    }
+
+    @Test
+    void testCreateUserBadgeSimple_WithAllFields() {
+        UserBadgeCreateRequest request = new UserBadgeCreateRequest(100L, 10L, 5, true);
+        when(userBadgeService.createUserBadge(any(UserBadgeCreateRequest.class))).thenReturn(userBadge);
+
+        UserBadge response = userBadgeController.createUserBadgeSimple(request);
+
+        assertEquals(userBadge, response);
+        verify(userBadgeService).createUserBadge(request);
+    }
+
+    @Test
+    void testCreateUserBadgeSimple_UserNotFound() {
+        UserBadgeCreateRequest request = new UserBadgeCreateRequest(999L, 10L);
+        when(userBadgeService.createUserBadge(any(UserBadgeCreateRequest.class)))
+            .thenThrow(new RuntimeException("Utilisateur non trouvé avec ID : 999"));
+
+        Exception ex = assertThrows(RuntimeException.class, 
+            () -> userBadgeController.createUserBadgeSimple(request));
+        
+        assertEquals("Utilisateur non trouvé avec ID : 999", ex.getMessage());
+        verify(userBadgeService).createUserBadge(request);
+    }
+
+    @Test
+    void testCreateUserBadgeSimple_BadgeNotFound() {
+        UserBadgeCreateRequest request = new UserBadgeCreateRequest(100L, 999L);
+        when(userBadgeService.createUserBadge(any(UserBadgeCreateRequest.class)))
+            .thenThrow(new RuntimeException("Badge non trouvé avec ID : 999"));
+
+        Exception ex = assertThrows(RuntimeException.class, 
+            () -> userBadgeController.createUserBadgeSimple(request));
+        
+        assertEquals("Badge non trouvé avec ID : 999", ex.getMessage());
+        verify(userBadgeService).createUserBadge(request);
+    }
+
+    @Test
+    void testCreateUserBadgeSimple_OnlyRequiredFields() {
+        UserBadgeCreateRequest request = new UserBadgeCreateRequest(100L, 10L);
+        assertEquals(0, request.getCurrent()); // Valeur par défaut
+        assertFalse(request.getUnlocked()); // Valeur par défaut
+        
+        when(userBadgeService.createUserBadge(any(UserBadgeCreateRequest.class))).thenReturn(userBadge);
+
+        UserBadge response = userBadgeController.createUserBadgeSimple(request);
+
+        assertEquals(userBadge, response);
+        verify(userBadgeService).createUserBadge(request);
     }
 }

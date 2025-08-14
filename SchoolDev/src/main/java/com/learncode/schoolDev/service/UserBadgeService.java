@@ -2,10 +2,13 @@ package com.learncode.schoolDev.service;
 
 import org.springframework.stereotype.Service;
 
+import com.learncode.schoolDev.dto.UserBadgeCreateRequest;
 import com.learncode.schoolDev.model.Badge;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.model.UserBadge;
 import com.learncode.schoolDev.repository.UserBadgeRepository;
+import com.learncode.schoolDev.service.UserService;
+import com.learncode.schoolDev.service.BadgeService;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +16,13 @@ import java.util.Optional;
 @Service
 public class UserBadgeService {
     private final UserBadgeRepository userBadgeRepository;
+    private final UserService userService;
+    private final BadgeService badgeService;
 
-    public UserBadgeService(UserBadgeRepository userBadgeRepository) {
+    public UserBadgeService(UserBadgeRepository userBadgeRepository, UserService userService, BadgeService badgeService) {
         this.userBadgeRepository = userBadgeRepository;
+        this.userService = userService;
+        this.badgeService = badgeService;
     }
 
     public List<UserBadge> getAllUserBadges() {
@@ -27,6 +34,22 @@ public class UserBadgeService {
     }
 
     public UserBadge createUserBadge(UserBadge userBadge) {
+        return userBadgeRepository.save(userBadge);
+    }
+
+    public UserBadge createUserBadge(UserBadgeCreateRequest request) {
+        User user = userService.getUserById(request.getUserId())
+            .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec ID : " + request.getUserId()));
+        
+        Badge badge = badgeService.getBadgeById(request.getBadgeId())
+            .orElseThrow(() -> new RuntimeException("Badge non trouvé avec ID : " + request.getBadgeId()));
+
+        UserBadge userBadge = new UserBadge();
+        userBadge.setUser(user);
+        userBadge.setBadge(badge);
+        userBadge.setCurrent(request.getCurrent());
+        userBadge.setUnlocked(request.getUnlocked());
+
         return userBadgeRepository.save(userBadge);
     }
 
