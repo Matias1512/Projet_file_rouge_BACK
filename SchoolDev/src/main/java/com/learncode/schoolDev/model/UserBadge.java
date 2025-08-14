@@ -38,23 +38,6 @@ public class UserBadge {
         unlockedAt = LocalDateTime.now();
     }
 
-    // Constructeur par défaut
-    public UserBadge() {}
-
-    // Constructeur pratique avec IDs et statut de succès
-    public UserBadge(Long userId, Long badgeId, Boolean success) {
-        User user = new User();
-        user.setUserId(userId);
-        this.user = user;
-        
-        Badge badge = new Badge();
-        badge.setId(badgeId);
-        this.badge = badge;
-        
-        this.unlocked = success;
-        this.current = success ? 1 : 0; // Si succès, current = 1, sinon 0
-    }
-
     public User getUser() {
         return user;
     }
