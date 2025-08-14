@@ -14,13 +14,13 @@ public class UserBadge {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @NotNull(message = "L'ID de l'utilisateur est obligatoire")
     private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "badgeId", nullable = false)
+    @JoinColumn(name = "badge_id", nullable = false)
     @NotNull(message = "L'ID du badge est obligatoire")
     private Badge badge;
 
