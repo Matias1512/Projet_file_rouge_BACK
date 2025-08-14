@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "User_Badges")
+@Table(name = "user_badges")
 @IdClass(UserBadge.UserBadgeKey.class)
 public class UserBadge {
 

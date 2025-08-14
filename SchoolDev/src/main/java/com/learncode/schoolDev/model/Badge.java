@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Badges")
+@Table(name = "badges")
 public class Badge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
