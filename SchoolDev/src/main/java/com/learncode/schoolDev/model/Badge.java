@@ -15,7 +15,7 @@ public class Badge {
     private Long id;
 
     @NotBlank(message = "Le titre est obligatoire")
-    @Column(name = "name")
+    @Column(name = "title")
     private String title;
     
     @NotBlank(message = "La description est obligatoire")
