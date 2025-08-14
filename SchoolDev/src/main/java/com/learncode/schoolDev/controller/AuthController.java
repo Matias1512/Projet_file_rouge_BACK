@@ -64,22 +64,33 @@ public class AuthController {
         } else {
             user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
             User savedUser = userRepository.save(user);
-            List<Badge> allBadges = badgeRepository.findAll();
-
-            List<UserBadge> userBadges = new ArrayList<>();
-            for (Badge badge : allBadges) {
-                UserBadge userBadge = new UserBadge();
-                userBadge.setUser(savedUser);
-                userBadge.setBadge(badge);
-                userBadge.setUnlocked(false); // Badges non débloqués par défaut
-                userBadge.setCurrent(0); // Progression à zéro
-                userBadges.add(userBadge);
-            }
-
-            userBadgeRepository.saveAll(userBadges);
             
-            // Déclencher l'évaluation des badges pour le nouvel utilisateur
-            badgeEventService.publishUserRegistered(savedUser);
+            try {
+                List<Badge> allBadges = badgeRepository.findAll();
+
+                // Créer les UserBadge seulement si des badges existent
+                if (!allBadges.isEmpty()) {
+                    List<UserBadge> userBadges = new ArrayList<>();
+                    for (Badge badge : allBadges) {
+                        UserBadge userBadge = new UserBadge();
+                        userBadge.setUser(savedUser);
+                        userBadge.setBadge(badge);
+                        userBadge.setUnlocked(false); // Badges non débloqués par défaut
+                        userBadge.setCurrent(0); // Progression à zéro
+                        userBadges.add(userBadge);
+                    }
+
+                    userBadgeRepository.saveAll(userBadges);
+                    
+                    // Déclencher l'évaluation des badges seulement si des badges existent
+                    badgeEventService.publishUserRegistered(savedUser);
+                } else {
+                    System.out.println("Aucun badge trouvé en base - création d'utilisateur sans badges");
+                }
+            } catch (Exception e) {
+                System.err.println("Erreur lors de la création des badges pour l'utilisateur: " + e.getMessage());
+                // L'inscription continue même si les badges échouent
+            }
 
             return ResponseEntity.ok(savedUser);
         } 
