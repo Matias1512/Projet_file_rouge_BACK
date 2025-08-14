@@ -11,12 +11,15 @@ import java.time.LocalDateTime;
 public class Badge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @NotBlank(message = "Le titre est obligatoire")
+    @Column(name = "name")
     private String title;
     
     @NotBlank(message = "La description est obligatoire")
+    @Column(name = "description")
     private String description;
     
     @NotBlank(message = "L'icône est obligatoire")
@@ -24,12 +27,15 @@ public class Badge {
     private String icon;
     
     @NotNull(message = "Le niveau est obligatoire")
+    @Column(name = "level")
     private Integer level;
     
     @NotBlank(message = "La couleur est obligatoire")
+    @Column(name = "color")
     private String color;
     
     @NotNull(message = "La valeur totale est obligatoire")
+    @Column(name = "total")
     private Integer total;
     
     @Column(name = "unlock_requirement")
