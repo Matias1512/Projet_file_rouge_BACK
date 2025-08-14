@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,8 @@ public class BadgeController {
     private final BadgeEvaluationService badgeEvaluationService;
     private final UserRepository userRepository;
 
-    public BadgeController(BadgeService badgeService, BadgeEvaluationService badgeEvaluationService,
+    public BadgeController(BadgeService badgeService, 
+                         @Lazy BadgeEvaluationService badgeEvaluationService,
                          UserRepository userRepository) {
         this.badgeService = badgeService;
         this.badgeEvaluationService = badgeEvaluationService;
