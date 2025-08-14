@@ -20,6 +20,7 @@ public class Badge {
     private String description;
     
     @NotBlank(message = "L'icône est obligatoire")
+    @Column(name = "icon_url")
     private String icon;
     
     @NotNull(message = "Le niveau est obligatoire")
@@ -31,8 +32,10 @@ public class Badge {
     @NotNull(message = "La valeur totale est obligatoire")
     private Integer total;
     
+    @Column(name = "unlock_requirement")
     private String unlockRequirement;
     
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
 

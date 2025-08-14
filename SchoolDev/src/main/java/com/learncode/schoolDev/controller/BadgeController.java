@@ -21,14 +21,15 @@ import java.util.Optional;
 @Tag(name = "Badges", description = "Gestion des badges")
 public class BadgeController {
     private final BadgeService badgeService;
-    // Temporarily commented out to test
-    // private final BadgeEvaluationService badgeEvaluationService;
-    // private final UserRepository userRepository;
+    private final BadgeEvaluationService badgeEvaluationService;
+    private final UserRepository userRepository;
 
-    public BadgeController(BadgeService badgeService) {
+    public BadgeController(BadgeService badgeService, 
+                         BadgeEvaluationService badgeEvaluationService,
+                         UserRepository userRepository) {
         this.badgeService = badgeService;
-        // this.badgeEvaluationService = badgeEvaluationService;
-        // this.userRepository = userRepository;
+        this.badgeEvaluationService = badgeEvaluationService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -67,8 +68,6 @@ public class BadgeController {
         return ResponseEntity.noContent().build();
     }
 
-    // Temporarily commented out to test BadgeEvaluationService issue
-    /*
     @PostMapping("/evaluate/{userId}")
     @Operation(summary = "Évaluer les badges d'un utilisateur", description = "Force l'évaluation et l'attribution des badges pour un utilisateur")
     public ResponseEntity<List<Badge>> evaluateUserBadges(@PathVariable Long userId) {
@@ -80,5 +79,4 @@ public class BadgeController {
         List<Badge> newBadges = badgeEvaluationService.evaluateAndAssignBadges(userOpt.get());
         return ResponseEntity.ok(newBadges);
     }
-    */
 }
