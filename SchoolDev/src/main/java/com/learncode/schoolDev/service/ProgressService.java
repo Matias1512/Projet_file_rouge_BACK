@@ -13,7 +13,6 @@ import com.learncode.schoolDev.repository.CourseRepository;
 import com.learncode.schoolDev.repository.ExerciseRepository;
 import com.learncode.schoolDev.repository.LessonRepository;
 import com.learncode.schoolDev.repository.ProgressRepository;
-import com.learncode.schoolDev.repository.SubmissionRepository;
 import com.learncode.schoolDev.repository.UserExerciseRepository;
 import com.learncode.schoolDev.repository.UserRepository;
 
@@ -24,7 +23,6 @@ import java.util.Optional;
 @Transactional
 public class ProgressService {
     private final ProgressRepository progressRepository;
-    private final SubmissionRepository submissionRepository;
     private final UserExerciseRepository userExerciseRepository;
     private final ExerciseRepository exerciseRepository;
     private final LessonRepository lessonRepository;
@@ -32,14 +30,12 @@ public class ProgressService {
     private final UserRepository userRepository;
 
     public ProgressService(ProgressRepository progressRepository, 
-                          SubmissionRepository submissionRepository,
                           UserExerciseRepository userExerciseRepository,
                           ExerciseRepository exerciseRepository,
                           LessonRepository lessonRepository,
                           CourseRepository courseRepository,
                           UserRepository userRepository) {
         this.progressRepository = progressRepository;
-        this.submissionRepository = submissionRepository;
         this.userExerciseRepository = userExerciseRepository;
         this.exerciseRepository = exerciseRepository;
         this.lessonRepository = lessonRepository;
@@ -154,16 +150,6 @@ public class ProgressService {
         }
     }
 
-    /**
-     * Met à jour la progression après qu'un utilisateur ait soumis un exercice
-     */
-    public void updateProgressAfterSubmission(Long userId, Long exerciseId) {
-        Exercise exercise = exerciseRepository.findById(exerciseId)
-            .orElseThrow(() -> new RuntimeException("Exercice non trouvé avec ID : " + exerciseId));
-        
-        Long courseId = exercise.getLesson().getCourse().getCourseId();
-        updateProgressAutomatically(userId, courseId);
-    }
 
     /**
      * Initialise la progression pour un utilisateur qui commence un cours

@@ -18,9 +18,6 @@ public class BadgeEventService {
         eventPublisher.publishEvent(new BadgeEvent(user, BadgeEvent.EXERCISE_COMPLETED));
     }
 
-    public void publishSubmissionSuccess(User user) {
-        eventPublisher.publishEvent(new BadgeEvent(user, BadgeEvent.SUBMISSION_SUCCESS));
-    }
 
     public void publishLessonCompleted(User user) {
         eventPublisher.publishEvent(new BadgeEvent(user, BadgeEvent.LESSON_COMPLETED));

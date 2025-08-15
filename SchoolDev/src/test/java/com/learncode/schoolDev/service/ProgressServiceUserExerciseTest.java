@@ -1,7 +1,6 @@
 package com.learncode.schoolDev.service;
 
 import com.learncode.schoolDev.repository.ProgressRepository;
-import com.learncode.schoolDev.repository.SubmissionRepository;
 import com.learncode.schoolDev.repository.UserExerciseRepository;
 import com.learncode.schoolDev.repository.ExerciseRepository;
 import com.learncode.schoolDev.repository.LessonRepository;
@@ -17,8 +16,6 @@ class ProgressServiceUserExerciseTest {
 
     @Mock
     private ProgressRepository progressRepository;
-    @Mock
-    private SubmissionRepository submissionRepository;
     @Mock
     private UserExerciseRepository userExerciseRepository;
     @Mock

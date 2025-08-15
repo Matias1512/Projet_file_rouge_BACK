@@ -8,7 +8,6 @@ import com.learncode.schoolDev.model.UserBadge;
 import com.learncode.schoolDev.repository.BadgeRepository;
 import com.learncode.schoolDev.repository.UserBadgeRepository;
 import com.learncode.schoolDev.repository.UserExerciseRepository;
-import com.learncode.schoolDev.repository.SubmissionRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,16 +24,13 @@ public class BadgeEvaluationService {
     private final BadgeRepository badgeRepository;
     private final UserBadgeRepository userBadgeRepository;
     private final UserExerciseRepository userExerciseRepository;
-    private final SubmissionRepository submissionRepository;
 
     public BadgeEvaluationService(BadgeRepository badgeRepository, 
                                 UserBadgeRepository userBadgeRepository,
-                                UserExerciseRepository userExerciseRepository,
-                                SubmissionRepository submissionRepository) {
+                                UserExerciseRepository userExerciseRepository) {
         this.badgeRepository = badgeRepository;
         this.userBadgeRepository = userBadgeRepository;
         this.userExerciseRepository = userExerciseRepository;
-        this.submissionRepository = submissionRepository;
     }
 
     /**
@@ -109,9 +105,6 @@ public class BadgeEvaluationService {
             case EXERCISES_COMPLETED:
                 return countCompletedExercises(user) >= condition.getTargetValue();
             
-            case SUBMISSION_SUCCESS:
-                return countSuccessfulSubmissions(user) >= condition.getTargetValue();
-            
             case LANGUAGE_EXERCISES:
                 if (condition.getLanguage() != null) {
                     return countLanguageExercises(user, condition.getLanguage()) >= condition.getTargetValue();
@@ -120,9 +113,6 @@ public class BadgeEvaluationService {
             
             case LESSONS_COMPLETED:
                 return countCompletedLessons(user) >= condition.getTargetValue();
-            
-            case PERFECT_SCORE:
-                return countPerfectScores(user) >= condition.getTargetValue();
             
             default:
                 return false;
@@ -169,9 +159,6 @@ public class BadgeEvaluationService {
             case EXERCISES_COMPLETED:
                 return Math.min(countCompletedExercises(user), condition.getTargetValue());
             
-            case SUBMISSION_SUCCESS:
-                return Math.min(countSuccessfulSubmissions(user), condition.getTargetValue());
-            
             case LANGUAGE_EXERCISES:
                 if (condition.getLanguage() != null) {
                     return Math.min(countLanguageExercises(user, condition.getLanguage()), condition.getTargetValue());
@@ -180,9 +167,6 @@ public class BadgeEvaluationService {
             
             case LESSONS_COMPLETED:
                 return Math.min(countCompletedLessons(user), condition.getTargetValue());
-            
-            case PERFECT_SCORE:
-                return Math.min(countPerfectScores(user), condition.getTargetValue());
             
             default:
                 return 0;
@@ -217,10 +201,6 @@ public class BadgeEvaluationService {
         return (int) userExerciseRepository.countByUser_UserIdAndSuccess(user.getUserId(), true);
     }
 
-    private int countSuccessfulSubmissions(User user) {
-        return (int) submissionRepository.countByUser_UserIdAndIsCorrect(user.getUserId(), true);
-    }
-
     private int countLanguageExercises(User user, String language) {
         // Cette méthode nécessiterait d'ajouter le language aux exercices
         // Pour l'instant, on retourne le nombre d'exercices complétés
@@ -231,11 +211,6 @@ public class BadgeEvaluationService {
         // Cette méthode nécessiterait un système de tracking des leçons
         // Pour l'instant, on utilise les exercices comme proxy
         return countCompletedExercises(user);
-    }
-
-    private int countPerfectScores(User user) {
-        // Compte les soumissions avec score parfait
-        return (int) submissionRepository.countByUser_UserIdAndIsCorrect(user.getUserId(), true);
     }
 
     /**

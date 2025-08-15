@@ -51,32 +51,32 @@
     },
     {
       "name": "Premier succès",
-      "description": "Réussissez votre première soumission",
+      "description": "Complétez votre premier exercice",
       "iconUrl": "FaCheckCircle",
       "level": 1,
       "color": "green.500",
       "total": 1,
-      "unlockRequirement": "submission_success:1",
+      "unlockRequirement": "exercises_completed:1",
       "createdAt": "2025-04-10T10:25:00"
     },
     {
       "name": "Série de réussites",
-      "description": "Réussissez 10 soumissions",
+      "description": "Complétez 10 exercices",
       "iconUrl": "FaTarget",
       "level": 2,
       "color": "blue.500",
       "total": 10,
-      "unlockRequirement": "submission_success:10",
+      "unlockRequirement": "exercises_completed:10",
       "createdAt": "2025-04-10T10:30:00"
     },
     {
       "name": "Perfectionniste",
-      "description": "Réussissez 5 exercices sans erreur",
+      "description": "Complétez 5 exercices",
       "iconUrl": "FaBullseye",
       "level": 3,
       "color": "purple.500",
       "total": 5,
-      "unlockRequirement": "perfect_score:5",
+      "unlockRequirement": "exercises_completed:5",
       "createdAt": "2025-04-10T10:35:00"
     },
     {
@@ -91,12 +91,12 @@
     },
     {
       "name": "Persévérant",
-      "description": "Réussissez 20 soumissions",
+      "description": "Complétez 20 exercices",
       "iconUrl": "FaShieldAlt",
       "level": 4,
       "color": "indigo.500",
       "total": 20,
-      "unlockRequirement": "submission_success:20",
+      "unlockRequirement": "exercises_completed:20",
       "createdAt": "2025-04-10T10:45:00"
     }
   ]

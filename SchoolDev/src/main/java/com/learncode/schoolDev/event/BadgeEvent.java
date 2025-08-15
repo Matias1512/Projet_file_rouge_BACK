@@ -33,7 +33,6 @@ public class BadgeEvent {
 
     // Types d'actions constants
     public static final String EXERCISE_COMPLETED = "exercise_completed";
-    public static final String SUBMISSION_SUCCESS = "submission_success";
     public static final String LESSON_COMPLETED = "lesson_completed";
     public static final String COURSE_FINISHED = "course_finished";
     public static final String USER_REGISTERED = "user_registered";

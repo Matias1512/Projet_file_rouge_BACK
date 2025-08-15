@@ -19,9 +19,6 @@ class ProgressServiceTest {
     private ProgressRepository progressRepository;
     
     @Mock
-    private SubmissionRepository submissionRepository;
-    
-    @Mock
     private UserExerciseRepository userExerciseRepository;
     
     @Mock
@@ -395,46 +392,6 @@ class ProgressServiceTest {
         verify(progressRepository).save(any(Progress.class));
     }
 
-    @Test
-    void updateProgressAfterSubmission_ExerciseNotFound_Throws() {
-        when(exerciseRepository.findById(999L)).thenReturn(Optional.empty());
-
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
-            progressService.updateProgressAfterSubmission(1L, 999L);
-        });
-
-        assertTrue(ex.getMessage().contains("Exercice non trouvé"));
-        verify(exerciseRepository).findById(999L);
-    }
-
-    @Test
-    void updateProgressAfterSubmission_Success() {
-        Exercise exercise = new Exercise();
-        Lesson lesson = new Lesson();
-        Course course = new Course();
-        course.setCourseId(1L);
-        lesson.setCourse(course);
-        exercise.setLesson(lesson);
-        
-        User user = new User();
-        Progress progress = new Progress();
-        
-        when(exerciseRepository.findById(1L)).thenReturn(Optional.of(exercise));
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(courseRepository.findById(1L)).thenReturn(Optional.of(course));
-        when(progressRepository.findByUser_UserIdAndCourse_CourseId(1L, 1L))
-            .thenReturn(Optional.of(progress));
-        when(exerciseRepository.countByCourseId(1L)).thenReturn(1L);
-        when(userExerciseRepository.countCompletedExercisesByUserAndCourse(1L, 1L)).thenReturn(0L);
-        when(lessonRepository.findByCourse_CourseIdOrderByOrderInCourse(1L))
-            .thenReturn(Collections.emptyList());
-        when(progressRepository.save(progress)).thenReturn(progress);
-
-        progressService.updateProgressAfterSubmission(1L, 1L);
-
-        verify(exerciseRepository).findById(1L);
-        verify(progressRepository).save(progress);
-    }
 
     @Test
     void initializeProgressForCourse_ExistingProgress_ReturnsExisting() {
