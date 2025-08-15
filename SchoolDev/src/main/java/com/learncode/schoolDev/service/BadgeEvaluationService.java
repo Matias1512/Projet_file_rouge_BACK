@@ -6,6 +6,8 @@ import com.learncode.schoolDev.model.Badge;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.model.UserBadge;
 import com.learncode.schoolDev.repository.BadgeRepository;
+import com.learncode.schoolDev.repository.ExerciseRepository;
+import com.learncode.schoolDev.repository.LessonRepository;
 import com.learncode.schoolDev.repository.ProgressRepository;
 import com.learncode.schoolDev.repository.UserBadgeRepository;
 import com.learncode.schoolDev.repository.UserExerciseRepository;
@@ -23,15 +25,21 @@ import java.util.Optional;
 public class BadgeEvaluationService {
     
     private final BadgeRepository badgeRepository;
+    private final ExerciseRepository exerciseRepository;
+    private final LessonRepository lessonRepository;
     private final ProgressRepository progressRepository;
     private final UserBadgeRepository userBadgeRepository;
     private final UserExerciseRepository userExerciseRepository;
 
     public BadgeEvaluationService(BadgeRepository badgeRepository,
+                                ExerciseRepository exerciseRepository,
+                                LessonRepository lessonRepository,
                                 ProgressRepository progressRepository,
                                 UserBadgeRepository userBadgeRepository,
                                 UserExerciseRepository userExerciseRepository) {
         this.badgeRepository = badgeRepository;
+        this.exerciseRepository = exerciseRepository;
+        this.lessonRepository = lessonRepository;
         this.progressRepository = progressRepository;
         this.userBadgeRepository = userBadgeRepository;
         this.userExerciseRepository = userExerciseRepository;
@@ -224,9 +232,9 @@ public class BadgeEvaluationService {
     }
 
     private int countCompletedLessons(User user) {
-        // Cette méthode nécessiterait un système de tracking des leçons
-        // Pour l'instant, on utilise les exercices comme proxy
-        return countCompletedExercises(user);
+        // Compter les leçons où l'utilisateur a complété au moins un exercice
+        // C'est un proxy plus réaliste que de compter tous les exercices
+        return (int) userExerciseRepository.countLessonsWithCompletedExercises(user.getUserId());
     }
 
     /**

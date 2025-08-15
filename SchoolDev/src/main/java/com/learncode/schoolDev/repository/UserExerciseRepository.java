@@ -25,4 +25,8 @@ public interface UserExerciseRepository extends JpaRepository<UserExercise, Long
     List<UserExercise> findSuccessfulUserExercisesByUserAndExercise(@Param("userId") Long userId, @Param("exerciseId") Long exerciseId);
     
     long countByUser_UserIdAndSuccess(Long userId, boolean success);
+    
+    @Query("SELECT COUNT(DISTINCT ue.exercise.lesson.lessonId) FROM UserExercise ue " +
+           "WHERE ue.user.userId = :userId AND ue.success = true")
+    long countLessonsWithCompletedExercises(@Param("userId") Long userId);
 }
