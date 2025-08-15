@@ -119,14 +119,31 @@ public class ExerciseService {
     }
     
 
+    @Transactional
     public Exercise updateExercise(Long id, Exercise updatedExercise) {
         return exerciseRepository.findById(id)
                 .map(exercise -> {
+                    // Mettre à jour les champs de base
                     exercise.setTitle(updatedExercise.getTitle());
                     exercise.setDescription(updatedExercise.getDescription());
                     exercise.setType(updatedExercise.getType());
                     exercise.setStarterCode(updatedExercise.getStarterCode());
                     exercise.setTestCases(updatedExercise.getTestCases());
+                    
+                    // Gérer les propositions QCM si elles sont fournies
+                    if (updatedExercise.getQcmPropositions() != null) {
+                        // Supprimer les anciennes propositions
+                        List<QcmProposition> existingPropositions = qcmPropositionRepository.findByExercise_ExerciseId(id);
+                        qcmPropositionRepository.deleteAll(existingPropositions);
+                        
+                        // Ajouter les nouvelles propositions
+                        for (QcmProposition proposition : updatedExercise.getQcmPropositions()) {
+                            proposition.setExercise(exercise);
+                            proposition.setPropositionId(null); // Forcer la création d'un nouvel ID
+                        }
+                        exercise.setQcmPropositions(updatedExercise.getQcmPropositions());
+                    }
+                    
                     return exerciseRepository.save(exercise);
                 })
                 .orElseThrow(() -> new RuntimeException("Exercice non trouvé avec ID : " + id));
