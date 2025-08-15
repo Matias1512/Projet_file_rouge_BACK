@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Badge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "badge_id")
     private Long id;
 
     @NotBlank(message = "Le titre est obligatoire")
