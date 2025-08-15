@@ -261,7 +261,7 @@ class BadgeEvaluationServiceTest {
         Badge lessonsBadge = new Badge();
         lessonsBadge.setUnlockRequirement("lessons_completed:3");
         
-        when(userExerciseRepository.countLessonsWithCompletedExercises(1L))
+        when(userExerciseRepository.countFullyCompletedLessons(1L))
             .thenReturn(4L);
 
         // Act
@@ -437,7 +437,7 @@ class BadgeEvaluationServiceTest {
         
         when(userBadgeRepository.findByUser_UserIdAndBadge_Id(1L, 3L))
             .thenReturn(Optional.of(userBadge));
-        when(userExerciseRepository.countLessonsWithCompletedExercises(1L))
+        when(userExerciseRepository.countFullyCompletedLessons(1L))
             .thenReturn(4L);
             
         badgeEvaluationService.updateBadgeProgress(testUser, lessonsBadge);

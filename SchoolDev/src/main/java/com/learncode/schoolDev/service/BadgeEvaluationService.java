@@ -232,9 +232,9 @@ public class BadgeEvaluationService {
     }
 
     private int countCompletedLessons(User user) {
-        // Compter les leçons où l'utilisateur a complété au moins un exercice
-        // C'est un proxy plus réaliste que de compter tous les exercices
-        return (int) userExerciseRepository.countLessonsWithCompletedExercises(user.getUserId());
+        // Compter les leçons où l'utilisateur a complété TOUS les exercices
+        // Une leçon est considérée comme terminée seulement si tous ses exercices sont réussis
+        return (int) userExerciseRepository.countFullyCompletedLessons(user.getUserId());
     }
 
     /**
