@@ -28,19 +28,22 @@ public class ProgressService {
     private final LessonRepository lessonRepository;
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final BadgeEventService badgeEventService;
 
     public ProgressService(ProgressRepository progressRepository, 
                           UserExerciseRepository userExerciseRepository,
                           ExerciseRepository exerciseRepository,
                           LessonRepository lessonRepository,
                           CourseRepository courseRepository,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          BadgeEventService badgeEventService) {
         this.progressRepository = progressRepository;
         this.userExerciseRepository = userExerciseRepository;
         this.exerciseRepository = exerciseRepository;
         this.lessonRepository = lessonRepository;
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
+        this.badgeEventService = badgeEventService;
     }
 
     public List<Progress> getAllProgress() {
@@ -135,19 +138,30 @@ public class ProgressService {
         double percentage = calculateProgressPercentage(userId, courseId);
         Long currentLessonId = getCurrentLessonId(userId, courseId);
         
+        Progress savedProgress;
+        boolean wasCourseAlreadyFinished = false;
+        
         if (existingProgress.isPresent()) {
             Progress progress = existingProgress.get();
+            wasCourseAlreadyFinished = progress.getPercentageCompleted() >= 100.0;
             progress.setPercentageCompleted(percentage);
             progress.setCurrentLessonId(currentLessonId);
-            return progressRepository.save(progress);
+            savedProgress = progressRepository.save(progress);
         } else {
             Progress newProgress = new Progress();
             newProgress.setUser(user);
             newProgress.setCourse(course);
             newProgress.setPercentageCompleted(percentage);
             newProgress.setCurrentLessonId(currentLessonId);
-            return progressRepository.save(newProgress);
+            savedProgress = progressRepository.save(newProgress);
         }
+        
+        // Déclencher l'événement de cours terminé si le cours atteint 100% pour la première fois
+        if (percentage >= 100.0 && !wasCourseAlreadyFinished) {
+            badgeEventService.publishCourseFinished(user);
+        }
+        
+        return savedProgress;
     }
 
 

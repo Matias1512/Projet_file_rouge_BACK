@@ -13,4 +13,5 @@ public interface ProgressRepository extends JpaRepository<Progress, Long> {
     List<Progress> findByUser_UserId(Long userId);
     List<Progress> findByCourse_CourseId(Long courseId);
     Optional<Progress> findByUser_UserIdAndCourse_CourseId(Long userId, Long courseId);
+    long countByUser_UserIdAndPercentageCompletedGreaterThanEqual(Long userId, Double percentage);
 }

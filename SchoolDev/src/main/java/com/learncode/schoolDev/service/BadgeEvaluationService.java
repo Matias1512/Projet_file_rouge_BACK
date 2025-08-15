@@ -6,6 +6,7 @@ import com.learncode.schoolDev.model.Badge;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.model.UserBadge;
 import com.learncode.schoolDev.repository.BadgeRepository;
+import com.learncode.schoolDev.repository.ProgressRepository;
 import com.learncode.schoolDev.repository.UserBadgeRepository;
 import com.learncode.schoolDev.repository.UserExerciseRepository;
 
@@ -22,13 +23,16 @@ import java.util.Optional;
 public class BadgeEvaluationService {
     
     private final BadgeRepository badgeRepository;
+    private final ProgressRepository progressRepository;
     private final UserBadgeRepository userBadgeRepository;
     private final UserExerciseRepository userExerciseRepository;
 
-    public BadgeEvaluationService(BadgeRepository badgeRepository, 
+    public BadgeEvaluationService(BadgeRepository badgeRepository,
+                                ProgressRepository progressRepository,
                                 UserBadgeRepository userBadgeRepository,
                                 UserExerciseRepository userExerciseRepository) {
         this.badgeRepository = badgeRepository;
+        this.progressRepository = progressRepository;
         this.userBadgeRepository = userBadgeRepository;
         this.userExerciseRepository = userExerciseRepository;
     }
@@ -105,6 +109,9 @@ public class BadgeEvaluationService {
             case EXERCISES_COMPLETED:
                 return countCompletedExercises(user) >= condition.getTargetValue();
             
+            case COURSES_FINISHED:
+                return countFinishedCourses(user) >= condition.getTargetValue();
+            
             case LANGUAGE_EXERCISES:
                 if (condition.getLanguage() != null) {
                     return countLanguageExercises(user, condition.getLanguage()) >= condition.getTargetValue();
@@ -159,6 +166,9 @@ public class BadgeEvaluationService {
             case EXERCISES_COMPLETED:
                 return Math.min(countCompletedExercises(user), condition.getTargetValue());
             
+            case COURSES_FINISHED:
+                return Math.min(countFinishedCourses(user), condition.getTargetValue());
+            
             case LANGUAGE_EXERCISES:
                 if (condition.getLanguage() != null) {
                     return Math.min(countLanguageExercises(user, condition.getLanguage()), condition.getTargetValue());
@@ -199,6 +209,12 @@ public class BadgeEvaluationService {
     
     private int countCompletedExercises(User user) {
         return (int) userExerciseRepository.countByUser_UserIdAndSuccess(user.getUserId(), true);
+    }
+
+    private int countFinishedCourses(User user) {
+        // Compte les cours avec progression à 100%
+        // Un cours est considéré terminé si la progression est >= 100%
+        return (int) progressRepository.countByUser_UserIdAndPercentageCompletedGreaterThanEqual(user.getUserId(), 100.0);
     }
 
     private int countLanguageExercises(User user, String language) {

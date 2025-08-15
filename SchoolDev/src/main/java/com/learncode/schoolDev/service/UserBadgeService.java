@@ -7,8 +7,6 @@ import com.learncode.schoolDev.model.Badge;
 import com.learncode.schoolDev.model.User;
 import com.learncode.schoolDev.model.UserBadge;
 import com.learncode.schoolDev.repository.UserBadgeRepository;
-import com.learncode.schoolDev.service.UserService;
-import com.learncode.schoolDev.service.BadgeService;
 
 import java.util.List;
 import java.util.Optional;

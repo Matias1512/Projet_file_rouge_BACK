@@ -8,7 +8,6 @@ import com.learncode.schoolDev.model.UserExercise;
 import com.learncode.schoolDev.repository.UserExerciseRepository;
 import com.learncode.schoolDev.repository.UserRepository;
 import com.learncode.schoolDev.repository.ExerciseRepository;
-import com.learncode.schoolDev.service.BadgeEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
