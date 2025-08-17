@@ -33,6 +33,57 @@ Une fois l'environnement local démarré, l'application est accessible aux adres
 
 ⚠️ **Important** : L'adresse http://localhost:8080/ seule ne permet pas d'accéder à l'interface. Utilisez `/swagger-ui/index.html` pour accéder à la documentation interactive de l'API.
 
+## 🚀 Comment exécuter l'application en local
+
+### Prérequis
+- Docker Desktop installé et en cours d'exécution
+- Java 23+ (optionnel pour exécution native)
+- Maven 3.9+ (optionnel pour exécution native)
+
+### Option 1 : Exécution avec Docker (Recommandée)
+
+#### Étape 1 : Démarrer l'environnement local
+```bash
+# Naviguez vers le dossier SchoolDev
+cd SchoolDev
+
+# Lancez l'environnement local complet (base de données + application)
+docker-compose -f docker-compose.local.yml up -d
+
+# Vérifiez que les containers sont démarrés
+docker-compose -f docker-compose.local.yml ps
+```
+
+#### Étape 2 : Accéder à l'application
+- **Swagger UI** : http://localhost:8080/swagger-ui/index.html
+- **API Documentation** : http://localhost:8080/v3/api-docs
+- **Health Check** : http://localhost:8080/actuator/health
+
+#### Étape 3 : Configuration Swagger pour utiliser la base locale
+1. Ouvrez Swagger UI : http://localhost:8080/swagger-ui/index.html
+2. Dans le dropdown "Servers" en haut de la page
+3. **Sélectionnez "Serveur Local (http://localhost:8080)"**
+4. Vous utilisez maintenant la base de données locale !
+5. Rendez-vous sur /api/auth/register
+6. Enregistré un nouvel utilisateur en utilisant cette exemple :
+{
+  "username": "matias",
+  "email": "matias@mail.com",
+  "passwordHash": "password",
+  "role": "user"
+}
+(saisissez simplement un mot de passe sans le hacher)
+7. Une fois l’inscription réussie, rendez-vous sur /api/auth/login
+8. Renseignez votre nom d’utilisateur et votre mot de passe comme ceci :
+{
+  "username": "matias",
+  "password": "password"
+}
+9. Copiez le token retourné dans « Response body ».
+10. Cliquez sur l’un des cadenas affichés dans Swagger, ou retournez en haut de la page et cliquez sur « Authorize ».
+11. Collez le token
+12. Vous pouvez maintenant utiliser toute la documentation Swagger.
+
 La configuration de développement local comprend :
 - Une base de données PostgreSQL avec des informations d'identification simplifiées
 - Une fonctionnalité de rechargement à chaud pour les modifications de code
