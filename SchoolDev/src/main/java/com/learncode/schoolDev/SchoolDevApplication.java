@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
         version = "v1"
     ),
     servers = {
+        @Server(url = "http://localhost:8080", description = "Serveur Local"),
         @Server(url = "http://schooldev.duckdns.org", description = "Serveur HTTP"),
         @Server(url = "https://schooldev.duckdns.org", description = "Serveur HTTPS")
     }

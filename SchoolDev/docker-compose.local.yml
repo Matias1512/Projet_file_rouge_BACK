@@ -6,7 +6,6 @@ services:
     container_name: postgres_local
     restart: always
     environment:
-      POSTGRES_HOST: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: localpassword
       POSTGRES_DB: schoolDevDatabase
@@ -16,6 +15,11 @@ services:
       - "5432:5432"
     networks:
       - local-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d schoolDevDatabase"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   spring-app:
     build:
@@ -24,11 +28,14 @@ services:
     container_name: spring_boot_local
     restart: always
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/schoolDevDatabase
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: localpassword
+      DB_USER: postgres
+      DB_PASSWORD: localpassword
       JWT_SECRET_KEY: your-local-256-bit-secret-key-for-development-only
       JWT_EXPIRATION: "3600000"
       SPRING_PROFILES_ACTIVE: local
