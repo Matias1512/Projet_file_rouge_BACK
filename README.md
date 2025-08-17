@@ -1,4 +1,106 @@
-# Projet_file_rouge_BACK
+## Project Overview
+
+SchoolDev est un système de gestion de l'apprentissage (LMS) basé sur Spring Boot qui propose des cours de programmation, des exercices et un système de badges pour les apprenants. L'application est conteneurisée et configurée pour un déploiement en production avec le proxy inverse Traefik et la base de données PostgreSQL.
+
+## Commandes de développement
+
+### Maven Commands
+- **Build project**: `./mvnw clean compile` (Windows: `mvnw.cmd clean compile`)
+- **Run tests**: `./mvnw test`
+- **Package application**: `./mvnw clean package`
+- **Run application locally**: `./mvnw spring-boot:run`
+- **Generate test coverage report**: `./mvnw jacoco:report` (rapport généré dans `target/site/jacoco/`)
+
+### Commandes Docker
+
+#### Production Deployment
+- **Build image**: `docker build -t schooldev_back .`
+- **Run with docker-compose**: `docker-compose up -d`
+- **View logs**: `docker-compose logs -f spring-app`
+
+#### Local Development with Docker
+- **Exécuter l'environnement de développement local**: `docker-compose -f docker-compose.local.yml up -d`
+- **Construire et exécuter avec rechargement automatique**: `docker-compose -f docker-compose.local.yml up --build`
+- **Afficher les logs locaux**: `docker-compose -f docker-compose.local.yml logs -f spring-app`
+- **Arrêter l'environnement local**: `docker-compose -f docker-compose.local.yml down`
+
+#### Accès à l'application en local
+Une fois l'environnement local démarré, l'application est accessible aux adresses suivantes :
+- **Swagger UI** : http://localhost:8080/swagger-ui/index.html
+- **API Documentation** : http://localhost:8080/v3/api-docs  
+- **Health Check** : http://localhost:8080/actuator/health
+- **Application** : http://localhost:8080/
+
+⚠️ **Important** : L'adresse http://localhost:8080/ seule ne permet pas d'accéder à l'interface. Utilisez `/swagger-ui/index.html` pour accéder à la documentation interactive de l'API.
+
+La configuration de développement local comprend :
+- Une base de données PostgreSQL avec des informations d'identification simplifiées
+- Une fonctionnalité de rechargement à chaud pour les modifications de code
+- Un port de débogage exposé sur 5005 pour le débogage à distance
+- Des dépendances Maven mises en cache pour des reconstructions plus rapides
+
+### Configuration de la base de données
+L'application utilise PostgreSQL.
+
+## Vue d'ensemble de l'architecture
+
+### Structure des packages
+- **config/**: Configuration de sécurité, utilitaires JWT, limitation de débit, CORS, Swagger
+- **controller/**: Points d'accès de l'API REST organisés par domaine (Auth, Course, Exercise, etc.)
+- **model/**: Entités JPA représentant le modèle de domaine
+- **repository/**: Référentiels Spring Data JPA
+- **service/**: Couche de logique métier
+- **dto/**: Objets de transfert de données pour les requêtes/réponses API
+- **filter/**: Filtres personnalisés (authentification JWT, limitation de débit)
+- **exception/**: Gestion globale des exceptions
+- **dataInitializer/**: Initialisation des données au démarrage de l'application
+
+### Modèles de domaine principaux
+- **User**: Authentification et gestion des utilisateurs avec accès basé sur les rôles
+- **Course**: Cours de programmation avec niveaux de difficulté (DÉBUTANT, INTERMÉDIAIRE, AVANCÉ)
+- **Lesson**: Contenu de cours organisé en leçons
+- **Exercise**: Exercices de programmation avec code de démarrage et cas de test
+- **Badge**: Système de réussite avec définitions de badges basées sur JSON
+- **Progress/Submission**: Suivi des progrès des utilisateurs et soumissions d'exercices
+
+### Architecture de sécurité
+- Authentification basée sur JWT avec `JwtFilter` personnalisé
+- Encodage des mots de passe BCrypt
+- Limitation de débit utilisant Bucket4j
+- Configuration CORS pour l'intégration frontend
+- En-têtes de sécurité (HSTS, Content-Type Options, Frame Options, Referrer Policy)
+
+### Fonctionnalités clés
+- API RESTful avec documentation OpenAPI/Swagger
+- Système de badges qui attribue automatiquement tous les badges aux nouveaux utilisateurs
+- Suivi des progrès pour les cours et exercices
+- Couverture de test complète avec rapports JaCoCo
+- Conteneurisation prête pour la production avec proxy inverse Traefik
+
+## Tests
+
+Le projet a une couverture de test complète sur toutes les couches :
+- **Tests unitaires** pour les services, contrôleurs, modèles et configuration
+- **Tests d'intégration** pour la configuration de sécurité
+- Exécuter les tests avec : `./mvnw test`
+- Générer le rapport de couverture avec : `./mvnw jacoco:report`
+
+## Notes de configuration
+
+- **Configuration JWT** : Configurée via les variables d'environnement `JWT_SECRET_KEY` et `JWT_EXPIRATION`
+- **Base de données** : PostgreSQL avec identifiants basés sur l'environnement
+- **Interface Swagger** : Disponible sur `/swagger-ui/index.html` lors de l'exécution
+- **Documentation API** : Disponible sur `/v3/api-docs`
+
+## Déploiement en production
+
+L'application est configurée pour le déploiement en production en utilisant :
+- Conteneurisation Docker avec Java 23 sur Alpine Linux
+- Proxy inverse Traefik avec HTTPS automatique (Let's Encrypt)
+- Base de données PostgreSQL avec volumes persistants
+- Configuration basée sur l'environnement pour les secrets
+
+Le répertoire de travail pour l'application principale est le sous-répertoire `SchoolDev/`.
 
 ## C2.1.1 Mettre en œuvre des environnements de déploiement et de test en y intégrant les outils de suivi de performance et de qualité afin de permettre le bon déroulement de la phase de développement du logiciel
 
